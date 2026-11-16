@@ -1,0 +1,1971 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>SAT Math Practice — All Topics</title>
+<meta name="description" content="527 real SAT-style Math practice questions, written lessons, and a built-in Desmos calculator. Install it to your home screen and use it like an app.">
+
+<!-- Link-preview card (Open Graph / Twitter) -->
+<meta property="og:title" content="SAT Math Practice">
+<meta property="og:description" content="527 real SAT-style Math practice questions, written lessons, and a built-in Desmos calculator.">
+<meta property="og:image" content="icon-512.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SAT Math Practice">
+<meta name="twitter:description" content="527 real SAT-style Math practice questions, written lessons, and a built-in Desmos calculator.">
+<meta name="twitter:image" content="icon-512.png">
+
+<!-- PWA: installable, "Add to Home Screen" -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0458ab">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SAT Math">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1a1a1a; --sub:#6e6e6e;
+    --accent:#0458ab; --accent-dark:#033d7d; --accent-light:#e8f0fb;
+    --choice-border:#9e9e9e; --choice-hover:#f5f8fc;
+    --green:#1a7a3c; --green-dark:#15602f; --greenbg:#e6f4ea;
+    --red:#b3261e; --red-dark:#8c1d17; --redbg:#fbe9e7;
+    --yellow:#997404; --yellow-dark:#7a5c03;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;}
+  /* 100% of the *layout* viewport is not the same thing as the screen on a
+     phone — the address bar grows/shrinks the visible area, and height:100%
+     chains up through html/body to whatever the browser decided at load
+     time, which is the classic cause of a block of empty space appearing
+     below real content once the page is scrolled. 100dvh tracks the actual
+     visible viewport instead; 100vh is kept first only as a fallback for
+     browsers that don't support dvh yet. */
+  html,body{margin:0;height:100vh;height:100dvh;font-family:'Roboto','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);overscroll-behavior:none;}
+  body{display:flex;flex-direction:column;overflow:hidden;}
+
+  /* ===================== App shell ===================== */
+  .appheader{height:56px;background:#fff;border-bottom:1px solid #d7d7d7;display:flex;align-items:center;padding:0 20px;gap:20px;flex:none;}
+  .brand{font-weight:700;font-size:17px;color:var(--ink);letter-spacing:.1px;white-space:nowrap;}
+  .exitbtn{border:1px solid #c7c7c7;border-radius:50%;width:28px;height:28px;background:#fff;cursor:pointer;color:#767676;font-size:13px;flex:none;font-weight:400;}
+  .exitbtn:hover{border-color:#999;color:#333;}
+  .maintabs{display:flex;gap:4px;}
+  .maintab{border:1px solid transparent;border-radius:4px;padding:8px 16px;font-size:14px;font-weight:500;background:transparent;color:#555;cursor:pointer;display:flex;align-items:center;gap:7px;}
+  .maintab:hover{background:#f2f2f2;}
+  .maintab.active{background:var(--accent-light);color:var(--accent-dark);border-color:#c6d9ef;font-weight:700;}
+  .appheader .avatar{margin-left:auto;}
+
+  .practicebar{height:50px;background:#fafafa;border-bottom:1px solid #d7d7d7;display:flex;align-items:center;justify-content:flex-end;padding:0 20px;gap:12px;flex:none;}
+
+  .appbody{flex:1;display:flex;overflow:hidden;min-height:0;}
+  .section{flex:1;display:none;min-height:0;flex-direction:column;overflow:hidden;}
+  .section.active{display:flex;}
+
+  /* ===================== Lessons section ===================== */
+  #sectionLessons.active{flex-direction:row;}
+  #sectionPractice.active{flex-direction:row;}
+  .practicemain{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;background:#fff;}
+  .topictree{width:270px;flex:none;background:#fafafa;border-right:1px solid #d7d7d7;overflow-y:auto;padding:18px 0 40px;}
+  .topictree .ttitle{padding:2px 20px 14px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#999;}
+  .domaingroup{margin-bottom:6px;}
+  .domainhead{display:flex;align-items:center;gap:9px;padding:10px 20px 6px;font-weight:700;font-size:13px;color:#555;}
+  .domaindot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .skillitem{display:flex;align-items:center;gap:8px;padding:9px 20px 9px 32px;font-size:13.5px;color:#444;cursor:pointer;border-left:3px solid transparent;line-height:1.3;}
+  .skillitem:hover{background:#f2f2f2;}
+  .skillitem.active{background:var(--accent-light);border-left-color:var(--accent);color:var(--accent-dark);font-weight:700;}
+  .skillitem .sname{flex:1;}
+  .skillbadge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;flex:none;}
+  .skillbadge.done{background:var(--greenbg);color:var(--green-dark);}
+  .skillbadge.soon{background:#eee;color:#999;}
+  .skillprogress{font-size:10.5px;font-weight:700;color:var(--accent-dark);flex:none;white-space:nowrap;}
+
+  .lessonmain{flex:1;overflow-y:auto;padding:0;background:#fff;}
+  .subnav{position:sticky;top:0;background:#fff;border-bottom:1px solid #d7d7d7;padding:10px 44px;display:flex;gap:6px;flex-wrap:wrap;z-index:2;}
+  .subnav a{font-size:12.5px;font-weight:500;color:#555;text-decoration:none;padding:6px 12px;border-radius:4px;background:#f2f2f2;}
+  .subnav a:hover{background:#e6e6e6;}
+  .subnav a.active{background:var(--accent);color:#fff;font-weight:700;}
+  .lessonbody{padding:34px 44px 100px;}
+
+  .lessonplaceholder{display:flex;align-items:center;justify-content:center;height:100%;padding:40px;}
+  .placardcard{max-width:480px;text-align:center;background:#fff;border:1px solid #d7d7d7;border-radius:6px;padding:44px 40px;}
+  .placardcard .picon{font-size:40px;margin-bottom:14px;}
+  .placardcard h2{margin:0 0 8px;font-size:20px;color:var(--ink);}
+  .placardcard .ptag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;background:#eee;color:#888;margin-bottom:14px;}
+  .placardcard p{font-size:14.5px;line-height:1.6;color:#666;margin:0 0 18px;}
+  .lessoncol{max-width:860px;}
+  .lsec{margin-bottom:54px;scroll-margin-top:24px;}
+  .lsec h1{font-size:25px;font-weight:700;color:var(--ink);margin:0 0 4px;}
+  .lsec .ltag{display:inline-block;background:var(--greenbg);color:var(--green-dark);font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-bottom:16px;}
+  .lsec h2{font-size:20px;font-weight:700;color:var(--ink);margin:0 0 6px;border-bottom:1px solid #d7d7d7;padding-bottom:8px;}
+  .lsec .lsub{color:#777;font-size:13.5px;margin:4px 0 18px;}
+  .lsec p{font-size:15.5px;line-height:1.65;margin:0 0 14px;}
+  .lrule{background:var(--accent-light);border:1px solid #c6d9ef;border-radius:4px;padding:13px 18px;font-weight:700;color:var(--accent-dark);margin-bottom:16px;font-size:15px;text-align:center;}
+  .lwarn{background:#fdf3e1;border:1px solid #f0d9ad;border-radius:4px;padding:12px 18px;color:#7a5c03;margin-bottom:16px;font-size:14.5px;}
+  .lwarn b{color:#7a5c03;}
+  .lex{background:#fafafa;border:1px solid #d7d7d7;border-radius:4px;padding:18px 20px;margin-bottom:16px;}
+  .lex .lextitle{font-weight:700;color:var(--green-dark);margin-bottom:10px;font-size:14.5px;}
+  .lex .lsol{color:var(--green-dark);font-weight:700;margin-top:10px;margin-bottom:4px;font-size:13.5px;}
+  .lex .lstep{font-size:14.5px;line-height:1.6;margin:4px 0;}
+  .lbracket{font-family:'Courier New',monospace;background:#fff;border:1px solid #d7d7d7;border-radius:4px;padding:10px 14px;margin:8px 0;font-size:13.5px;overflow-x:auto;}
+  .practicebtn{display:inline-block;margin-top:8px;background:var(--accent);color:#fff;border:1px solid var(--accent-dark);border-radius:4px;padding:9px 18px;font-size:13.5px;font-weight:700;cursor:pointer;}
+  .practicebtn:hover{background:var(--accent-dark);}
+  table.cheat{border-collapse:collapse;margin:10px 0 4px;width:100%;border:1px solid #d7d7d7;}
+  table.cheat th,table.cheat td{border:1px solid #d7d7d7;padding:9px 14px;font-size:14px;text-align:left;}
+  table.cheat th{background:var(--accent-light);color:var(--accent-dark);}
+  .lesson-ls{margin:0 0 14px;padding-left:22px;font-size:15.5px;line-height:1.65;}
+  .lesson-ls li{margin-bottom:6px;}
+  .timer{margin-left:auto;margin-right:20px;font-weight:700;font-size:17px;color:var(--ink);letter-spacing:.3px;}
+  .icons{display:flex;align-items:center;gap:10px;}
+  .icbtn{width:34px;height:34px;border-radius:50%;border:1px solid transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;}
+  .icbtn.ref{background:var(--accent-light);color:var(--accent-dark);}
+  .icbtn.calc{background:var(--greenbg);color:var(--green-dark);}
+  .icbtn.calc.active{outline:2px solid var(--green-dark);}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#555;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;background-size:cover;background-position:center;}
+  .signinbtn{margin-left:auto;border:1.5px solid #c7c7c7;border-radius:4px;padding:7px 14px;font-size:13px;font-weight:700;background:#fff;color:#333;cursor:pointer;white-space:nowrap;}
+  .signinbtn:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .usermenu{position:fixed;top:54px;right:18px;background:#fff;border:1px solid #d7d7d7;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:10px 12px;z-index:80;min-width:160px;}
+  .usermenu-name{font-size:12.5px;color:#555;margin-bottom:8px;word-break:break-word;}
+  .usermenu-signout{width:100%;border:1px solid #c7c7c7;border-radius:4px;padding:7px 10px;font-size:13px;font-weight:600;background:#fff;color:#333;cursor:pointer;}
+  .usermenu-signout:hover{border-color:var(--red);color:var(--red);}
+
+  .body{display:flex;flex:1;min-height:0;}
+  .qpane{flex:1;overflow-y:auto;display:flex;justify-content:center;}
+  .qcol{width:100%;max-width:760px;padding:30px 24px 60px;}
+  .qtophead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
+  .qnum{width:30px;height:30px;border-radius:4px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .marks{display:flex;gap:14px;}
+  .markbtn{background:none;border:none;cursor:pointer;font-size:18px;color:#bbb;}
+  .markbtn.on{color:var(--red);}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-left:10px;vertical-align:middle;}
+  .tag.Easy{background:var(--greenbg);color:var(--green-dark);} .tag.Medium{background:#fdf0db;color:#7a5c03;} .tag.Hard{background:var(--redbg);color:var(--red-dark);}
+  .skilltag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-left:6px;vertical-align:middle;background:var(--accent-light);color:var(--accent-dark);}
+  .qtext{font-size:18px;line-height:1.55;margin-bottom:18px;}
+  .qtext .katex{font-size:1.02em;}
+  .qtext .katex-display{margin:14px 0;}
+  table.datatable, table.minitable{border-collapse:collapse;margin-bottom:18px;font-size:16px;}
+  table.datatable th,table.datatable td, table.minitable th, table.minitable td{border:1px solid #333;padding:6px 16px;text-align:center;}
+  table.datatable th, table.minitable th{background:#f0f0f0;}
+  table.minitable{font-size:15px;margin-top:6px;margin-bottom:0;}
+  .figwrap{margin-bottom:18px;overflow-x:auto;}
+  .choices{margin-bottom:6px;}
+  .choicerow{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .choice{flex:1;display:flex;align-items:center;gap:14px;border:1.5px solid var(--choice-border);border-radius:var(--radius);padding:12px 18px;cursor:pointer;font-size:16px;background:#fff;transition:background .1s,border-color .1s;}
+  .choice.htmlchoice{border-radius:4px;align-items:flex-start;}
+  .choice:hover{background:var(--choice-hover);border-color:var(--accent);}
+  .choice.selected{border-color:var(--accent);border-width:2px;background:var(--accent-light);}
+  .choice.correct{border-color:var(--green);background:var(--greenbg);}
+  .choice.wrong{border-color:var(--red);background:var(--redbg);}
+  .choice.eliminated{opacity:.4;}
+  .choice.eliminated .ctext{text-decoration:line-through;}
+  .cl{width:26px;height:26px;border-radius:50%;border:1.5px solid #767676;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none;color:#555;}
+  .choice.selected .cl{border-color:var(--accent);background:var(--accent);color:#fff;}
+  .choice.correct .cl{border-color:var(--green);background:var(--green);color:#fff;}
+  .choice.wrong .cl{border-color:var(--red);background:var(--red);color:#fff;}
+  .elim{width:26px;height:26px;border-radius:50%;border:1.5px dashed #999;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;color:#999;font-size:11px;font-weight:700;background:#fff;}
+  .elim.on{border-style:solid;border-color:#555;color:#333;}
+  .gridin{max-width:260px;}
+  .gridin input{width:100%;font-size:18px;padding:11px 13px;border:1.5px solid var(--choice-border);border-radius:var(--radius);}
+  .gridin input:focus{outline:none;border-color:var(--accent);}
+  .answerbtn{margin-top:16px;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font-weight:700;padding:9px 18px;border-radius:var(--radius);cursor:pointer;font-size:14px;}
+  .answerbtn:hover{background:var(--accent-light);}
+  .answerline{margin-top:14px;font-size:15px;color:var(--green-dark);font-weight:700;}
+
+  .bottombar{height:68px;flex:none;border-top:1px solid #d7d7d7;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;}
+  .navbtn{border:1.5px solid #767676;border-radius:4px;padding:9px 22px;font-weight:500;font-size:14px;background:#fff;color:#333;cursor:pointer;}
+  .navbtn:disabled{opacity:.35;cursor:default;}
+  .navbtn.primary{background:var(--accent);color:#fff;border-color:var(--accent-dark);}
+  .navbtn.primary:hover{background:var(--accent-dark);}
+  .progress{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;cursor:pointer;border:1.5px solid #767676;border-radius:4px;padding:8px 14px;background:#fff;color:#333;}
+  .progress .chev{font-size:11px;}
+
+  .navmodal{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);width:640px;max-width:92vw;background:#fff;border:1px solid #d7d7d7;border-radius:6px;box-shadow:0 16px 40px rgba(0,0,0,.2);display:none;z-index:60;padding:18px 22px 22px;max-height:70vh;overflow-y:auto;}
+  .navmodal.open{display:block;}
+  .navhead{display:flex;align-items:center;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+  .navhead b{font-size:15px;}
+  .legend{display:flex;align-items:center;gap:6px;font-size:13px;color:#555;}
+  .legendbox{width:16px;height:16px;border:1.5px dashed #999;border-radius:3px;display:inline-block;}
+  .legendflag{color:var(--red);font-size:13px;}
+  .navgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
+  .navcell{position:relative;height:40px;border:1.5px dashed #bbb;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#333;}
+  .navcell.answered{border-style:solid;border-color:#333;background:#f3f3f3;}
+  .navcell.solved{border-style:solid;border-color:var(--accent);background:var(--accent-light);color:var(--accent-dark);}
+  .navcell.current{border-style:solid;border-color:#111;border-width:2.5px;}
+  .navcell .flagdot{position:absolute;top:-5px;right:-5px;color:var(--red);font-size:11px;}
+  .navcell .solvedtick{position:absolute;top:-6px;left:-6px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;line-height:16px;text-align:center;font-weight:700;}
+  .legendcheck{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:700;}
+  .qnum .solvedtick{position:static;display:inline-flex;margin-left:8px;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;align-items:center;justify-content:center;font-weight:700;vertical-align:middle;}
+  .scrim{position:fixed;inset:0;background:rgba(60,60,60,.0);z-index:55;display:none;}
+  .scrim.open{display:block;}
+
+  /* One calculator panel, mounted once. Floating vs docked is purely a CSS
+     geometry change — the Desmos DOM is never moved, because Desmos builds a
+     nested widget inside its container and relocating any inner node tears the
+     graph canvas away from its wrapper. */
+  .calcpanel{position:fixed;top:96px;left:50%;transform:translateX(-50%);width:780px;height:580px;max-width:96vw;max-height:calc(100vh - 150px);background:#fff;border:1px solid #d7d7d7;border-radius:6px;box-shadow:0 12px 32px rgba(0,0,0,.22);display:none;flex-direction:column;z-index:50;overflow:hidden;}
+  .calcpanel.open{display:flex;}
+  .calcpanel.docked{top:60px;bottom:70px;right:0;left:auto;transform:none;width:46%;height:auto;max-height:none;border-radius:0;border:none;border-left:1px solid #d7d7d7;box-shadow:-2px 0 10px rgba(0,0,0,.06);}
+  body.split .body{margin-right:46%;}
+  .calchead{height:38px;background:#f2f2f2;display:flex;align-items:center;padding:0 14px;font-weight:700;font-size:13.5px;color:#333;cursor:move;gap:10px;flex:none;border-bottom:1px solid #d7d7d7;}
+  .calcpanel.docked .calchead{cursor:default;}
+  .calchead button{margin-left:0;width:26px;height:26px;border-radius:50%;border:none;background:none;cursor:pointer;font-size:14px;color:#555;}
+  .calchead .x{margin-left:auto;}
+  .calchead .regrbtn{width:auto;height:26px;border-radius:4px;padding:0 10px;font-size:12px;font-weight:700;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);}
+  .calchead .regrbtn:hover{background:var(--accent-light);}
+  .calcbody{flex:1;min-height:0;}
+  .calcbody .dcg-calculator-api-container{width:100%;height:100%;}
+  .calcgrip{position:absolute;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;background:linear-gradient(135deg,transparent 50%,#bbb 50%,#bbb 60%,transparent 60%,transparent 70%,#bbb 70%,#bbb 80%,transparent 80%);}
+  .calcpanel.docked .calcgrip{display:none;}
+
+  /* ===================== Language switcher (lesson content) ===================== */
+  .langbar{display:flex;align-items:center;gap:8px;padding:10px 44px 0;}
+  .langbar .llabel{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-right:2px;}
+  .langbtn{border:1.5px solid #c7c7c7;border-radius:4px;padding:6px 13px;font-size:12.5px;font-weight:500;background:#fff;cursor:pointer;color:#555;}
+  .langbtn.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent-dark);font-weight:700;}
+
+  /* ===================== Mobile topic-tree drawer ===================== */
+  .treeToggle{display:none;}
+  .treescrim{display:none;}
+
+  /* ===================== Responsive ===================== */
+  @media (max-width: 760px){
+    .appheader{padding:0 10px;gap:8px;}
+    .brand{display:none;}
+    .maintab{padding:8px 12px;font-size:13px;}
+    .appheader .avatar, .practicebar .avatar{width:32px;height:32px;}
+
+    .practicebar{padding:0 10px;gap:10px;}
+    .timer{margin-right:8px;font-size:15px;}
+    .icbtn{width:34px;height:34px;font-size:14px;}
+
+    .qcol{padding:20px 16px 50px;}
+    .qtext{font-size:17px;}
+    .choice{padding:11px 14px;font-size:15px;}
+    .choicerow{gap:8px;}
+    .elim{width:26px;height:26px;}
+    .bottombar{padding:0 14px;}
+    .navbtn{padding:9px 16px;font-size:13px;}
+    .progress{padding:7px 12px;font-size:13px;}
+    .navgrid{grid-template-columns:repeat(5,1fr);}
+    .navmodal{width:94vw;padding:14px 16px 16px;}
+
+    /* Topic tree becomes a slide-in drawer instead of a fixed side column */
+    .treeToggle{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--accent);border-radius:4px;padding:7px 14px;font-size:13px;font-weight:700;background:#fff;color:var(--accent-dark);cursor:pointer;position:absolute;top:10px;left:10px;z-index:12;}
+    #sectionLessons.active{position:relative;}
+    #sectionPractice.active{position:relative;}
+    .practicemain{width:100%;}
+    .topictree{position:fixed;top:0;bottom:0;left:0;width:84vw;max-width:310px;z-index:40;transform:translateX(-100%);transition:transform .18s ease;box-shadow:4px 0 18px rgba(0,0,0,.18);padding-top:56px;}
+    .topictree.open{transform:translateX(0);}
+    .treescrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:35;opacity:0;pointer-events:none;transition:opacity .18s;}
+    .treescrim.open{opacity:1;pointer-events:auto;}
+    .lessonmain{width:100%;}
+    .subnav{padding:10px 16px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
+    .subnav a{white-space:nowrap;}
+    .lessonbody{padding:20px 16px 70px;}
+    .langbar{padding:10px 16px 0;flex-wrap:wrap;}
+    .lsec h1{font-size:21px;}
+    .lsec h2{font-size:18px;}
+    .lsec p, .lex .lstep{font-size:14.5px;}
+    .lbracket{font-size:12px;}
+    table.cheat{display:block;overflow-x:auto;white-space:nowrap;}
+    .placardcard{max-width:92vw;padding:30px 22px;}
+
+    /* Calculator fills nearly the whole screen on mobile instead of a fixed 780x580 window */
+    .calcpanel{top:8px;left:8px;right:8px;bottom:8px;width:auto;height:auto;max-width:none;max-height:none;transform:none;}
+    .calcpanel.docked{top:8px;bottom:8px;right:8px;left:8px;width:auto;}
+    body.split .body{margin-right:0;}
+    .calcgrip{display:none;}
+  }
+  @media (max-width: 420px){
+    .maintab{padding:7px 9px;font-size:12px;}
+  }
+</style></head>
+<body>
+
+<div class="scrim" id="scrim" onclick="closeNav()"></div>
+
+<div class="appheader">
+  <button class="exitbtn" onclick="if(confirm('Leave this page?')) history.back();" title="Exit">&#10005;</button>
+  <div class="brand">SAT Math</div>
+  <div class="maintabs">
+    <button class="maintab" id="tabLessons" onclick="switchSection('lessons')">&#128218; Lessons</button>
+    <button class="maintab active" id="tabPractice" onclick="switchSection('practice')">&#9998; Practice</button>
+  </div>
+  <button class="signinbtn" id="signinBtn" onclick="window.firebaseSignIn && window.firebaseSignIn()" title="Sign in with Google to sync progress across devices">Sign in</button>
+  <div class="avatar" id="userAvatar" style="display:none" onclick="toggleUserMenu()" title="Click to sign out"></div>
+  <div class="usermenu" id="userMenu" style="display:none">
+    <div class="usermenu-name" id="userMenuName"></div>
+    <button class="usermenu-signout" onclick="window.firebaseSignOut && window.firebaseSignOut(); toggleUserMenu();">Sign out</button>
+  </div>
+</div>
+
+<div class="practicebar" id="practiceBar">
+  <div class="timer" id="timerText">00:00</div>
+  <div class="icons">
+    <button class="icbtn ref" title="Reference sheet">&#128218;</button>
+    <button class="icbtn calc" id="calcToggle" title="Calculator">&#128202;</button>
+  </div>
+</div>
+
+<div class="appbody">
+<div class="section active" id="sectionPractice">
+  <button class="treeToggle" id="practiceTreeToggleBtn" onclick="togglePracticeTree()">&#9776; Topics</button>
+  <div class="treescrim" id="practiceTreeScrim" onclick="closePracticeTree()"></div>
+  <div class="topictree" id="practiceTopicTree"></div>
+  <div class="practicemain">
+  <div class="body">
+  <div class="qpane" id="qpane"></div>
+</div>
+<div class="bottombar">
+  <button class="navbtn" id="prevBtn" onclick="go(-1)">Previous</button>
+  <button class="progress" id="progress" onclick="openNav(event)"></button>
+  <button class="navbtn primary" id="nextBtn" onclick="go(1)">Next</button>
+</div>
+</div>
+</div>
+
+<div class="section" id="sectionLessons">
+  <button class="treeToggle" id="treeToggleBtn" onclick="toggleTopicTree()">&#9776; Topics</button>
+  <div class="treescrim" id="treeScrim" onclick="closeTopicTree()"></div>
+  <div class="topictree" id="topicTree"></div>
+  <div class="lessonmain" id="lessonMain">
+
+    <div class="lessonplaceholder" id="lessonPlaceholder" style="display:none">
+      <div class="placardcard">
+        <div class="picon" id="placardIcon">&#128218;</div>
+        <div class="ptag" id="placardTag">Coming soon</div>
+        <h2 id="placardTitle">Lesson topic</h2>
+        <p id="placardText">This lesson hasn't been written yet.</p>
+        <button class="practicebtn" id="placardBtn" style="display:none">Practice these questions instead &rarr;</button>
+      </div>
+    </div>
+
+    <div id="lessonPercentages" class="lessonroot" data-subnav="pctSubnav">
+    <div class="langbar">
+      <span class="llabel">Language</span>
+      <button class="langbtn active" id="langBtnEn" onclick="setLang('en')">English</button>
+      <button class="langbtn" id="langBtnUz" onclick="setLang('uz')">O'zbekcha</button>
+      <button class="langbtn" id="langBtnRu" onclick="setLang('ru')">Русский</button>
+    </div>
+    <div class="subnav" id="pctSubnav">
+      <a href="#l-intro" onclick="return lsNav(event,'l-intro')">Introduction</a>
+      <a href="#l-basics" onclick="return lsNav(event,'l-basics')">1. Basics</a>
+      <a href="#l-golden" onclick="return lsNav(event,'l-golden')">2. Golden Rule</a>
+      <a href="#l-decrease" onclick="return lsNav(event,'l-decrease')">3. Decreasing</a>
+      <a href="#l-reverse" onclick="return lsNav(event,'l-reverse')">4. Reverse %</a>
+      <a href="#l-chain" onclick="return lsNav(event,'l-chain')">5. Chained %</a>
+      <a href="#l-three" onclick="return lsNav(event,'l-three')">6. Three-Number Chains</a>
+      <a href="#l-plug100" onclick="return lsNav(event,'l-plug100')">7. Plug In 100</a>
+      <a href="#l-mixture" onclick="return lsNav(event,'l-mixture')">8. Mixtures</a>
+      <a href="#l-cheat" onclick="return lsNav(event,'l-cheat')">9. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="lessonBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol" id="lessonCol">
+
+        <div class="lsec" id="l-intro">
+          <h1>Percentages on the SAT</h1>
+          <div class="ltag">Problem-Solving &amp; Data Analysis</div>
+          <p>Percent questions are the type most students get wrong &mdash; not because the math is hard, but because the <b>wording</b> hides a trap. Every percent question boils down to one question: <b>is this percent describing the whole result, or just the amount of change?</b> Get that right every time and every percent question on the SAT becomes the same handful of patterns, no matter how the numbers or the story around them change.</p>
+          <p>This lesson walks through those patterns in the order they show up on the test, from the basics up to the hardest "three-number chain" questions &mdash; using real SAT questions (some already in this practice set) worked all the way through, Desmos-style.</p>
+        </div>
+
+        <div class="lsec" id="l-basics">
+          <h2>1. The Basics</h2>
+          <div class="lsub">Converting between percent and decimal, and what "of" means</div>
+          <div class="lrule">To turn a decimal into a percent, &times;100. To turn a percent into a decimal, &divide;100.</div>
+          <p>So \(0.5 = 50\%\), and \(1.2345 = 123.45\%\). Notice that <b>1 is the same as 100%</b> &mdash; that single fact is the key to almost everything later in this lesson.</p>
+          <div class="lex">
+            <div class="lextitle">The word "of" always means multiply.</div>
+            <p class="lstep">"50% of 6" is just \(0.5 \times 6 = 3\). "75% of 2" is just \(0.75\times 2 = 1.5\). On the SAT's built-in Desmos calculator you can even type the percent symbol directly &mdash; type <code>50%</code> and Desmos will offer "of" automatically and compute it for you. That's the entire idea behind a straight percent question: whenever a question just asks "what is X% of Y," you multiply, done.</p>
+          </div>
+          <p>The hard part is never this. The hard part is questions that <i>don't</i> just ask "X% of Y" &mdash; they describe an increase or a decrease. That's section 2, and it's the single most important idea in this whole lesson.</p>
+        </div>
+
+        <div class="lsec" id="l-golden">
+          <h2>2. The Golden Rule: "of" vs. "increased/decreased by"</h2>
+          <div class="lsub">The single most common SAT percent trap</div>
+          <div class="lrule">"X% of a number" is a straight multiplication.<br>"Increased/decreased BY X%" means you must add that amount back onto (or take it off of) the original number.</div>
+          <div class="lwarn"><b>The trap:</b> when a question says "the result of increasing 5 by 500% is x," almost every student computes \(500\%\times 5 = 25\) and moves on. That's wrong. 500% is only the <i>amount it grew by</i> &mdash; not the final answer.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "The result of increasing the quantity 5 by 500% is x. What is x?"</div>
+            <p class="lstep">You have to take the <b>original</b> number and <b>add on</b> the amount it increased by:</p>
+            <p class="lstep">\(x = 5 + 500\%\text{ of }5 = 5+25=30\)</p>
+            <p class="lstep">Here's the shortcut that makes this fast every time: 5 is just <b>100%</b> of itself. So "5 plus 500% of 5" is the same as "100% of 5 plus 500% of 5," which is just <b>600% of 5</b> &mdash; and \(600\%\times5=30\). Same answer, one multiplication instead of two steps.</p>
+            <p class="lstep">Desmos solution: no equation needed &mdash; just type <code>5 + 500% of 5</code> directly into the calculator and it evaluates to 30 on the spot.</p>
+            <div class="lsol">x = 30 (not 25)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 3.19')">Try the exact SAT version of this question &rarr;</button>
+          </div>
+          <p>So the real rule is: <b>increasing by x% = multiplying by (100+x)%</b>. Increasing by 500% means multiplying by 600%. Increasing by 7% means multiplying by 107%. Always add the x% onto the 100% that's already "built in" to the original number.</p>
+        </div>
+
+        <div class="lsec" id="l-decrease">
+          <h2>3. Decreasing: 100% &minus; x%</h2>
+          <div class="lsub">The mirror image of section 2</div>
+          <div class="lrule">Decreasing by x% = multiplying by (100&minus;x)%</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "The result of decreasing 5 by 20% is x. What is x?"</div>
+            <p class="lstep">You can't just compute 20% of 5. You have to take the original number and subtract the amount it decreased by:</p>
+            <p class="lstep">\(x = 5 - 20\%\text{ of }5 = 5-1=4\)</p>
+            <p class="lstep">Using the shortcut: 5 is 100% of itself, so "5 minus 20% of 5" is "100% &minus; 20% = 80% of 5," and \(80\%\times5=4\). Same answer.</p>
+            <p class="lstep">Desmos solution: type <code>5 - 20% of 5</code> (or just <code>80% of 5</code>) straight into the calculator &mdash; no equation-solving needed, it computes 4 immediately.</p>
+            <div class="lsol">x = 4, and 80% of 5 gets you there in one step</div>
+          </div>
+          <div class="lwarn">Whenever you see a percentage in a question, the very first thing to check is: <b>is this increasing by / decreasing by, or is it a straight "X% of Y"?</b> That one check decides how you set up the whole equation, and the SAT tests this distinction constantly.</div>
+        </div>
+
+        <div class="lsec" id="l-reverse">
+          <h2>4. Reverse Percentage &mdash; finding the original number</h2>
+          <div class="lsub">When the question gives you the <i>result</i> and asks for the starting number</div>
+          <div class="lrule">original &times; (1 &plusmn; percent) = final result</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "A customer paid $53 for a jacket after a 6% sales tax was added. What was the price before tax?"</div>
+            <p class="lstep">The instinct is to take 6% off of $53 &mdash; that's wrong, and it doesn't even match an answer choice if you try it (you'd get $49.82). The 6% tax was never charged <i>on</i> $53; it was charged on the price <b>before</b> tax, which is what we don't know yet. Call that \(x\).</p>
+            <p class="lstep">\(x + 6\%\text{ of }x = 53 \quad\Longrightarrow\quad 1.06x = 53\)</p>
+            <p class="lstep">On the SAT's Desmos, you'd type this almost exactly as written &mdash; <code>x&#8201;+&#8201;6%&nbsp;of&nbsp;x&nbsp;~&nbsp;53</code> &mdash; and let the squiggly-equals regression solve for x.</p>
+            <div class="lsol">x = $50</div>
+            <button class="practicebtn" onclick="goPractice('SAT8 M 3.16')">Try a reverse-percentage SAT question &rarr;</button>
+          </div>
+          <p>The lesson here: whatever the percent is "of," that's the unknown you solve for &mdash; never the number you were given at the end. The 6% was on the original price, not on $53, so $53 can only ever appear on the <i>other</i> side of the equation.</p>
+        </div>
+
+        <div class="lsec" id="l-chain">
+          <h2>5. Chained Percentages &mdash; discount, then tax</h2>
+          <div class="lsub">Two percentages, back to back, each one on a <i>different</i> number</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "Alma bought a laptop at a 20% discount. She paid P dollars including 8% sales tax on the discounted price. What is the original price in terms of P?"</div>
+            <p class="lstep">Let the original price be \(x\). Two things happen to it, in order:</p>
+            <p class="lstep">1&rpar; A 20% <b>discount</b> &mdash; that's a decrease, so the discounted price is \(0.8x\) (using the section 3 shortcut: 100%&minus;20%=80%).</p>
+            <p class="lstep">2&rpar; An 8% sales <b>tax</b> on that discounted price &mdash; that's an increase, so the final price is \(0.8x \times 1.08\).</p>
+            <p class="lstep">\(0.8x \times 1.08 = P \quad\Longrightarrow\quad x = \dfrac{P}{0.8\times1.08}\)</p>
+            <p class="lstep">Desmos solution: since the answer is an expression in P rather than a number, regression won't directly apply &mdash; but you can still type <code>x = P/(0.8*1.08)</code> into Desmos, give P any test value (say \(P=100\)), and Desmos instantly computes the matching x, letting you check your algebra against the answer choices numerically.</p>
+            <div class="lsol">Original price = P &divide; (0.8 &times; 1.08) &mdash; answer choice D</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.12')">Try a similar chained-percent question &rarr;</button>
+          </div>
+          <div class="lwarn">The two percentages here are each "on" a <i>different</i> number &mdash; the 20% discount is on the <b>original</b> price, the 8% tax is on the <b>discounted</b> price. Keeping track of which number each percent actually multiplies is the whole skill. You can never slide a percent onto a number it wasn't described as acting on.</div>
+        </div>
+
+        <div class="lsec" id="l-three">
+          <h2>6. Three-Number Percent Chains (the "bracket" pattern)</h2>
+          <div class="lsub">The hardest, most common pattern on the real SAT &mdash; shows up almost every test</div>
+          <p>Watch for this exact shape of wording: <b>"A is x% of (B + C), and B is y% of C. What percent of B is A?"</b> &mdash; three quantities, three percent relationships, and a "what percent" question at the end. When you see that shape, set up three separate equations and solve them all at once using Desmos's bracket-regression trick: put every left-hand side in one bracket, every right-hand side in the matching bracket, separated by commas.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "The positive number a is 2,241% of the sum of the positive numbers b and c, and b is 83% of c. What percent of b is a?"</div>
+            <p class="lstep">Three facts, three equations. Call the unknown percent \(w\):</p>
+            <p class="lstep">\(a = 2241\%(b+c) \qquad b = 83\%\,c \qquad w\%\text{ of }b = a\)</p>
+            <p class="lstep">Stack the left sides in one bracket and the right sides in the matching bracket, then let Desmos regress for every unknown letter at once:</p>
+            <div class="lbracket">[a, b, w% of b] &nbsp;~&nbsp; [2241% of (b+c), 83% of c, a]</div>
+            <p class="lstep">Desmos returns a value for every unknown in one shot: \(a\approx49.41,\ b=1,\ c\approx1.205,\ w=4941\).</p>
+            <div class="lsol">w = 4,941% &mdash; answer choice D</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 3.18')">Try this exact question &rarr;</button>
+          </div>
+          <p>This is also the pattern behind questions about <i>rates</i> or <i>speeds</i> phrased as percents of each other (object A's speed is some % of object B's, etc.) &mdash; same three-equation bracket setup, just different units.</p>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.81')">Try the "speeds" version of this pattern &rarr;</button>
+        </div>
+
+        <div class="lsec" id="l-plug100">
+          <h2>7. The "Plug In 100" Trick</h2>
+          <div class="lsub">For questions that give you <i>only</i> percentages &mdash; no real numbers at all</div>
+          <p>Sometimes a question describes two quantities purely in terms of percent changes, and never gives you a single real number to start from. When that happens, <b>invent one</b>. Pick 100 for the starting value &mdash; it's the easiest number to take percentages of &mdash; and carry it through the whole problem. Since every quantity in the question is defined only by percentages relative to each other, the actual number you pick never affects the final percent answer.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "A predator and a prey population start the week the same size. By the end of the week, the prey increased by 4,000% and the predator increased by 900%. The prey population was then p% greater than the predator population. Find p."</div>
+            <p class="lstep">No real starting population is given &mdash; so invent one. Let both populations start at 100:</p>
+            <p class="lstep">Prey at week's end: \(100+4000\%\text{ of }100 = 100+4000=4100\)</p>
+            <p class="lstep">Predator at week's end: \(100+900\%\text{ of }100=100+900=1000\)</p>
+            <p class="lstep">Now the question's last sentence is just another "increased by" relationship between the two results you just found:</p>
+            <p class="lstep">\(1000 + p\%\text{ of }1000 = 4100\)</p>
+            <p class="lstep">Desmos solution: type <code>1000 + p% of 1000 ~ 4100</code> &mdash; the squiggly-equals regression solves for p directly, giving 310.</p>
+            <div class="lsol">p = 310</div>
+          </div>
+          <div class="lwarn">Catch both "increased by" phrases <i>and</i> the "p% greater than" at the very end &mdash; that last one is an increase relationship too, and it's easy to read right past it after solving the first two parts.</div>
+        </div>
+
+        <div class="lsec" id="l-mixture">
+          <h2>8. Percent of a Solution (Mixture Problems)</h2>
+          <div class="lsub">A rarer pattern, but worth knowing the formula cold</div>
+          <div class="lrule">(concentration₁)(amount₁) + (concentration₂)(amount₂) = (final concentration)(total amount)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "How many liters of a 25% saline solution must be added to 3 liters of a 10% saline solution to obtain a 15% saline solution?"</div>
+            <p class="lstep">Let \(x\) be the unknown amount (liters) of the 25% solution. The total amount at the end is whatever you pour in plus the 3 liters already there, i.e. \(x+3\):</p>
+            <p class="lstep">\(0.25x + 0.10(3) = 0.15(x+3)\)</p>
+            <p class="lstep">Type it into Desmos almost exactly like that, with the equals sign as a squiggly regression, and solve for \(x\).</p>
+            <div class="lsol">x = 1.5 liters</div>
+            <button class="practicebtn" onclick="goPractice('Chung Tip29 Q1')">Try more mixture/solution questions &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="l-cheat">
+          <h2>9. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Pattern</th><th>What to do</th></tr>
+            <tr><td>"x% of y"</td><td>Straight multiply: \(0.0x\times y\)</td></tr>
+            <tr><td>"increased by x%"</td><td>Multiply by \((100+x)\%\), or add \(x\%\) of the original back on</td></tr>
+            <tr><td>"decreased by x%"</td><td>Multiply by \((100-x)\%\), or subtract \(x\%\) of the original</td></tr>
+            <tr><td>Unknown original, known result</td><td>original &times; (1 &plusmn; percent) = result &mdash; solve for original</td></tr>
+            <tr><td>Two percentages in a row (discount, then tax)</td><td>Apply them one at a time, in order, each on the number it actually describes</td></tr>
+            <tr><td>"A is x% of (B+C), B is y% of C, what % of B is A?"</td><td>Three equations &rarr; one Desmos bracket regression</td></tr>
+            <tr><td>Only percentages given, no real starting number</td><td>Plug in 100 for the starting value and carry it through</td></tr>
+            <tr><td>Mixing two solutions of different percent concentration</td><td>(conc₁)(amt₁) + (conc₂)(amt₂) = (final conc)(total amt)</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The Percentages filter already covers 129 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Percentages');">Go practice Percentages &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonOneVariable" class="lessonroot" data-subnav="ovSubnav" style="display:none">
+    <div class="subnav" id="ovSubnav">
+      <a href="#ov-intro" onclick="return lsNav(event,'ov-intro')">Introduction</a>
+      <a href="#ov-center" onclick="return lsNav(event,'ov-center')">1. Mean, Median, Mode</a>
+      <a href="#ov-spread" onclick="return lsNav(event,'ov-spread')">2. Range &amp; IQR</a>
+      <a href="#ov-outliers" onclick="return lsNav(event,'ov-outliers')">3. Outliers</a>
+      <a href="#ov-dotplot" onclick="return lsNav(event,'ov-dotplot')">4. Dot Plots</a>
+      <a href="#ov-histogram" onclick="return lsNav(event,'ov-histogram')">5. Histograms</a>
+      <a href="#ov-boxplot" onclick="return lsNav(event,'ov-boxplot')">6. Box Plots</a>
+      <a href="#ov-freqtable" onclick="return lsNav(event,'ov-freqtable')">7. Frequency Tables</a>
+      <a href="#ov-stddev" onclick="return lsNav(event,'ov-stddev')">8. Standard Deviation</a>
+      <a href="#ov-combine" onclick="return lsNav(event,'ov-combine')">9. Combining Data Sets</a>
+      <a href="#ov-cheat" onclick="return lsNav(event,'ov-cheat')">10. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="ovBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="ov-intro">
+          <h1>One-Variable Data on the SAT</h1>
+          <div class="ltag">Problem-Solving &amp; Data Analysis</div>
+          <p>A one-variable data question gives you a single list of numbers &mdash; test scores, plant heights, number of books read &mdash; shown as a plain list, a dot plot, a histogram, a box plot, or a frequency table, and asks you something about its <b>center</b> (mean, median, mode), its <b>spread</b> (range, interquartile range, standard deviation), or how that center/spread changes when the data changes.</p>
+          <p>The hard part is almost never the arithmetic. It's reading the right number off the right kind of picture, and knowing which measures a picture can and can't actually tell you. This lesson goes through every picture type the SAT uses, in the order they show up, using real SAT questions (already in this practice set) worked all the way through.</p>
+        </div>
+
+        <div class="lsec" id="ov-center">
+          <h2>1. Measures of Center: Mean, Median, Mode</h2>
+          <div class="lsub">Three different ways to describe "the middle," and why they don't always agree</div>
+          <div class="lrule">Mean = (sum of all values) &divide; (how many values). Median = the middle value once the data is sorted (average the two middle values if there's an even count). Mode = the value that shows up most often.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "What is the median of the data shown?"</div>
+            <p class="lstep">Data: \(71, 72, 73, 76, 77, 79, 83, 87, 93\) &mdash; already sorted, 9 values.</p>
+            <p class="lstep">With an odd count of \(n\) sorted values, the median is just the \(\frac{n+1}{2}\)-th value. Here \(n=9\), so it's the 5th value &mdash; count in from either end: 71, 72, 73, 76, <b>77</b>.</p>
+            <div class="lsol">median = 77</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.1')">Try this exact question &rarr;</button>
+          </div>
+          <p>The median only cares about <i>position</i>, not size &mdash; so one huge or tiny value barely moves it. The mean cares about every value's actual size, so it's much more sensitive to an extreme number. Watch what happens when a big new value joins the group:</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; comparing the mean of data set X and data set Y</div>
+            <p class="lstep">Data set X: \(5, 9, 9, 13\). Data set Y is the same four numbers plus one more: \(5, 9, 9, 13, 27\).</p>
+            <p class="lstep">Mean of X: \((5+9+9+13)\div 4 = 36 \div 4 = 9\).</p>
+            <p class="lstep">Mean of Y: \((36+27)\div 5 = 63 \div 5 = 12.6\).</p>
+            <p class="lstep">Desmos solution: type <code>(5+9+9+13)/4</code> and <code>(5+9+9+13+27)/5</code> as two separate lines and compare the two results directly &mdash; no need to simplify by hand.</p>
+            <div class="lsol">The mean of X is LESS than the mean of Y (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 1.2')">Try this exact question &rarr;</button>
+          </div>
+          <p>One new value (27) dragged the mean up by more than 3 points. That sensitivity to extreme values is exactly what the next section is about.</p>
+        </div>
+
+        <div class="lsec" id="ov-spread">
+          <h2>2. Measures of Spread: Range and IQR</h2>
+          <div class="lsub">How far the data is stretched out, in two different ways</div>
+          <div class="lrule">Range = maximum &minus; minimum (the whole spread). Interquartile range (IQR) = Q3 &minus; Q1 (just the middle 50% of the data).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "What is the range of the 7 scores shown?"</div>
+            <p class="lstep">Data (sorted): \(23, 27, 27, 32, 35, 36, 52\).</p>
+            <p class="lstep">Range = maximum &minus; minimum \(= 52 - 23 = 29\).</p>
+            <div class="lsol">range = 29</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 2.10')">Try this exact question &rarr;</button>
+          </div>
+          <p>Range uses only the two most extreme values, so a single freakishly high or low number can blow it up. IQR ignores the top and bottom quarters of the data entirely, so it's much more resistant to outliers &mdash; which is exactly why box plots (section 6) are built around the IQR instead of the range.</p>
+        </div>
+
+        <div class="lsec" id="ov-outliers">
+          <h2>3. How an Outlier Pulls the Mean</h2>
+          <div class="lsub">The "total trick": turn a mean into a sum, then the arithmetic becomes easy</div>
+          <p>Whenever a question gives you a mean <i>and</i> a count, immediately multiply them to get the total (sum) &mdash; it's much easier to add, remove, or compare totals than to juggle means directly.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "What was the highest score?"</div>
+            <p class="lstep">The mean score of 8 players was 14.5, so the total of all 8 scores is \(14.5 \times 8 = 116\).</p>
+            <p class="lstep">After removing the highest score, the mean of the remaining 7 players is 12, so their total is \(12 \times 7 = 84\).</p>
+            <p class="lstep">The highest score is whatever was removed: \(116 - 84 = 32\).</p>
+            <p class="lstep">Desmos solution: type <code>14.5*8 - 12*7</code> as one line &mdash; it computes both totals and subtracts them in a single step, giving 32.</p>
+            <div class="lsol">highest score = 32 (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('Q326 M 2.84')">Try this exact question &rarr;</button>
+          </div>
+          <p>Here's a trickier version where you have to reason about an outlier's effect on <i>several</i> measures at once:</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; which measure does NOT stay the same?</div>
+            <p class="lstep">A data set of 27 different numbers has mean 33 and median 33. A new data set adds 7 to every number above the median and subtracts 7 from every number below the median.</p>
+            <p class="lstep"><b>Median:</b> unchanged &mdash; the middle number was exactly 33 itself, and it isn't shifted by either rule, so the middle of the sorted list is still 33.</p>
+            <p class="lstep"><b>Sum and mean:</b> unchanged &mdash; with 27 values and the median itself untouched, 13 values go up by 7 and 13 values go down by 7. Those changes cancel exactly, so the total sum (and therefore the mean) doesn't move.</p>
+            <p class="lstep"><b>Standard deviation:</b> this is the one that changes &mdash; every value above the median moved even farther above it, and every value below moved even farther below it, so the data is now more spread out around the center, even though the center itself didn't move.</p>
+            <div class="lsol">Standard deviation is the one that changes (choice D)</div>
+            <button class="practicebtn" onclick="goPractice('Q326 M 2.78')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-dotplot">
+          <h2>4. Dot Plots</h2>
+          <div class="lsub">Each dot is one data value; stacked dots mean that value showed up more than once</div>
+          <p>A dot plot puts every individual value on a number line and stacks a dot for each time it occurs &mdash; so unlike a histogram, you can always see the exact values, not just which range they fall in.</p>
+          <div class="figwrap" id="ovFigDotShift"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; shifting every value by the same amount</div>
+            <p class="lstep">The dot plot shows the 15 values in data set A. Data set B is created by adding 56 to every value in A.</p>
+            <p class="lstep">Adding the same constant to every value slides the whole distribution to the right &mdash; the middle value moves too, so the <b>median of B is greater</b> than the median of A.</p>
+            <p class="lstep">But sliding a distribution doesn't stretch or squeeze it: if the two farthest-apart values in A were 4 units apart, they're still exactly 4 units apart after both get +56. So the <b>range of B equals the range of A</b>.</p>
+            <div class="lsol">Median of B is greater; range of B is equal to range of A (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 2.14')">Try this exact question &rarr;</button>
+          </div>
+          <div class="figwrap" id="ovFigDotStd"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; comparing standard deviations from two dot plots</div>
+            <p class="lstep">Two dot plots show the number of glue sticks brought in by students in class A and class B. Class B's dots are just class A's dots, shifted 13 units to the right &mdash; same exact pattern of stacking, just relabeled.</p>
+            <p class="lstep">Same idea as the median/range example above: shifting a distribution changes <i>where</i> it's centered but never how spread out it is. Identical shape means identical standard deviation.</p>
+            <div class="lsol">The standard deviations are EQUAL (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 1.9')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-histogram">
+          <h2>5. Histograms</h2>
+          <div class="lsub">Bars over value-ranges, not individual dots &mdash; you only know which "bucket" a value fell into</div>
+          <p>A histogram groups values into equal-width intervals ("bins") and draws a bar whose height is how many values landed in that bin. The trade-off versus a dot plot: you can instantly see how many values are in, say, the 40s &mdash; but you lose the exact values. That hidden information is exactly what the hardest histogram questions exploit.</p>
+          <div class="figwrap" id="ovFigHistogram"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; the smallest possible difference between two means</div>
+            <p class="lstep">Two histograms each summarize 23 integers. Data set A's bins are [20,30), [30,40), [40,50), [50,60) with frequencies 3, 4, 7, 9. Data set B's bins are [10,20), [20,30), [30,40), [40,50) &mdash; the exact same frequencies 3, 4, 7, 9, just every bin shifted 10 lower.</p>
+            <p class="lstep">Since a histogram only tells you the bin, not the exact value, you get to choose where inside each bin every value actually sits. To make the two means as close together as possible, push every A-value to the <i>bottom</i> of its bin (e.g. right at 20, 30, 40, 50) and every matching B-value to the <i>top</i> of its bin (e.g. just under 20, 30, 40, 50 &mdash; so 19, 29, 39, 49, since these are integers).</p>
+            <p class="lstep">Every matched pair then differs by exactly 1 (e.g. \(20-19=1\)), so the smallest possible difference between the two means is 1 &mdash; it can't be pushed to 0, because A's values can never actually dip into B's bin range or vice versa.</p>
+            <div class="lsol">smallest possible difference = 1 (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 3.22')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-boxplot">
+          <h2>6. Box Plots</h2>
+          <div class="lsub">The five-number summary &mdash; min, Q1, median, Q3, max &mdash; drawn as a box with whiskers</div>
+          <p>A box plot's whiskers run from the minimum to the maximum; the box itself spans Q1 to Q3 (so the box width IS the IQR); the line inside the box is the median. That's all five numbers you can read directly &mdash; <b>and that's all you can read</b>. A box plot never tells you the mean, because it doesn't show individual values, only those five landmarks.</p>
+          <div class="figwrap" id="ovFigBoxGazelle"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; which statement MUST be true?</div>
+            <p class="lstep">Two box plots summarize the masses of two groups of gazelles. Group 1's median line sits higher on the number line than group 2's median line.</p>
+            <p class="lstep">That comparison is directly readable &mdash; group 1's median really is greater than group 2's median, no assumptions needed.</p>
+            <p class="lstep">A statement comparing the two <i>means</i>, on the other hand, can look tempting from the picture but is never guaranteed &mdash; box plots don't show enough information to pin down the mean unless you're told the data is perfectly symmetric.</p>
+            <div class="lsol">The median of group 1 is greater than the median of group 2 (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.6')">Try this exact question &rarr;</button>
+          </div>
+          <div class="figwrap" id="ovFigBoxBooks"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; reading the range straight off two box plots</div>
+            <p class="lstep">Class A's whiskers run from 0 to 5, so its range is \(5-0=5\). Class B's whiskers run from 1 to 10, so its range is \(10-1=9\).</p>
+            <p class="lstep">Positive difference between the ranges: \(9-5=4\).</p>
+            <p class="lstep">Desmos solution: type <code>(10-1) - (5-0)</code> as one line and it computes both ranges and their difference at once, giving 4.</p>
+            <div class="lsol">difference = 4</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 1.14')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-freqtable">
+          <h2>7. Frequency Tables and Bar Graphs</h2>
+          <div class="lsub">A compact way to show how many times each value occurs</div>
+          <p>A frequency table lists every value in one column and how many times it occurred in the next; a bar graph draws the same idea as bars instead of numbers. Either way, the total count is just the sum of all the frequencies/bar heights.</p>
+          <div class="figwrap" id="ovFigBar"></div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; reading a bar graph directly</div>
+            <p class="lstep">The bar graph shows 419 cans collected by 10 groups. How many cans did group 6 collect? You don't need to calculate anything &mdash; just read the height of the bar labeled "6" straight off the vertical axis.</p>
+            <div class="lsol">group 6 collected 40 cans</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 2.4')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; the maximum value isn't always the last row</div>
+            <table class="minitable"><tr><th>Data value</th><th>Frequency</th></tr><tr><td>6</td><td>3</td></tr><tr><td>7</td><td>3</td></tr><tr><td>8</td><td>8</td></tr><tr><td>9</td><td>8</td></tr><tr><td>10</td><td>9</td></tr><tr><td>11</td><td>11</td></tr><tr><td>12</td><td>9</td></tr><tr><td>13</td><td>0</td></tr><tr><td>14</td><td>6</td></tr></table>
+            <p class="lstep">This table summarizes 57 values (check: \(3+3+8+8+9+11+9+0+6=57\), so every value is accounted for). What's the maximum value in the data set?</p>
+            <p class="lstep">The maximum data <i>value</i> is the largest value that actually occurs &mdash; i.e. has a nonzero frequency. The value 13 is listed but its frequency is 0, meaning nobody actually has that value; 14 has frequency 6, so 14 really does occur.</p>
+            <div class="lsol">maximum value = 14 (not 13)</div>
+            <button class="practicebtn" onclick="goPractice('SAT9 M 1.9')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a symmetric frequency table</div>
+            <table class="minitable"><tr><th>Value</th><th>Frequency</th></tr><tr><td>1</td><td>a</td></tr><tr><td>2</td><td>2a</td></tr><tr><td>3</td><td>3a</td></tr><tr><td>4</td><td>2a</td></tr><tr><td>5</td><td>a</td></tr></table>
+            <p class="lstep">How much greater is the mean of this data than the median, where \(a\) is some positive integer?</p>
+            <p class="lstep">The frequencies themselves are perfectly symmetric around the middle value: \(a, 2a, 3a, 2a, a\) mirrors itself around 3. Whenever a frequency table is exactly symmetric like this, both the mean and the median land exactly on that middle value (3) &mdash; no matter what \(a\) actually is.</p>
+            <div class="lsol">mean &minus; median = 0 (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('Q326 M 2.83')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-stddev">
+          <h2>8. Standard Deviation, Without the Formula</h2>
+          <div class="lsub">The SAT never makes you calculate it &mdash; it makes you compare it</div>
+          <p>Standard deviation measures how far, <i>typically</i>, the values sit from the mean. A small standard deviation means the values are tightly clustered close to the mean; a large one means they're spread out, with some values sitting far away. You will never need the standard deviation formula on the SAT &mdash; every real question just asks you to compare which of two or three data sets is more or less spread out, usually from a list, dot plot, or histogram.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; ranking three data sets by spread</div>
+            <p class="lstep">Data Set 1: \(\{1,1,1,3,3,3,3,5,6,8\}\) &mdash; values range all the way from 1 to 8, several sitting far from the middle.</p>
+            <p class="lstep">Data Set 2: \(\{2,2,3,3,3,4,4,4,5,5\}\) &mdash; tighter, values only range from 2 to 5.</p>
+            <p class="lstep">Data Set 3: \(\{3,3,3,3,3,4,4,4,4,4\}\) &mdash; every single value is only 3 or 4; nothing could be more tightly clustered.</p>
+            <div class="lsol">Largest standard deviation: Data Set 1. Smallest standard deviation: Data Set 3.</div>
+            <button class="practicebtn" onclick="goPractice('Chung Tip58 Q1')">Try the "largest" version of this question &rarr;</button>
+            <button class="practicebtn" onclick="goPractice('Chung Tip58 Q2')">Try the "smallest" version &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="ov-combine">
+          <h2>9. Combining Two Data Sets &mdash; the Weighted Mean</h2>
+          <div class="lsub">You can't just average the two means &mdash; the bigger group pulls harder</div>
+          <div class="lrule">combined mean = (sum of group 1 + sum of group 2) &divide; (count 1 + count 2), where sum = mean &times; count</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; merging two data sets</div>
+            <p class="lstep">Data set A: 75 buildings, mean height 32 m &rarr; total height \(= 75\times32=2400\) m.</p>
+            <p class="lstep">Data set B: 50 buildings, mean height 62 m &rarr; total height \(=50\times62=3100\) m.</p>
+            <p class="lstep">Data set C is all 125 buildings combined: total \(=2400+3100=5500\) m, so the mean is \(5500\div125=44\) m.</p>
+            <p class="lstep">Desmos solution: type <code>(75*32 + 50*62)/(75+50)</code> as one line &mdash; it computes both totals, adds them, and divides by the combined count in a single step, giving 44.</p>
+            <div class="lsol">mean of C = 44 meters</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.14')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Don't just average the two means! \((32+62)\div2=47\) is wrong &mdash; it secretly pretends both groups have the same number of buildings. Group A has more buildings (75 vs. 50), so it pulls the true combined mean (44) down closer to its own mean (32) than to group B's.</div>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.103')">Try a similar combined-mean question &rarr;</button>
+        </div>
+
+        <div class="lsec" id="ov-cheat">
+          <h2>10. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Median of a sorted list</td><td>Odd count: middle value. Even count: average the two middle values.</td></tr>
+            <tr><td>Mean + count given</td><td>Multiply them to get the total &mdash; add/remove/compare totals, not means</td></tr>
+            <tr><td>An outlier is added or removed</td><td>Mean moves a lot; median usually barely moves (or not at all)</td></tr>
+            <tr><td>Every value shifted by the same constant</td><td>Mean/median shift by that constant; range/IQR/standard deviation unchanged</td></tr>
+            <tr><td>Histogram, "smallest/largest possible" difference</td><td>Choose where in each bin the values sit to push the means together (or apart)</td></tr>
+            <tr><td>Box plot</td><td>Min/Q1/median/Q3/max are readable; the mean is NOT, unless told the data is symmetric</td></tr>
+            <tr><td>Frequency table, max/min value</td><td>Use the largest/smallest value with a nonzero frequency, not just the last row</td></tr>
+            <tr><td>Symmetric frequency table</td><td>Mean = median = the value at the center of symmetry</td></tr>
+            <tr><td>Comparing standard deviations</td><td>More tightly clustered around the mean = smaller standard deviation</td></tr>
+            <tr><td>Merging two data sets</td><td>combined mean = (sum&#8321;+sum&#8322;)&divide;(count&#8321;+count&#8322;) &mdash; never just average the two means</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The One-variable filter already covers 60 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('One-variable');">Go practice One-variable data &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonRatios" class="lessonroot" data-subnav="ratSubnav" style="display:none">
+    <div class="subnav" id="ratSubnav">
+      <a href="#rat-intro" onclick="return lsNav(event,'rat-intro')">Introduction</a>
+      <a href="#rat-ratios" onclick="return lsNav(event,'rat-ratios')">1. Ratios</a>
+      <a href="#rat-unitrate" onclick="return lsNav(event,'rat-unitrate')">2. Unit Rates</a>
+      <a href="#rat-convert" onclick="return lsNav(event,'rat-convert')">3. Unit Conversion</a>
+      <a href="#rat-chain" onclick="return lsNav(event,'rat-chain')">4. Chained Conversions</a>
+      <a href="#rat-density" onclick="return lsNav(event,'rat-density')">5. Density</a>
+      <a href="#rat-expr" onclick="return lsNav(event,'rat-expr')">6. Ratios as Expressions</a>
+      <a href="#rat-linked" onclick="return lsNav(event,'rat-linked')">7. Two Linked Ratios</a>
+      <a href="#rat-rate-change" onclick="return lsNav(event,'rat-rate-change')">8. Rates + Conversion</a>
+      <a href="#rat-cheat" onclick="return lsNav(event,'rat-cheat')">9. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="ratBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="rat-intro">
+          <h1>Ratios, Rates, and Units on the SAT</h1>
+          <div class="ltag">Problem-Solving &amp; Data Analysis</div>
+          <p>This skill covers four closely related ideas: <b>ratios</b> (comparing two quantities), <b>rates</b> (a ratio where one quantity is "per" some unit, like speed or density), <b>unit conversion</b> (rewriting the same quantity in different units), and <b>proportional relationships</b> (two quantities that scale together). On the SAT they all reduce to the same move: set up a fraction, multiply or divide by the right conversion factor, and keep track of what cancels.</p>
+          <p>This lesson walks through every version of that move using real SAT questions (already in this practice set) worked all the way through, with a Desmos shortcut for every example that has one.</p>
+        </div>
+
+        <div class="lsec" id="rat-ratios">
+          <h2>1. Ratios &mdash; Keeping a Ratio Fixed</h2>
+          <div class="lsub">If a ratio has to stay the same, both parts scale by the same factor</div>
+          <div class="lrule">If \(\dfrac{a}{b}\) must stay constant and \(b\) changes to \(b'\), then \(a\) must change to \(a\times\dfrac{b'}{b}\).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "how must the length change to maintain this ratio?"</div>
+            <p class="lstep">The ratio of length to width is 35 to 10. If the width increases by 7 units (from 10 to 17), the length must scale by the same factor, \(\frac{17}{10}\), to keep the ratio at 35:10.</p>
+            <p class="lstep">Original length (using width = 10 as the base): \(35\). New length: \(35\times\frac{17}{10}=59.5\).</p>
+            <p class="lstep">Change in length: \(59.5-35=24.5\), and it's an increase, since the width increased.</p>
+            <p class="lstep">Desmos solution: type <code>35*(17/10) - 35</code> as one line &mdash; it computes the new length and subtracts the old one in a single step, giving 24.5.</p>
+            <div class="lsol">The length must increase by 24.5 units (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.6')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Don't just copy the amount the width changed by (7 units) onto the length &mdash; that only works if the ratio is 1 to 1. Here the length moves by \(7\times\frac{35}{10}=24.5\) units, not 7.</div>
+        </div>
+
+        <div class="lsec" id="rat-unitrate">
+          <h2>2. Unit Rates</h2>
+          <div class="lsub">A rate is just a ratio with "per" built in &mdash; distance per time, posters per minute, etc.</div>
+          <div class="lrule">rate &times; amount of the "per" unit = total. So total &divide; rate = amount of the "per" unit, and total &divide; amount = rate.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; constant speed</div>
+            <p class="lstep">An object travels at a constant 12 centimeters per second. How long does it take to travel 108 centimeters?</p>
+            <p class="lstep">Time = distance &divide; rate \(=108\div12=9\) seconds.</p>
+            <p class="lstep">Desmos solution: type <code>108/12</code> directly.</p>
+            <div class="lsol">9 seconds (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.15')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; converting a rate's time unit</div>
+            <p class="lstep">A printer makes 42 posters per minute. What's that rate in posters per <i>hour</i>? Since there are 60 minutes in an hour, multiply the per-minute rate by 60.</p>
+            <p class="lstep">\(42\times60=2520\) posters per hour.</p>
+            <p class="lstep">Desmos solution: type <code>42*60</code> directly.</p>
+            <div class="lsol">2,520 posters per hour</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 2.3')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="rat-convert">
+          <h2>3. Unit Conversion</h2>
+          <div class="lsub">Rewriting the same quantity in different-sized units</div>
+          <div class="lrule">Converting to a <i>smaller</i> unit &rarr; multiply by the conversion factor. Converting to a <i>bigger</i> unit &rarr; divide by it.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; meters to centimeters</div>
+            <p class="lstep">A centimeter is smaller than a meter (1 meter = 100 centimeters), so converting 51 meters to centimeters means <b>multiplying</b> by 100: \(51\times100=5{,}100\) cm.</p>
+            <p class="lstep">Desmos solution: type <code>51*100</code> directly.</p>
+            <div class="lsol">5,100 centimeters (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.4')">Try this exact question &rarr;</button>
+          </div>
+          <p>Going the other way &mdash; centimeters to meters, a bigger unit &mdash; means dividing instead: \(2{,}300\div100=23\) meters.</p>
+          <button class="practicebtn" onclick="goPractice('SAT6 M 2.1')">Try the "divide" version &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT10 M 2.5')">Try a kilograms-to-grams question &rarr;</button>
+        </div>
+
+        <div class="lsec" id="rat-chain">
+          <h2>4. Chained Conversions, and Squared/Cubed Units</h2>
+          <div class="lsub">When one conversion factor isn't enough &mdash; or the units are squared</div>
+          <p>Some questions give you the conversion in two steps (furlongs &rarr; yards &rarr; feet). Just chain the multiplications in one line instead of finding a single combined factor yourself.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; furlongs to feet</div>
+            <p class="lstep">1 furlong = 220 yards, and 1 yard = 3 feet. So 1 furlong = \(220\times3=660\) feet.</p>
+            <p class="lstep">354 furlongs \(=354\times220\times3\) feet.</p>
+            <p class="lstep">Desmos solution: type <code>354*220*3</code> as one line &mdash; no need to compute the 660-feet-per-furlong factor separately first.</p>
+            <div class="lsol">233,640 feet (choice D)</div>
+            <button class="practicebtn" onclick="goPractice('SAT8 M 1.10')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">When the <i>unit itself</i> is squared (square yards, square miles) or cubed, the conversion factor gets squared or cubed too &mdash; it does NOT apply just once.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; square yards to square miles</div>
+            <p class="lstep">1 mile = 1,760 yards, so 1 square mile \(=1{,}760^2\) square yards &mdash; not just 1,760. To convert square yards to square miles, divide by \(1{,}760^2\), not 1,760.</p>
+            <p class="lstep">\(11{,}863{,}808 \div 1{,}760^2 \approx 3.83\) square miles.</p>
+            <p class="lstep">Desmos solution: type <code>11863808/1760^2</code> &mdash; the exponent handles the "squared unit" automatically.</p>
+            <div class="lsol">3.83 square miles (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 3.18')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.99')">Try a square-inches-to-square-feet question &rarr;</button>
+        </div>
+
+        <div class="lsec" id="rat-density">
+          <h2>5. Density = Mass &divide; Volume</h2>
+          <div class="lsub">A rate you're expected to recognize by name, not just by formula</div>
+          <div class="lrule">density = mass &divide; volume, so mass = density &times; volume, and volume = mass &divide; density. For a cube with edge length \(s\): volume \(=s^3\).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; finding mass from density</div>
+            <p class="lstep">A cube of oak has density 807 kg/m&sup3; and edge length 0.90 m. Its volume is \(0.90^3=0.729\) m&sup3;.</p>
+            <p class="lstep">Mass = density &times; volume \(=807\times0.729\approx588\) kg.</p>
+            <p class="lstep">Desmos solution: type <code>807*0.9^3</code> as one line.</p>
+            <div class="lsol">588 kg (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.9')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; working backward to find edge length</div>
+            <p class="lstep">A cube of wood has density 353 kg/m&sup3; and mass 345 kg. First find its volume: volume = mass &divide; density \(=345\div353\) m&sup3;. Then undo the cube to get the edge length: take the cube root.</p>
+            <p class="lstep">Desmos solution: type <code>(345/353)^(1/3)</code> &mdash; raising to the \(\frac{1}{3}\) power takes the cube root in one step.</p>
+            <div class="lsol">edge &asymp; 0.99 m (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('Q326 M 2.88')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('Q326 M 3.10')">Try a mass-from-density question &rarr;</button>
+        </div>
+
+        <div class="lsec" id="rat-expr">
+          <h2>6. Proportional Relationships as Expressions</h2>
+          <div class="lsub">When the question wants a formula, not a number &mdash; plug in an easy test value</div>
+          <p>Some questions ask for an <i>expression</i> that represents a rate or ratio, with variables instead of numbers in the answer choices. The fastest way through these: invent a simple number for the variable, work out what the answer should be by hand, then check which choice gives that same number when you substitute.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; coaches to athletes</div>
+            <p class="lstep">The ratio of coaches to athletes is 1 to 26. With \(x\) coaches, how many athletes (as an expression in \(x\))?</p>
+            <p class="lstep">Test it with an easy number: if \(x=1\) coach, there should be 26 athletes (since the ratio is 1 to 26). Only <code>26x</code> gives 26 when \(x=1\) &mdash; the other choices give \(\frac{1}{26}\), 27, and 26 respectively, and only one of those matches by coincidence, so always double check with the real ratio in mind.</p>
+            <p class="lstep">Desmos solution: define \(x=1\), then type each answer choice as its own line (e.g. <code>26x</code>, <code>x/26</code>, <code>x+26</code>) and see which one evaluates to 26.</p>
+            <div class="lsol">\(26x\) (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 2.19')">Try this exact question &rarr;</button>
+          </div>
+          <p>The same "plug in a number" move works even when the rate itself is given in variables instead of plain numbers:</p>
+          <button class="practicebtn" onclick="goPractice('SAT9 M 1.19')">Try a "rate given in variables" question &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.96')">Try a "growth rate" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="rat-linked">
+          <h2>7. Two Linked Ratios &mdash; Solve for the Missing One</h2>
+          <div class="lsub">When only the ratio between letters matters, you can pick convenient values for them</div>
+          <p>If you're told \(\frac{x}{y}=4\) and nothing else pins down \(x\) and \(y\) individually, you're free to pick any pair of numbers that satisfies that ratio &mdash; like \(x=4,\ y=1\) &mdash; and the rest of the problem will still work out, because only the ratio ever mattered in the first place.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "what is the value of n?"</div>
+            <p class="lstep">\(\dfrac{x}{y}=4\) and \(\dfrac{24x}{ny}=4\). Since only \(\frac{x}{y}\) matters, let \(x=4,\ y=1\) (any pair with ratio 4 works).</p>
+            <p class="lstep">Substitute: \(\dfrac{24(4)}{n(1)}=4\).</p>
+            <p class="lstep">Desmos solution: type <code>24*4/n ~ 4</code> &mdash; the squiggly-equals regression solves for n directly, giving 24.</p>
+            <div class="lsol">n = 24</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.11')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; the same trick with decimals</div>
+            <p class="lstep">\(\dfrac{4a}{b}=6.7\) and \(\dfrac{a}{bn}=26.8\). From the first equation, \(\dfrac{a}{b}=\dfrac{6.7}{4}=1.675\), so let \(a=1.675,\ b=1\).</p>
+            <p class="lstep">Desmos solution: type <code>1.675/n ~ 26.8</code> &mdash; this solves for n directly, giving 0.0625 (equivalently \(\frac{1}{16}\)).</p>
+            <div class="lsol">n = 0.0625 (or \(\frac{1}{16}\))</div>
+            <button class="practicebtn" onclick="goPractice('Q326 M 2.86')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="rat-rate-change">
+          <h2>8. Rates of Change, Combined with Conversion</h2>
+          <div class="lsub">The hardest version: a rate that also needs a unit conversion</div>
+          <p>These stack two skills from this lesson &mdash; first set up the rate relationship, then convert the units, usually in one combined Desmos line.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; splitting a total flux between two squares</div>
+            <p class="lstep">A surface is made of a small square and a large square, where the large square's side is 3 times the small square's side. Electric flux = field strength &times; area, and the total flux through both squares is 4,640 (with field strength 29). Since area scales with side-length squared, the large square has \(3^2=9\) times the area of the small one, so the two areas split the total flux in a 1-to-9 ratio.</p>
+            <p class="lstep">Total "area units": \(1+9=10\). The large square gets \(\frac{9}{10}\) of the total flux.</p>
+            <p class="lstep">Desmos solution: type <code>4640*(9/10)</code> &mdash; giving 4,176 directly, no need to solve for the side lengths at all.</p>
+            <div class="lsol">4,176 volts&middot;meters</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 3.21')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; converting a rate of change's units</div>
+            <p class="lstep">An area is growing at 250 square feet per hour. Convert to square meters per minute: divide by \(3.28^2\) to go from square feet to square meters, then divide by 60 to go from per-hour to per-minute.</p>
+            <p class="lstep">Desmos solution: type <code>250/(3.28^2*60)</code> as one line, giving about 0.39.</p>
+            <div class="lsol">&asymp; 0.39 square meters per minute (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('SAT9 M 3.21')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; converting an acceleration's units</div>
+            <p class="lstep">A vehicle's speed increases at 7.3 meters per second&sup2;. Convert to miles per minute&sup2;: divide by 1,609 to go from meters to miles, then multiply by \(60^2=3{,}600\) to go from "per second squared" to "per minute squared" (since 1 minute = 60 seconds, converting a squared time unit means squaring the 60).</p>
+            <p class="lstep">Desmos solution: type <code>7.3/1609*3600</code> as one line, giving about 16.3.</p>
+            <div class="lsol">&asymp; 16.3 miles per minute&sup2; (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT7 M 3.22')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="rat-cheat">
+          <h2>9. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Keeping a ratio fixed while one part changes</td><td>Scale the other part by the same factor: new = old &times; (new other-part &divide; old other-part)</td></tr>
+            <tr><td>Rate &times; amount = total</td><td>total &divide; rate = amount; total &divide; amount = rate</td></tr>
+            <tr><td>Converting to a smaller unit</td><td>Multiply by the conversion factor</td></tr>
+            <tr><td>Converting to a bigger unit</td><td>Divide by the conversion factor</td></tr>
+            <tr><td>Converting squared or cubed units (area, volume)</td><td>Square or cube the conversion factor too &mdash; never apply it just once</td></tr>
+            <tr><td>Density</td><td>density = mass &divide; volume; for a cube, volume = (edge length)&sup3;</td></tr>
+            <tr><td>Answer choices are expressions, not numbers</td><td>Plug in an easy test value and see which choice matches your hand-computed answer</td></tr>
+            <tr><td>Two ratio equations, only the ratio between letters matters</td><td>Pick convenient numbers satisfying the ratio, then solve the remaining equation with Desmos regression (~)</td></tr>
+            <tr><td>A rate of change that also needs converting</td><td>Set up the rate first, then convert &mdash; usually doable in one combined Desmos line</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The Ratios/rates filter already covers 51 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Ratios, rates, proportional relationships, and units');">Go practice Ratios &amp; Rates &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="navmodal" id="navModal">
+  <div class="navhead">
+    <b id="navTitle">SAT Math Practice</b>
+    <span class="legend"><span class="legendbox"></span> Unanswered</span>
+    <span class="legend"><span class="legendcheck">&#10003;</span> Solved</span>
+    <span class="legend"><span class="legendflag">&#9873;</span> For Review</span>
+  </div>
+  <div class="navgrid" id="navGrid"></div>
+</div>
+
+<div class="calcpanel" id="calcPanel">
+  <div class="calchead" id="calcHead">&#128202; Calculator
+    <button class="regrbtn" onclick="addRegression()" title="Fit a line of best fit to a table you've entered">+ Regression</button>
+    <button id="splitBtn" onclick="toggleSplit(!splitMode)" title="Split screen">&#8862;</button>
+    <button class="x" onclick="closeCalc()" title="Close">&#10005;</button>
+  </div>
+  <div class="calcbody" id="calcBody"></div>
+  <div class="calcgrip" id="calcGrip" title="Resize"></div>
+</div>
+
+<script src="figures.js"></script>
+<template id="tplLessonUz">
+        <div class="lsec" id="l-intro">
+          <h1>SAT'da foizlar</h1>
+          <div class="ltag">Masalalarni Yechish va Ma'lumotlar Tahlili</div>
+          <p>Foiz masalalari &mdash; o'quvchilar eng ko'p xato qiladigan masala turi. Buning sababi matematika qiyin bo'lgani uchun emas, balki savol matnida yashiringan "tuzoq" tufayli. Har qanday foiz masalasi bitta savolga tushadi: <b>bu foiz natijaning o'zini ifodalayaptimi, yoki faqat o'zgarish miqdorinimi?</b> Buni har safar to'g'ri aniqlasangiz, SAT'dagi barcha foiz masalalari sonlar yoki hikoya o'zgarishidan qat'i nazar, bir nechta bir xil qoliplarga aylanadi.</p>
+          <p>Ushbu dars bu qoliplarni testda uchraydigan tartibda, eng asosiylaridan tortib eng qiyin "uch sonli zanjir" masalalarigacha ko'rib chiqadi &mdash; haqiqiy SAT savollari (ba'zilari ushbu mashq to'plamida allaqachon mavjud) Desmos uslubida oxirigacha yechiladi.</p>
+        </div>
+
+        <div class="lsec" id="l-basics">
+          <h2>1. Asoslar</h2>
+          <div class="lsub">Foiz va o'nlik kasr orasida aylantirish, va "of" (dan) nimani anglatishi</div>
+          <div class="lrule">O'nlik kasrni foizga aylantirish uchun 100 ga ko'paytiring. Foizni o'nlik kasrga aylantirish uchun 100 ga bo'ling.</div>
+          <p>Demak, \(0.5 = 50\%\), va \(1.2345 = 123.45\%\). Diqqat qiling: <b>1 soni 100% bilan bir xil</b> &mdash; ushbu bitta fakt ushbu darsning qolgan qismi uchun kalit hisoblanadi.</p>
+          <div class="lex">
+            <div class="lextitle">"of" (dan) so'zi doim ko'paytirishni anglatadi.</div>
+            <p class="lstep">"50% of 6" (6 ning 50%i) shunchaki \(0.5 \times 6 = 3\). "75% of 2" (2 ning 75%i) esa \(0.75\times 2 = 1.5\). SAT ichidagi Desmos kalkulyatorida foiz belgisini to'g'ridan-to'g'ri yozishingiz mumkin &mdash; <code>50%</code> deb yozing, Desmos avtomatik ravishda "of" so'zini taklif qiladi va hisoblab beradi. Oddiy foiz savolining butun mohiyati shu: savol shunchaki "X ning Y%i nima" deb so'rasa, ko'paytirasiz, tamom.</p>
+          </div>
+          <p>Qiyinchilik hech qachon shunda emas. Qiyinchilik &mdash; shunchaki "X ning Y%i" demaydigan, balki oshish yoki kamayishni tasvirlaydigan savollarda. Bu 2-bo'lim, va bu butun darsdagi eng muhim g'oya.</p>
+        </div>
+
+        <div class="lsec" id="l-golden">
+          <h2>2. Oltin qoida: "of" (dan) va "ortgan/kamaygan" farqi</h2>
+          <div class="lsub">SAT'dagi eng ko'p uchraydigan foiz tuzog'i</div>
+          <div class="lrule">"X ning Y%i" &mdash; oddiy ko'paytirish.<br>"Y% ga ortgan/kamaygan" esa bu miqdorni asl songa qo'shish (yoki undan ayirish) kerakligini bildiradi.</div>
+          <div class="lwarn"><b>Tuzoq:</b> savolda "5 sonini 500% ga oshirish natijasi x" deyilsa, deyarli har bir o'quvchi \(500\%\times 5 = 25\) deb hisoblab, davom etadi. Bu xato. 500% &mdash; bu faqat <i>qancha o'sgani</i>, natijaning o'zi emas.</div>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "5 sonini 500% ga oshirish natijasi x. x nimaga teng?"</div>
+            <p class="lstep">Siz <b>asl</b> sonni olib, unga o'sgan miqdorni <b>qo'shishingiz</b> kerak:</p>
+            <p class="lstep">\(x = 5 + 500\%\text{ of }5 = 5+25=30\)</p>
+            <p class="lstep">Mana har doim tezroq ishlaydigan qisqa yo'l: 5 soni o'zining <b>100%</b> i hisoblanadi. Shuning uchun "5 plus 500% of 5" aslida "100% of 5 plus 500% of 5" bilan bir xil, bu esa shunchaki <b>600% of 5</b> &mdash; va \(600\%\times5=30\). Xuddi shu javob, lekin ikkita qadam o'rniga bitta ko'paytirish.</p>
+            <p class="lstep">Desmos yechimi: hech qanday tenglama kerak emas &mdash; shunchaki <code>5 + 500% of 5</code> deb kalkulyatorga yozing, u darhol 30 ni hisoblab beradi.</p>
+            <div class="lsol">x = 30 (25 emas)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 3.19')">Aynan shu SAT savolini sinab ko'ring &rarr;</button>
+          </div>
+          <p>Demak, haqiqiy qoida: <b>X% ga oshirish = (100+X)% ga ko'paytirish</b>. 500% ga oshirish 600% ga ko'paytirishga teng. 7% ga oshirish 107% ga ko'paytirishga teng. Har doim X% ni asl songa "o'rnatilgan" 100% ustiga qo'shing.</p>
+        </div>
+
+        <div class="lsec" id="l-decrease">
+          <h2>3. Kamaytirish: 100% &minus; X%</h2>
+          <div class="lsub">2-bo'limning aks sadosi</div>
+          <div class="lrule">X% ga kamaytirish = (100&minus;X)% ga ko'paytirish</div>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "5 sonini 20% ga kamaytirish natijasi x. x nimaga teng?"</div>
+            <p class="lstep">Siz shunchaki 5 ning 20% ini hisoblay olmaysiz. Asl sondan kamaygan miqdorni ayirishingiz kerak:</p>
+            <p class="lstep">\(x = 5 - 20\%\text{ of }5 = 5-1=4\)</p>
+            <p class="lstep">Qisqa yo'l bilan: 5 &mdash; o'zining 100% i, shuning uchun "5 minus 20% of 5" &mdash; "100% &minus; 20% = 80% of 5" bilan bir xil, va \(80\%\times5=4\). Xuddi shu javob.</p>
+            <p class="lstep">Desmos yechimi: <code>5 - 20% of 5</code> (yoki shunchaki <code>80% of 5</code>) deb to'g'ridan-to'g'ri kalkulyatorga yozing &mdash; tenglama yechish shart emas, u darhol 4 ni hisoblab beradi.</p>
+            <div class="lsol">x = 4, va 80% of 5 &mdash; bitta qadamda shu javobga olib keladi</div>
+          </div>
+          <div class="lwarn">Savolda foiz ko'rsangiz, birinchi tekshiring: <b>bu oshish/kamayish, yoki oddiy "X ning Y%i"mi?</b> Shu bitta tekshiruv butun tenglamani qanday tuzishingizni belgilaydi, va SAT buni doimiy tekshiradi.</div>
+        </div>
+
+        <div class="lsec" id="l-reverse">
+          <h2>4. Teskari foiz &mdash; asl sonni topish</h2>
+          <div class="lsub">Savolda <i>natija</i> berilib, boshlang'ich son so'ralganda</div>
+          <div class="lrule">asl son &times; (1 &plusmn; foiz) = yakuniy natija</div>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "Mijoz 6% savdo solig'i qo'shilgandan so'ng kurtka uchun $53 to'lagan. Soliqdan oldingi narx qancha edi?"</div>
+            <p class="lstep">Birinchi fikr &mdash; $53 dan 6% ni ayirish. Bu xato, va javob variantlariga ham mos kelmaydi (siz $49.82 olasiz). 6% soliq hech qachon $53 <i>ustiga</i> hisoblanmagan; u soliqdan <b>oldingi</b> narxga hisoblangan, buni hali bilmaymiz. Uni \(x\) deb belgilaylik.</p>
+            <p class="lstep">\(x + 6\%\text{ of }x = 53 \quad\Longrightarrow\quad 1.06x = 53\)</p>
+            <p class="lstep">SAT'dagi Desmos'da buni deyarli xuddi shunday yozasiz &mdash; <code>x&#8201;+&#8201;6%&nbsp;of&nbsp;x&nbsp;~&nbsp;53</code> &mdash; va to'lqinsimon tenglik (regressiya) x ni topib beradi.</p>
+            <div class="lsol">x = $50</div>
+            <button class="practicebtn" onclick="goPractice('SAT8 M 3.16')">Teskari foiz SAT savolini sinab ko'ring &rarr;</button>
+          </div>
+          <p>Bu yerdagi dars: foiz <i>nimaning</i> ustiga hisoblangan bo'lsa, siz izlagan noma'lum son o'sha. Hech qachon oxirida berilgan son emas. 6% asl narxga hisoblangan, $53 ga emas, shuning uchun $53 faqat tenglamaning <i>boshqa</i> tomonida bo'lishi mumkin.</p>
+        </div>
+
+        <div class="lsec" id="l-chain">
+          <h2>5. Zanjir foizlar &mdash; chegirma, keyin soliq</h2>
+          <div class="lsub">Ketma-ket ikkita foiz, har biri <i>boshqa-boshqa</i> songa</div>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "Alma noutbukni asl narxidan 20% chegirma bilan sotib oldi. U kassirga chegirmalangan narxga 8% savdo solig'i qo'shilgan holda P dollar to'lagan. Noutbukning asl narxini P orqali ifodalang."</div>
+            <p class="lstep">Asl narxni \(x\) deb olaylik. Unga ketma-ket ikkita narsa bo'ladi:</p>
+            <p class="lstep">1&rpar; 20% <b>chegirma</b> &mdash; bu kamayish, shuning uchun chegirmalangan narx \(0.8x\) (3-bo'lim qisqa yo'li bilan: 100%&minus;20%=80%).</p>
+            <p class="lstep">2&rpar; Chegirmalangan narxga 8% savdo <b>solig'i</b> &mdash; bu oshish, shuning uchun yakuniy narx \(0.8x \times 1.08\).</p>
+            <p class="lstep">\(0.8x \times 1.08 = P \quad\Longrightarrow\quad x = \dfrac{P}{0.8\times1.08}\)</p>
+            <p class="lstep">Desmos yechimi: javob P ga bog'liq ifoda bo'lgani uchun regressiya to'g'ridan-to'g'ri ishlamaydi &mdash; lekin siz baribir <code>x = P/(0.8*1.08)</code> deb Desmos'ga yozishingiz, P ga biror son (masalan, \(P=100\)) berishingiz mumkin, va Desmos mos x qiymatini darhol hisoblab beradi, shunda algebrangizni javob variantlariga nisbatan sonli tekshirib ko'rasiz.</p>
+            <div class="lsol">Asl narx = P &divide; (0.8 &times; 1.08) &mdash; D javobi</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.12')">Shunga o'xshash zanjir-foiz savolini sinab ko'ring &rarr;</button>
+          </div>
+          <div class="lwarn">Bu yerdagi ikkita foiz har biri <i>boshqa-boshqa</i> songa hisoblangan &mdash; 20% chegirma <b>asl</b> narxga, 8% soliq esa <b>chegirmalangan</b> narxga. Har bir foiz qaysi songa ko'paytirilishini kuzatib borish &mdash; bu yerdagi butun mahorat. Foizni u tasvirlamagan songa hech qachon "surib" qo'ya olmaysiz.</div>
+        </div>
+
+        <div class="lsec" id="l-three">
+          <h2>6. Uch sonli foiz zanjirlari ("qavs" qoliplari)</h2>
+          <div class="lsub">Haqiqiy SAT'dagi eng qiyin va eng ko'p uchraydigan qolip &mdash; deyarli har bir testda bor</div>
+          <p>Aynan shu matn shaklini kuzating: <b>"A &mdash; (B + C) ning X%i, va B &mdash; C ning Y%i. A, B ning necha foizi?"</b> &mdash; uchta miqdor, uchta foiz munosabati, va oxirida "necha foiz" savoli. Shunday shaklni ko'rganingizda, uchta alohida tenglama tuzing va ularni Desmos'ning qavs-regressiya usuli bilan bir vaqtda yeching: barcha chap tomonlarni bitta qavsga, barcha o'ng tomonlarni mos qavsga, vergul bilan ajratib joylashtiring.</p>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "Musbat son a, musbat b va c sonlarining yig'indisining 2 241%i, va b &mdash; c ning 83%i. a, b ning necha foizi?"</div>
+            <p class="lstep">Uchta fakt, uchta tenglama. Noma'lum foizni \(w\) deb belgilaylik:</p>
+            <p class="lstep">\(a = 2241\%(b+c) \qquad b = 83\%\,c \qquad w\%\text{ of }b = a\)</p>
+            <p class="lstep">Chap tomonlarni bitta qavsga, o'ng tomonlarni mos qavsga joylashtiring, so'ng Desmos'ga barcha noma'lumlarni bir vaqtda hisoblatiring:</p>
+            <div class="lbracket">[a, b, w% of b] &nbsp;~&nbsp; [2241% of (b+c), 83% of c, a]</div>
+            <p class="lstep">Desmos har bir noma'lum uchun qiymat qaytaradi: \(a\approx49.41,\ b=1,\ c\approx1.205,\ w=4941\).</p>
+            <div class="lsol">w = 4 941% &mdash; D javobi</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 3.18')">Aynan shu savolni sinab ko'ring &rarr;</button>
+          </div>
+          <p>Bu qolip tezlik yoki bir-biriga nisbatan foiz sifatida ifodalangan savollar ortida ham turadi (A obyektining tezligi B obyektiniki ning qandaydir foizi va h.k.) &mdash; xuddi shu uch tenglamali qavs usuli, faqat birliklar boshqacha.</p>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.81')">Ushbu qolipning "tezliklar" versiyasini sinab ko'ring &rarr;</button>
+        </div>
+
+        <div class="lsec" id="l-plug100">
+          <h2>7. "100 ni qo'yish" usuli</h2>
+          <div class="lsub">Savolda <i>faqat</i> foizlar berilib, hech qanday haqiqiy son berilmaganda</div>
+          <p>Ba'zan savol ikkita miqdorni faqat foiz o'zgarishlari orqali tasvirlaydi va boshlash uchun bironta haqiqiy son bermaydi. Shunday bo'lsa, <b>o'zingiz o'ylab toping</b>. Boshlang'ich qiymat uchun 100 ni tanlang &mdash; foiz olish uchun eng qulay son &mdash; va uni butun masala davomida olib yuring. Savoldagi har bir miqdor faqat bir-biriga nisbatan foizlar orqali aniqlangani uchun, tanlagan haqiqiy son yakuniy foiz javobiga ta'sir qilmaydi.</p>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "Yirtqich va o'ljaning populyatsiyasi hafta boshida bir xil o'lchamda edi. Hafta oxirigacha o'lja populyatsiyasi 4 000%ga, yirtqich populyatsiyasi esa 900%ga oshdi. O'lja populyatsiyasi yirtqichnikidan p% ko'p bo'ldi. p ni toping."</div>
+            <p class="lstep">Haqiqiy boshlang'ich populyatsiya berilmagan &mdash; shuning uchun o'ylab topamiz. Ikkala populyatsiya 100 dan boshlansin:</p>
+            <p class="lstep">Hafta oxirida o'lja: \(100+4000\%\text{ of }100 = 100+4000=4100\)</p>
+            <p class="lstep">Hafta oxirida yirtqich: \(100+900\%\text{ of }100=100+900=1000\)</p>
+            <p class="lstep">Endi savolning oxirgi gapi &mdash; topilgan ikkita natija orasidagi yana bir "oshish" munosabati:</p>
+            <p class="lstep">\(1000 + p\%\text{ of }1000 = 4100\)</p>
+            <p class="lstep">Desmos yechimi: <code>1000 + p% of 1000 ~ 4100</code> deb yozing &mdash; to'lqinsimon tenglik (regressiya) p ni to'g'ridan-to'g'ri topib beradi: 310.</p>
+            <div class="lsol">p = 310</div>
+          </div>
+          <div class="lwarn">Ikkala "oshdi" iborasini <i>va</i> oxiridagi "p% ko'p" iborasini ushlab oling &mdash; oxirgisi ham oshish munosabati, va birinchi ikki qismni yechgandan keyin uni o'qib o'tib ketish oson.</div>
+        </div>
+
+        <div class="lsec" id="l-mixture">
+          <h2>8. Eritmaning foizi (Aralashma masalalari)</h2>
+          <div class="lsub">Kamdan-kam uchraydigan qolip, lekin formulasini yodda tutish kerak</div>
+          <div class="lrule">(konsentratsiya&#8321;)(miqdor&#8321;) + (konsentratsiya&#8322;)(miqdor&#8322;) = (yakuniy konsentratsiya)(umumiy miqdor)</div>
+          <div class="lex">
+            <div class="lextitle">Yechilgan misol &mdash; "15% li tuzli eritma olish uchun 10% li tuzli eritmaning 3 litriga 25% li tuzli eritmadan necha litr qo'shish kerak?"</div>
+            <p class="lstep">25% li eritmaning noma'lum miqdorini \(x\) deb olaylik. Yakunda umumiy miqdor &mdash; quyilgan hamma narsa va allaqachon bor bo'lgan 3 litr, ya'ni \(x+3\):</p>
+            <p class="lstep">\(0.25x + 0.10(3) = 0.15(x+3)\)</p>
+            <p class="lstep">Buni Desmos'ga deyarli xuddi shunday yozing, tenglik belgisini to'lqinsimon regressiya sifatida qo'yib, \(x\) ni yeching.</p>
+            <div class="lsol">x = 1.5 litr</div>
+            <button class="practicebtn" onclick="goPractice('Chung Tip29 Q1')">Ko'proq aralashma/eritma savollarini sinab ko'ring &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="l-cheat">
+          <h2>9. Qisqacha ma'lumot</h2>
+          <div class="lsub">Ushbu darsdagi hammasi, bitta jadvalda</div>
+          <table class="cheat">
+            <tr><th>Qolip</th><th>Nima qilish kerak</th></tr>
+            <tr><td>"X ning Y%i"</td><td>Oddiy ko'paytiring: \(0.0X\times Y\)</td></tr>
+            <tr><td>"X% ga oshdi"</td><td>(100+X)% ga ko'paytiring, yoki asl songa X% ini qo'shing</td></tr>
+            <tr><td>"X% ga kamaydi"</td><td>(100&minus;X)% ga ko'paytiring, yoki asl sondan X% ini ayiring</td></tr>
+            <tr><td>Noma'lum asl son, ma'lum natija</td><td>asl son &times; (1 &plusmn; foiz) = natija &mdash; asl sonni yeching</td></tr>
+            <tr><td>Ketma-ket ikkita foiz (chegirma, keyin soliq)</td><td>Ularni birin-ketin, har birini tasvirlangan songa qo'llang</td></tr>
+            <tr><td>"A &mdash; (B+C) ning X%i, B &mdash; C ning Y%i, A, B ning necha %i?"</td><td>Uchta tenglama &rarr; bitta Desmos qavs-regressiyasi</td></tr>
+            <tr><td>Faqat foizlar berilgan, haqiqiy boshlang'ich son yo'q</td><td>Boshlang'ich qiymat sifatida 100 ni qo'ying va shu bilan davom eting</td></tr>
+            <tr><td>Ikki xil konsentratsiyali eritmalarni aralashtirish</td><td>(konts&#8321;)(miqd&#8321;) + (konts&#8322;)(miqd&#8322;) = (yakuniy konts)(umumiy miqd)</td></tr>
+          </table>
+          <p style="margin-top:22px">Mashq qilishga tayyormisiz? Foizlar filtri allaqachon 129 ta haqiqiy SAT uslubidagi savolni o'z ichiga oladi &mdash; shu jumladan ushbu darsdagi har bir qolip.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Percentages');">Foizlarni mashq qilishga o'tish &rarr;</button>
+        </div>
+</template>
+
+<template id="tplLessonRu">
+        <div class="lsec" id="l-intro">
+          <h1>Проценты на SAT</h1>
+          <div class="ltag">Решение задач и анализ данных</div>
+          <p>Задачи на проценты &mdash; это тип задач, в которых ученики ошибаются чаще всего. Причина не в сложности математики, а в том, что формулировка скрывает ловушку. Любая задача на проценты сводится к одному вопросу: <b>этот процент описывает весь результат, или только величину изменения?</b> Если каждый раз правильно отвечать на этот вопрос, все задачи на проценты на SAT сводятся к одному и тому же набору приёмов, независимо от чисел или сюжета.</p>
+          <p>В этом уроке эти приёмы разбираются в том порядке, в котором они встречаются на экзамене &mdash; от основ до самых сложных задач с &laquo;цепочкой из трёх чисел&raquo; &mdash; на реальных задачах SAT (некоторые уже есть в этом наборе практики), разобранных полностью, в стиле Desmos.</p>
+        </div>
+
+        <div class="lsec" id="l-basics">
+          <h2>1. Основы</h2>
+          <div class="lsub">Перевод между процентом и десятичной дробью, и что значит &laquo;от&raquo;</div>
+          <div class="lrule">Чтобы превратить десятичную дробь в процент, умножьте на 100. Чтобы превратить процент в десятичную дробь, разделите на 100.</div>
+          <p>Итак, \(0.5 = 50\%\), а \(1.2345 = 123.45\%\). Обратите внимание: <b>1 &mdash; это то же самое, что 100%</b> &mdash; этот факт является ключом почти ко всему остальному в этом уроке.</p>
+          <div class="lex">
+            <div class="lextitle">Слово &laquo;от&raquo; всегда означает умножение.</div>
+            <p class="lstep">&laquo;50% от 6&raquo; &mdash; это просто \(0.5 \times 6 = 3\). &laquo;75% от 2&raquo; &mdash; это просто \(0.75\times 2 = 1.5\). Во встроенном калькуляторе Desmos на SAT можно прямо ввести знак процента &mdash; наберите <code>50%</code>, и Desmos сам предложит &laquo;от&raquo; и посчитает результат. В этом вся суть простого вопроса на проценты: если спрашивается просто &laquo;сколько составляет X% от Y&raquo;, вы просто умножаете &mdash; и всё.</p>
+          </div>
+          <p>Сложность никогда не в этом. Сложность &mdash; в вопросах, которые <i>не</i> просто спрашивают &laquo;X% от Y&raquo;, а описывают увеличение или уменьшение. Это раздел 2, и это самая важная идея всего урока.</p>
+        </div>
+
+        <div class="lsec" id="l-golden">
+          <h2>2. Золотое правило: &laquo;от&raquo; против &laquo;увеличилось/уменьшилось на&raquo;</h2>
+          <div class="lsub">Самая частая ловушка SAT с процентами</div>
+          <div class="lrule">&laquo;X% от числа&raquo; &mdash; это прямое умножение.<br>&laquo;Увеличилось/уменьшилось НА X%&raquo; означает, что эту величину нужно прибавить к исходному числу (или вычесть из него).</div>
+          <div class="lwarn"><b>Ловушка:</b> когда в задаче сказано &laquo;результат увеличения числа 5 на 500% равен x&raquo;, почти каждый ученик считает \(500\%\times 5 = 25\) и идёт дальше. Это неверно. 500% &mdash; это только <i>величина прироста</i>, а не сам результат.</div>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Результат увеличения числа 5 на 500% равен x. Чему равно x?&raquo;</div>
+            <p class="lstep">Нужно взять <b>исходное</b> число и <b>прибавить</b> к нему величину прироста:</p>
+            <p class="lstep">\(x = 5 + 500\%\text{ of }5 = 5+25=30\)</p>
+            <p class="lstep">Вот приём, который всегда ускоряет решение: 5 &mdash; это просто <b>100%</b> самого себя. Поэтому &laquo;5 плюс 500% от 5&raquo; &mdash; то же самое, что &laquo;100% от 5 плюс 500% от 5&raquo;, то есть просто <b>600% от 5</b> &mdash; и \(600\%\times5=30\). Тот же ответ, но за одно умножение вместо двух шагов.</p>
+            <p class="lstep">Решение в Desmos: уравнение не нужно &mdash; просто введите <code>5 + 500% of 5</code> прямо в калькулятор, и он сразу вычислит 30.</p>
+            <div class="lsol">x = 30 (а не 25)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 3.19')">Попробовать точно такую же задачу SAT &rarr;</button>
+          </div>
+          <p>Итак, настоящее правило: <b>увеличение на X% = умножение на (100+X)%</b>. Увеличение на 500% означает умножение на 600%. Увеличение на 7% означает умножение на 107%. Всегда прибавляйте X% к тем &laquo;встроенным&raquo; 100%, которые уже есть в исходном числе.</p>
+        </div>
+
+        <div class="lsec" id="l-decrease">
+          <h2>3. Уменьшение: 100% &minus; X%</h2>
+          <div class="lsub">Зеркальное отражение раздела 2</div>
+          <div class="lrule">Уменьшение на X% = умножение на (100&minus;X)%</div>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Результат уменьшения числа 5 на 20% равен x. Чему равно x?&raquo;</div>
+            <p class="lstep">Нельзя просто посчитать 20% от 5. Нужно взять исходное число и вычесть из него величину уменьшения:</p>
+            <p class="lstep">\(x = 5 - 20\%\text{ of }5 = 5-1=4\)</p>
+            <p class="lstep">По тому же приёму: 5 &mdash; это 100% самого себя, поэтому &laquo;5 минус 20% от 5&raquo; &mdash; то же самое, что &laquo;100% &minus; 20% = 80% от 5&raquo;, и \(80\%\times5=4\). Тот же ответ.</p>
+            <p class="lstep">Решение в Desmos: введите <code>5 - 20% of 5</code> (или просто <code>80% of 5</code>) прямо в калькулятор &mdash; решать уравнение не нужно, результат 4 вычисляется сразу.</p>
+            <div class="lsol">x = 4, и 80% от 5 даёт этот ответ за один шаг</div>
+          </div>
+          <div class="lwarn">Как только видите процент в задаче, первым делом проверьте: <b>это увеличение/уменьшение, или просто &laquo;X% от Y&raquo;?</b> Именно эта проверка определяет, как составить всё уравнение, и SAT постоянно проверяет именно это различие.</div>
+        </div>
+
+        <div class="lsec" id="l-reverse">
+          <h2>4. Обратный процент &mdash; нахождение исходного числа</h2>
+          <div class="lsub">Когда в задаче дан <i>результат</i>, а спрашивается исходное число</div>
+          <div class="lrule">исходное число &times; (1 &plusmn; процент) = итоговый результат</div>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Покупатель заплатил $53 за куртку после добавления налога с продаж 6%. Какова была цена до налога?&raquo;</div>
+            <p class="lstep">Первый порыв &mdash; вычесть 6% из $53. Это неверно, и даже не совпадает ни с одним из вариантов ответа (получится $49.82). Налог 6% никогда не начислялся <i>на</i> $53; он начислялся на цену <b>до</b> налога, которую мы ещё не знаем. Назовём её \(x\).</p>
+            <p class="lstep">\(x + 6\%\text{ of }x = 53 \quad\Longrightarrow\quad 1.06x = 53\)</p>
+            <p class="lstep">В Desmos на SAT это вводится почти буквально так же &mdash; <code>x&#8201;+&#8201;6%&nbsp;of&nbsp;x&nbsp;~&nbsp;53</code> &mdash; и волнистый знак равенства (регрессия) находит x.</p>
+            <div class="lsol">x = $50</div>
+            <button class="practicebtn" onclick="goPractice('SAT8 M 3.16')">Попробовать задачу на обратный процент &rarr;</button>
+          </div>
+          <p>Урок здесь такой: то число, от которого берётся процент, и есть неизвестное, которое нужно найти, &mdash; а не число, данное в конце. 6% начислялись на исходную цену, а не на $53, поэтому $53 может стоять только на <i>другой</i> стороне уравнения.</p>
+        </div>
+
+        <div class="lsec" id="l-chain">
+          <h2>5. Цепочка процентов &mdash; сначала скидка, потом налог</h2>
+          <div class="lsub">Два процента подряд, каждый действует на <i>своё</i> число</div>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Альма купила ноутбук со скидкой 20% от исходной цены. Кассиру она заплатила P долларов, включая налог с продаж 8% от цены со скидкой. Выразите исходную цену ноутбука через P.&raquo;</div>
+            <p class="lstep">Пусть исходная цена &mdash; \(x\). С ней по порядку происходят две вещи:</p>
+            <p class="lstep">1&rpar; Скидка 20% &mdash; это уменьшение, поэтому цена со скидкой равна \(0.8x\) (по приёму из раздела 3: 100%&minus;20%=80%).</p>
+            <p class="lstep">2&rpar; Налог с продаж 8% на эту цену со скидкой &mdash; это увеличение, поэтому итоговая цена равна \(0.8x \times 1.08\).</p>
+            <p class="lstep">\(0.8x \times 1.08 = P \quad\Longrightarrow\quad x = \dfrac{P}{0.8\times1.08}\)</p>
+            <p class="lstep">Решение в Desmos: поскольку ответ &mdash; это выражение через P, а не число, регрессия здесь напрямую не применяется &mdash; но можно ввести <code>x = P/(0.8*1.08)</code> в Desmos, задать P любое тестовое значение (например, \(P=100\)) и мгновенно получить соответствующее x, чтобы численно проверить свою алгебру по вариантам ответа.</p>
+            <div class="lsol">Исходная цена = P &divide; (0.8 &times; 1.08) &mdash; вариант D</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.12')">Попробовать похожую задачу с цепочкой процентов &rarr;</button>
+          </div>
+          <div class="lwarn">Эти два процента действуют каждый на <i>своё</i> число &mdash; скидка 20% действует на <b>исходную</b> цену, а налог 8% &mdash; на цену <b>со скидкой</b>. Отслеживание того, на какое именно число умножается каждый процент, &mdash; вот и весь навык. Процент никогда нельзя &laquo;перенести&raquo; на число, которое он не описывал.</div>
+        </div>
+
+        <div class="lsec" id="l-three">
+          <h2>6. Цепочки из трёх чисел с процентами (приём со &laquo;скобками&raquo;)</h2>
+          <div class="lsub">Самый сложный и самый частый приём на реальном SAT &mdash; встречается почти в каждом тесте</div>
+          <p>Следите за такой формулировкой: <b>&laquo;A составляет X% от суммы (B + C), а B составляет Y% от C. Сколько процентов B составляет A?&raquo;</b> &mdash; три величины, три процентных соотношения, и вопрос &laquo;сколько процентов&raquo; в конце. Увидев такую формулировку, составьте три отдельных уравнения и решите их все сразу с помощью приёма Desmos со скобками-регрессией: все левые части &mdash; в одну скобку, все правые части &mdash; в соответствующую скобку, через запятую.</p>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Положительное число a составляет 2 241% от суммы положительных чисел b и c, а b составляет 83% от c. Сколько процентов b составляет a?&raquo;</div>
+            <p class="lstep">Три факта &mdash; три уравнения. Обозначим неизвестный процент через \(w\):</p>
+            <p class="lstep">\(a = 2241\%(b+c) \qquad b = 83\%\,c \qquad w\%\text{ of }b = a\)</p>
+            <p class="lstep">Соберите левые части в одну скобку, правые части &mdash; в соответствующую скобку, и пусть Desmos сразу найдёт все неизвестные регрессией:</p>
+            <div class="lbracket">[a, b, w% of b] &nbsp;~&nbsp; [2241% of (b+c), 83% of c, a]</div>
+            <p class="lstep">Desmos сразу выдаёт значение для каждого неизвестного: \(a\approx49.41,\ b=1,\ c\approx1.205,\ w=4941\).</p>
+            <div class="lsol">w = 4 941% &mdash; вариант D</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 3.18')">Попробовать именно эту задачу &rarr;</button>
+          </div>
+          <p>Этот же приём стоит за задачами про скорости или другие величины, выраженные в процентах друг от друга (скорость объекта A составляет какой-то процент от скорости B и т.д.) &mdash; та же схема с тремя уравнениями и скобками, просто другие единицы измерения.</p>
+          <button class="practicebtn" onclick="goPractice('Q326 M 2.81')">Попробовать версию этого приёма со &laquo;скоростями&raquo; &rarr;</button>
+        </div>
+
+        <div class="lsec" id="l-plug100">
+          <h2>7. Приём &laquo;подставь 100&raquo;</h2>
+          <div class="lsub">Для задач, где даны <i>только</i> проценты &mdash; вообще без реальных чисел</div>
+          <p>Иногда в задаче две величины описаны только через процентные изменения, и ни одного реального числа для старта не дано. В этом случае <b>придумайте его сами</b>. Возьмите 100 в качестве исходного значения &mdash; с ним проще всего брать проценты &mdash; и проведите это число через всю задачу. Поскольку каждая величина в задаче определена только через проценты друг относительно друга, выбранное вами число никак не влияет на итоговый процентный ответ.</p>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Популяции хищника и жертвы в начале недели были одинакового размера. К концу недели популяция жертвы увеличилась на 4 000%, а популяция хищника &mdash; на 900%. Популяция жертвы оказалась на p% больше популяции хищника. Найдите p.&raquo;</div>
+            <p class="lstep">Реальная исходная численность не дана &mdash; значит, придумаем её. Пусть обе популяции начинаются со 100:</p>
+            <p class="lstep">Жертва к концу недели: \(100+4000\%\text{ of }100 = 100+4000=4100\)</p>
+            <p class="lstep">Хищник к концу недели: \(100+900\%\text{ of }100=100+900=1000\)</p>
+            <p class="lstep">Теперь последнее предложение задачи &mdash; это ещё одно соотношение &laquo;увеличилось на&raquo; между двумя уже найденными результатами:</p>
+            <p class="lstep">\(1000 + p\%\text{ of }1000 = 4100\)</p>
+            <p class="lstep">Решение в Desmos: введите <code>1000 + p% of 1000 ~ 4100</code> &mdash; волнистый знак равенства (регрессия) сразу находит p: 310.</p>
+            <div class="lsol">p = 310</div>
+          </div>
+          <div class="lwarn">Обратите внимание на обе фразы &laquo;увеличилась на&raquo; <i>и</i> на фразу &laquo;на p% больше&raquo; в самом конце &mdash; это тоже отношение увеличения, и его легко пропустить, уже решив первые две части.</div>
+        </div>
+
+        <div class="lsec" id="l-mixture">
+          <h2>8. Процент раствора (задачи на смеси)</h2>
+          <div class="lsub">Более редкий приём, но формулу стоит знать наизусть</div>
+          <div class="lrule">(концентрация&#8321;)(объём&#8321;) + (концентрация&#8322;)(объём&#8322;) = (итоговая концентрация)(общий объём)</div>
+          <div class="lex">
+            <div class="lextitle">Разбор примера &mdash; &laquo;Сколько литров 25%-ного солевого раствора нужно добавить к 3 литрам 10%-ного раствора, чтобы получить 15%-ный раствор?&raquo;</div>
+            <p class="lstep">Пусть \(x\) &mdash; неизвестный объём (в литрах) 25%-ного раствора. Итоговый общий объём &mdash; это всё, что долили, плюс уже имеющиеся 3 литра, то есть \(x+3\):</p>
+            <p class="lstep">\(0.25x + 0.10(3) = 0.15(x+3)\)</p>
+            <p class="lstep">Введите это в Desmos почти в том же виде, поставив знак равенства как волнистую регрессию, и найдите \(x\).</p>
+            <div class="lsol">x = 1.5 литра</div>
+            <button class="practicebtn" onclick="goPractice('Chung Tip29 Q1')">Попробовать другие задачи на смеси/растворы &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="l-cheat">
+          <h2>9. Краткий справочник</h2>
+          <div class="lsub">Всё из этого урока &mdash; в одной таблице</div>
+          <table class="cheat">
+            <tr><th>Приём</th><th>Что делать</th></tr>
+            <tr><td>&laquo;X% от Y&raquo;</td><td>Прямое умножение: \(0.0X\times Y\)</td></tr>
+            <tr><td>&laquo;увеличилось на X%&raquo;</td><td>Умножьте на \((100+X)\%\), или прибавьте X% от исходного числа</td></tr>
+            <tr><td>&laquo;уменьшилось на X%&raquo;</td><td>Умножьте на \((100-X)\%\), или вычтите X% от исходного числа</td></tr>
+            <tr><td>Неизвестное исходное число, известен результат</td><td>исходное &times; (1 &plusmn; процент) = результат &mdash; решите относительно исходного</td></tr>
+            <tr><td>Два процента подряд (скидка, потом налог)</td><td>Применяйте по очереди, каждый &mdash; к тому числу, которое он описывает</td></tr>
+            <tr><td>&laquo;A &mdash; X% от (B+C), B &mdash; Y% от C, сколько % от B составляет A?&raquo;</td><td>Три уравнения &rarr; одна регрессия Desmos со скобками</td></tr>
+            <tr><td>Даны только проценты, без реального исходного числа</td><td>Подставьте 100 в качестве исходного значения и проведите через задачу</td></tr>
+            <tr><td>Смешивание двух растворов разной концентрации</td><td>(конц&#8321;)(об&#8321;) + (конц&#8322;)(об&#8322;) = (итог. конц)(общий об)</td></tr>
+          </table>
+          <p style="margin-top:22px">Готовы практиковаться? Фильтр &laquo;Percentages&raquo; уже содержит 129 настоящих задач в стиле SAT &mdash; включая каждый приём из этого урока.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Percentages');">Перейти к практике по процентам &rarr;</button>
+        </div>
+</template>
+
+<script src="data_all.js"></script>
+<script>
+var filterMode = "All";
+var VIEW = DATA.map((q,i)=>i);
+function applyFilter(mode){
+  filterMode = mode;
+  VIEW = DATA.map((q,i)=>i).filter(i => mode==="All" || DATA[i].skill===mode);
+  idx = 0;
+  if(!practiceTopicTreeBuilt) buildPracticeTopicTree();
+  updatePracticeTopicActive();
+  closePracticeTree();
+  render();
+}
+var practiceTopicTreeBuilt = false;
+function buildPracticeTopicTree(){
+  practiceTopicTreeBuilt = true;
+  var html = '<div class="ttitle">Practice by Topic</div>';
+  html += '<div class="domaingroup"><div class="skillitem" data-key="All" style="padding-left:20px;font-weight:700;" onclick="applyFilter(\'All\')">'+
+    '<span class="sname">All questions<\/span><span class="skillprogress">'+DATA.length+'<\/span><\/div><\/div>';
+  TOPICS.forEach(function(group){
+    var groupSkills = group.skills.filter(function(sk){ return typeof sk !== 'string' && sk.key; });
+    if(!groupSkills.length) return;
+    html += '<div class="domaingroup"><div class="domainhead"><span class="domaindot" style="background:'+group.color+'"></span>'+group.domain+'<\/div>';
+    groupSkills.forEach(function(obj){
+      var count = DATA.filter(function(q){ return q.skill===obj.key; }).length;
+      html += '<div class="skillitem" data-key="'+obj.key.replace(/"/g,'&quot;')+'" onclick="applyFilter(\''+obj.key.replace(/'/g,"\\'")+'\')">'+
+        '<span class="sname">'+obj.name+'<\/span><span class="skillprogress">'+count+'<\/span><\/div>';
+    });
+    html += '<\/div>';
+  });
+  document.getElementById('practiceTopicTree').innerHTML = html;
+  updatePracticeTopicActive();
+}
+function updatePracticeTopicActive(){
+  document.querySelectorAll('#practiceTopicTree .skillitem').forEach(function(el){
+    el.classList.toggle('active', el.getAttribute('data-key')===filterMode);
+  });
+}
+function togglePracticeTree(){
+  document.getElementById('practiceTopicTree').classList.toggle('open');
+  document.getElementById('practiceTreeScrim').classList.toggle('open');
+}
+function closePracticeTree(){
+  document.getElementById('practiceTopicTree').classList.remove('open');
+  document.getElementById('practiceTreeScrim').classList.remove('open');
+}
+
+var idx = 0;
+var answered = {};
+var flagged  = {};
+var seconds = 0;
+setInterval(()=>{ seconds++; var m=String(Math.floor(seconds/60)).padStart(2,'0'); var s=String(seconds%60).padStart(2,'0'); document.getElementById('timerText').textContent=m+':'+s; }, 1000);
+
+function isAnswered(viewPos){
+  var di = VIEW[viewPos];
+  var st = answered[di];
+  if(!st) return false;
+  return st.sel!==undefined || (st.val && st.val.trim()!=='');
+}
+function isSolvedDi(di){
+  var q = DATA[di];
+  var st = answered[di];
+  if(!st) return false;
+  if(q.ansIdx!==undefined) return st.sel===q.ansIdx;
+  if(q.ans!==undefined && st.val) return st.val.trim().toLowerCase()===String(q.ans).trim().toLowerCase();
+  return false;
+}
+function isSolved(viewPos){ return isSolvedDi(VIEW[viewPos]); }
+function updateHeaderTick(){
+  var host = document.querySelector('.qnum');
+  if(!host) return;
+  var existing = host.querySelector('.solvedtick');
+  if(isSolved(idx)){
+    if(!existing) host.insertAdjacentHTML('beforeend', '<span class="solvedtick" title="Solved">&#10003;<\/span>');
+  } else if(existing){ existing.remove(); }
+}
+function skillProgress(key){
+  var total=0, solved=0;
+  DATA.forEach(function(q, di){ if(q.skill===key){ total++; if(isSolvedDi(di)) solved++; } });
+  return {total:total, solved:solved};
+}
+function updateTopicProgress(){
+  document.querySelectorAll('.skillitem[data-key]').forEach(function(el){
+    var key = el.getAttribute('data-key');
+    if(!key) return;
+    var p = skillProgress(key);
+    if(p.total===0) return;
+    var badge = el.querySelector('.skillprogress');
+    if(!badge){
+      badge = document.createElement('span');
+      badge.className='skillprogress';
+      el.insertBefore(badge, el.querySelector('.skillbadge'));
+    }
+    badge.innerHTML = (p.solved>0?'&#10003; ':'')+p.solved+'/'+p.total;
+  });
+}
+
+// ===================== Progress persistence (localStorage + optional cloud sync) =====================
+var PROGRESS_KEY = 'satpctProgress_v1';
+function progressBlob(){
+  var a={}, f={};
+  Object.keys(answered).forEach(function(di){ a[DATA[di].ref]=answered[di]; });
+  Object.keys(flagged).forEach(function(di){ if(flagged[di]) f[DATA[di].ref]=true; });
+  return {answered:a, flagged:f};
+}
+function saveProgress(){
+  var blob = progressBlob();
+  try{ localStorage.setItem(PROGRESS_KEY, JSON.stringify(blob)); }catch(e){}
+  if(window.firebaseSaveProgress) window.firebaseSaveProgress(blob);
+  if(topicTreeBuilt) updateTopicProgress();
+}
+function applyProgressBlob(saved){
+  var refToIdx = {};
+  DATA.forEach(function(q,di){ refToIdx[q.ref]=di; });
+  Object.keys(saved.answered||{}).forEach(function(ref){
+    var di = refToIdx[ref];
+    if(di!==undefined) answered[di]=saved.answered[ref];
+  });
+  Object.keys(saved.flagged||{}).forEach(function(ref){
+    var di = refToIdx[ref];
+    if(di!==undefined) flagged[di]=true;
+  });
+}
+function loadProgress(){
+  try{
+    var raw = localStorage.getItem(PROGRESS_KEY);
+    if(!raw) return;
+    applyProgressBlob(JSON.parse(raw));
+  }catch(e){}
+}
+loadProgress();
+// Called by the Firebase module script once, after sign-in, with the cloud copy
+// of progress. Merges it on top of whatever's already loaded (local device
+// progress made before signing in isn't lost — it's just overwritten
+// question-by-question wherever the cloud has a saved answer for that ref),
+// re-saves the merged result everywhere, and refreshes anything on screen.
+window.mergeCloudProgress = function(cloudBlob){
+  applyProgressBlob(cloudBlob || {});
+  saveProgress();
+  if(typeof updateHeaderTick === 'function') updateHeaderTick();
+  if(typeof render === 'function') render();
+};
+
+function render(){
+  var di = VIEW[idx];
+  var q = DATA[di];
+  var host = document.getElementById('qpane');
+  var st = answered[di] || {};
+  var elim = st.elim || {};
+  var html = '<div class="qcol">';
+  html += '<div class="qtophead"><div class="qnum">'+(idx+1)+(isSolved(idx)?'<span class="solvedtick" title="Solved">&#10003;<\/span>':'')+'<\/div>'+
+    '<div class="marks">'+
+      '<button class="markbtn '+(flagged[di]?'on':'')+'" onclick="toggleFlag()" title="Mark for review">&#9873;<\/button>'+
+    '<\/div><\/div>';
+  html += '<div class="qtext">'+q.text+'<span class="tag '+q.diff+'">'+q.diff+'<\/span><span class="skilltag">'+q.skill+'<\/span><\/div>';
+  if(q.figure && q.figure.type==='table'){
+    html += '<div class="figwrap"><table class="datatable"><tr>'+q.figure.headers.map(h=>'<th>'+h+'<\/th>').join('')+'<\/tr>';
+    q.figure.rows.forEach(r=>{ html+='<tr>'+r.map(c=>'<td>'+c+'<\/td>').join('')+'<\/tr>'; });
+    html += '<\/table><\/div>';
+  } else if(q.figure){
+    html += '<div class="figwrap">'+renderFigure(q.figure)+'<\/div>';
+  }
+  if(q.figureSVG){
+    html += '<div class="figwrap">'+q.figureSVG+'<\/div>';
+  }
+  if(q.figure2 && q.figure2.type==='table'){
+    html += '<div class="figwrap"><table class="datatable"><tr>'+q.figure2.headers.map(h=>'<th>'+h+'<\/th>').join('')+'<\/tr>';
+    q.figure2.rows.forEach(r=>{ html+='<tr>'+r.map(c=>'<td>'+c+'<\/td>').join('')+'<\/tr>'; });
+    html += '<\/table><\/div>';
+  }
+  var choiceList = q.choicesHTML || q.choices;
+  var isHtmlChoice = !!q.choicesHTML;
+  if(choiceList){
+    html += '<div class="choices">';
+    choiceList.forEach((c,i)=>{
+      var letter = String.fromCharCode(65+i);
+      var cls='choice'+(isHtmlChoice?' htmlchoice':'');
+      if(st.revealed){
+        if(i===q.ansIdx) cls+=' correct';
+        else if(st.sel===i) cls+=' wrong';
+      } else if(st.sel===i) cls+=' selected';
+      if(elim[i]) cls+=' eliminated';
+      html += '<div class="choicerow">'+
+        '<div class="'+cls+'" onclick="selectChoice('+i+')"><span class="cl">'+letter+'<\/span><span class="ctext">'+c+'<\/span><\/div>'+
+        '<div class="elim '+(elim[i]?'on':'')+'" onclick="toggleElim('+i+',event)" title="Cross out">'+(elim[i]?letter:'&#10005;')+'<\/div>'+
+      '<\/div>';
+    });
+    html += '<\/div>';
+    html += '<button class="answerbtn" onclick="reveal()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+  } else {
+    html += '<div class="gridin"><input id="gridInput" type="text" placeholder="Answer" value="'+(st.val||'')+'" oninput="answered['+di+']=answered['+di+']||{}; answered['+di+'].val=this.value; saveProgress(); updateHeaderTick();"><\/div>';
+    html += '<button class="answerbtn" onclick="reveal()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+    if(st.revealed) html += '<div class="answerline">Correct answer: '+q.ans+'<\/div>';
+  }
+  html += '<\/div>';
+  host.innerHTML = html;
+  if(typeof renderMathInElement === 'function'){
+    renderMathInElement(host, {delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});
+  }
+  document.getElementById('progress').innerHTML = (idx+1)+' of '+VIEW.length+' <span class="chev">&#9662;<\/span>';
+  document.getElementById('prevBtn').disabled = idx===0;
+  document.getElementById('nextBtn').textContent = idx===VIEW.length-1 ? 'Finish' : 'Next';
+}
+function selectChoice(i){ var di=VIEW[idx]; answered[di]=answered[di]||{}; answered[di].sel=i; saveProgress(); render(); }
+function toggleElim(i,e){ e.stopPropagation(); var di=VIEW[idx]; answered[di]=answered[di]||{}; answered[di].elim=answered[di].elim||{}; answered[di].elim[i]=!answered[di].elim[i]; saveProgress(); render(); }
+function reveal(){ var di=VIEW[idx]; answered[di]=answered[di]||{}; answered[di].revealed=!answered[di].revealed; saveProgress(); render(); }
+function toggleFlag(){ var di=VIEW[idx]; flagged[di]=!flagged[di]; saveProgress(); render(); }
+function go(d){ var n=idx+d; if(n<0||n>=VIEW.length) return; idx=n; render(); }
+
+function openNav(e){
+  e.stopPropagation();
+  var grid = document.getElementById('navGrid');
+  grid.innerHTML = VIEW.map((di,vi)=>{
+    var cls='navcell'+(isAnswered(vi)?' answered':'')+(isSolved(vi)?' solved':'')+(vi===idx?' current':'');
+    return '<div class="'+cls+'" onclick="jumpTo('+vi+')">'+(vi+1)+(isSolved(vi)?'<span class="solvedtick">&#10003;<\/span>':'')+(flagged[di]?'<span class="flagdot">&#9873;<\/span>':'')+'<\/div>';
+  }).join('');
+  document.getElementById('navModal').classList.add('open');
+  document.getElementById('scrim').classList.add('open');
+}
+function closeNav(){ document.getElementById('navModal').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
+function jumpTo(vi){ idx=vi; render(); closeNav(); }
+
+render();
+
+// ===================== Lesson language switcher =====================
+var LESSON_HTML = {en:null, uz:null, ru:null};
+var SUBNAV_LABELS = {
+  en:['Introduction','1. Basics','2. Golden Rule','3. Decreasing','4. Reverse %','5. Chained %','6. Three-Number Chains','7. Plug In 100','8. Mixtures','9. Cheat Sheet'],
+  uz:["Kirish","1. Asoslar","2. Oltin qoida","3. Kamaytirish","4. Teskari foiz","5. Zanjir foizlar","6. Uch sonli zanjir","7. 100 ni qo'yish","8. Aralashmalar","9. Qisqacha jadval"],
+  ru:['Введение','1. Основы','2. Золотое правило','3. Уменьшение','4. Обратный процент','5. Цепочка процентов','6. Цепочка из трёх чисел','7. Подставь 100','8. Смеси','9. Шпаргалка']
+};
+function initLessonLangs(){
+  LESSON_HTML.en = document.getElementById('lessonCol').innerHTML;
+  var tplUz = document.getElementById('tplLessonUz');
+  var tplRu = document.getElementById('tplLessonRu');
+  if(tplUz) LESSON_HTML.uz = tplUz.innerHTML;
+  if(tplRu) LESSON_HTML.ru = tplRu.innerHTML;
+}
+var currentLang = 'en';
+function setLang(lang){
+  if(!LESSON_HTML[lang]) return;
+  currentLang = lang;
+  document.getElementById('lessonCol').innerHTML = LESSON_HTML[lang];
+  ['en','uz','ru'].forEach(function(l){
+    document.getElementById('langBtn'+l.charAt(0).toUpperCase()+l.slice(1)).classList.toggle('active', l===lang);
+  });
+  var links = document.querySelectorAll('#pctSubnav a');
+  SUBNAV_LABELS[lang].forEach(function(text, i){ if(links[i]) links[i].textContent = text; });
+  if(typeof renderMathInElement === 'function'){
+    renderMathInElement(document.getElementById('lessonCol'), {delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});
+  }
+  renderedLessons.add('lessonPercentages');
+  document.getElementById('lessonBody').scrollTop = 0;
+}
+initLessonLangs();
+renderOneVarFigures();
+function renderOneVarFigures(){
+  document.getElementById('ovFigDotShift').innerHTML = dotPlotSVG([
+    {label:"Data Set A", xmin:22, xmax:26, counts:{22:5,23:4,24:3,25:2,26:1}}
+  ]);
+  document.getElementById('ovFigDotStd').innerHTML = dotPlotSVG([
+    {label:"Class A", xmin:1, xmax:7, counts:{1:1,2:1,3:3,4:4,5:5,6:6,7:7}},
+    {label:"Class B", xmin:14, xmax:20, counts:{14:1,15:1,16:3,17:4,18:5,19:6,20:7}}
+  ]);
+  document.getElementById('ovFigHistogram').innerHTML = histogramSVG([
+    {label:"Data Set A", bins:[{x0:20,x1:30,freq:3},{x0:30,x1:40,freq:4},{x0:40,x1:50,freq:7},{x0:50,x1:60,freq:9}]},
+    {label:"Data Set B", bins:[{x0:10,x1:20,freq:3},{x0:20,x1:30,freq:4},{x0:30,x1:40,freq:7},{x0:40,x1:50,freq:9}]}
+  ], {maxF:11});
+  document.getElementById('ovFigBoxGazelle').innerHTML = boxPlotSVG([
+    {label:"Group 1", min:21, q1:23, median:25, q3:26, max:28},
+    {label:"Group 2", min:22, q1:23, median:24, q3:25, max:28}
+  ], {axisMin:20, axisMax:32, step:2, xlabel:"Mass (kilograms)"});
+  document.getElementById('ovFigBoxBooks').innerHTML = boxPlotSVG([
+    {label:"Class A", min:0, q1:2, median:2, q3:4, max:5},
+    {label:"Class B", min:1, q1:4, median:7, q3:9, max:10}
+  ], {axisMin:0, axisMax:12, step:2, xlabel:"Number of books"});
+  document.getElementById('ovFigBar').innerHTML = barGraphSVG({
+    categories:["1","2","3","4","5","6","7","8","9","10"],
+    values:[30,63,38,50,47,40,54,60,17,20],
+    xlabel:"Group", ylabel:"Number of cans", maxV:70, ystep:10
+  });
+}
+
+// ===================== App shell: Lessons <-> Practice =====================
+var currentSection = 'practice';
+function switchSection(name){
+  currentSection = name;
+  document.getElementById('sectionPractice').classList.toggle('active', name==='practice');
+  document.getElementById('sectionLessons').classList.toggle('active', name==='lessons');
+  document.getElementById('tabPractice').classList.toggle('active', name==='practice');
+  document.getElementById('tabLessons').classList.toggle('active', name==='lessons');
+  document.getElementById('practiceBar').style.display = name==='practice' ? 'flex' : 'none';
+  if(name==='lessons'){
+    closeCalc(); // the calculator is a Practice-only tool; never leave it floating over a lesson
+    if(!topicTreeBuilt) buildTopicTree();
+  }
+}
+
+// ---- Topic directory: the full official skill taxonomy, grouped by domain.
+// Only Percentages has a written lesson so far; every other skill is listed
+// (per request) with a "Coming soon" placeholder rather than being hidden.
+var TOPICS = [
+  {domain:"Algebra", color:"#2f6fb0", skills:[
+    "Linear equations in one variable","Linear functions","Linear equations in two variables",
+    "Systems of two linear equations in two variables","Linear inequalities in one or two variables"
+  ]},
+  {domain:"Advanced Math", color:"#7a4fbd", skills:[
+    "Equivalent expressions","Nonlinear functions",
+    "Nonlinear equations in one variable and systems of equations in two variables"
+  ]},
+  {domain:"Problem-Solving and Data Analysis", color:"#1e7a35", skills:[
+    {name:"Ratios, rates, proportional relationships, and units", key:"Ratios, rates, proportional relationships, and units", lesson:"lessonRatios"},
+    {name:"Percentages", key:"Percentages", lesson:"lessonPercentages"},
+    {name:"One-variable data: Distributions and measures of center and spread", key:"One-variable", lesson:"lessonOneVariable"},
+    {name:"Two-variable data: Models and scatterplots", key:"Two-variable"},
+    {name:"Probability and conditional probability", key:"Probability and conditional probability"},
+    {name:"Inference from sample statistics and margin of error", key:"Inference from sample statistics and margin of error"},
+    {name:"Evaluating statistical claims: Observational studies and experiments", key:"Evaluating statistical claims: Observational studies and experiments"}
+  ]},
+  {domain:"Geometry and Trigonometry", color:"#b5651d", skills:[
+    {name:"Lines, angles, and triangles", key:"Lines, angles, and triangles"},
+    {name:"Right triangles and trigonometry", key:"Right triangles and trigonometry"},
+    {name:"Circles", key:"Circles"},
+    {name:"Area and volume", key:"Area and volume"}
+  ]}
+];
+buildPracticeTopicTree();
+var topicTreeBuilt = false, renderedLessons = new Set(), currentTopicLabel = null;
+function buildTopicTree(){
+  topicTreeBuilt = true;
+  var html = '<div class="ttitle">All SAT Math Topics</div>';
+  TOPICS.forEach(function(group, gi){
+    html += '<div class="domaingroup"><div class="domainhead"><span class="domaindot" style="background:'+group.color+'"></span>'+group.domain+'</div>';
+    group.skills.forEach(function(sk, si){
+      var obj = typeof sk === 'string' ? {name:sk} : sk;
+      var done = !!obj.lesson;
+      var id = 'sk-'+gi+'-'+si;
+      html += '<div class="skillitem" id="'+id+'" onclick="selectTopic(\''+id+'\')" data-name="'+obj.name.replace(/"/g,'&quot;')+'" data-key="'+(obj.key||'')+'" data-lesson="'+(obj.lesson||'')+'" data-color="'+group.color+'" data-domain="'+group.domain+'">'+
+        '<span class="sname">'+obj.name+'</span>'+
+        '<span class="skillbadge '+(done?'done':'soon')+'">'+(done?'Lesson':'Soon')+'</span>'+
+      '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('topicTree').innerHTML = html;
+  updateTopicProgress();
+  // default: open the one lesson that exists
+  selectTopic('sk-2-1');
+}
+function toggleTopicTree(){
+  document.getElementById('topicTree').classList.toggle('open');
+  document.getElementById('treeScrim').classList.toggle('open');
+}
+function closeTopicTree(){
+  document.getElementById('topicTree').classList.remove('open');
+  document.getElementById('treeScrim').classList.remove('open');
+}
+function selectTopic(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  document.querySelectorAll('.skillitem').forEach(function(s){ s.classList.remove('active'); });
+  el.classList.add('active');
+  closeTopicTree(); // on mobile this is a drawer; harmless no-op on desktop
+  document.getElementById('lessonMain').scrollTop = 0;
+  currentTopicLabel = el.getAttribute('data-name');
+  var lessonId = el.getAttribute('data-lesson');
+  var key = el.getAttribute('data-key');
+  document.querySelectorAll('.lessonroot').forEach(function(r){ r.style.display = 'none'; });
+  var ph = document.getElementById('lessonPlaceholder');
+  if(lessonId){
+    ph.style.display = 'none';
+    document.getElementById(lessonId).style.display = 'block';
+    if(!renderedLessons.has(lessonId) && typeof renderMathInElement === 'function'){
+      renderMathInElement(document.getElementById(lessonId), {delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});
+      renderedLessons.add(lessonId);
+    }
+  } else {
+    ph.style.display = 'flex';
+    var color = el.getAttribute('data-color'), domain = el.getAttribute('data-domain');
+    document.getElementById('placardIcon').style.color = color;
+    document.getElementById('placardTag').textContent = domain;
+    document.getElementById('placardTitle').textContent = currentTopicLabel;
+    var btn = document.getElementById('placardBtn');
+    if(key){
+      document.getElementById('placardText').textContent = 'The written lesson for this topic isn\'t ready yet, but '+DATA.filter(function(q){return q.skill===key;}).length+' real SAT practice questions on it are already in this set.';
+      btn.style.display = 'inline-block';
+      btn.onclick = function(){ switchSection('practice'); applyFilter(key); };
+    } else {
+      document.getElementById('placardText').textContent = 'This lesson hasn\'t been written yet.';
+      btn.style.display = 'none';
+    }
+  }
+}
+function lsNav(e, id){
+  e.preventDefault();
+  var target = document.getElementById(id);
+  target.scrollIntoView({behavior:'smooth', block:'start'});
+  setLessonNavActive(target.closest('.lessonroot'), id);
+  return false;
+}
+function setLessonNavActive(root, id){
+  if(!root) return;
+  document.querySelectorAll('#'+root.getAttribute('data-subnav')+' a').forEach(function(a){
+    a.classList.toggle('active', a.getAttribute('href')==='#'+id);
+  });
+}
+function onLessonScroll(bodyEl){
+  var root = bodyEl.closest('.lessonroot');
+  var secs = bodyEl.querySelectorAll('.lsec');
+  var best = secs[0], bestTop = Infinity;
+  secs.forEach(function(s){
+    var top = s.getBoundingClientRect().top - bodyEl.getBoundingClientRect().top;
+    if(top <= 80 && Math.abs(top) < bestTop){ bestTop = Math.abs(top); best = s; }
+  });
+  if(best) setLessonNavActive(root, best.id);
+}
+function goPractice(ref){
+  switchSection('practice');
+  var q = DATA.find(function(d){ return d.ref===ref; });
+  applyFilter(q ? q.skill : 'All');
+  var i = VIEW.findIndex(function(di){ return DATA[di].ref===ref; });
+  if(i>=0){ idx=i; render(); }
+}
+
+var calcCalculator = null;
+var splitMode = false;
+
+// Desmos builds a nested widget inside the container we hand it, and the graph
+// canvas lives in a wrapper above .dcg-calculator-api-container. Relocating any
+// inner node tears the canvas away from that wrapper and the graph goes blank,
+// so the calculator is mounted exactly once here and NEVER moved. Floating vs
+// split-screen is only a CSS geometry change on the one panel.
+function ensureCalc(){
+  if(calcCalculator) return;
+  var container = document.getElementById('calcBody');
+  if(typeof Desmos !== 'undefined'){
+    calcCalculator = Desmos.GraphingCalculator(container, {
+      keypad:true, expressions:true, settingsMenu:true, border:false,
+      expressionsTopbar:true, zoomButtons:true
+    });
+  } else {
+    container.innerHTML = '<div style="padding:20px;font-size:14px;color:#888">Calculator needs an internet connection to load.<\/div>';
+  }
+}
+// Desmos measures its container's layout box, so resize only after the browser
+// has committed the new geometry (two frames), never synchronously on click.
+function requestResize(){
+  if(!calcCalculator || !calcCalculator.resize) return;
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      try{ calcCalculator.resize(); }catch(e){}
+    });
+  });
+}
+// Desmos's embeddable API (unlike the full desmos.com/calculator web app) has
+// no "ghost suggestion" autocomplete that offers a regression fit under a
+// table — you must type the model by hand (e.g. y_1~mx_1+b). That's not a
+// bug in this page, but most people don't know the syntax, so give them a
+// real button that writes it for them from whatever table they've entered.
+function addRegression(){
+  if(!calcCalculator){ alert('Open the calculator first.'); return; }
+  var exprs = calcCalculator.getExpressions();
+  var table = null;
+  for(var i=exprs.length-1;i>=0;i--){ if(exprs[i].type==='table'){ table=exprs[i]; break; } }
+  if(!table || !table.columns || table.columns.length<2){
+    alert('Add a table with two columns of numbers first (click the + button, choose "table"), then press "+ Regression".');
+    return;
+  }
+  var xLatex = table.columns[0].latex, yLatex = table.columns[1].latex;
+  if(!xLatex || !yLatex){ alert('Fill in both columns of the table first.'); return; }
+  var fitLatex = yLatex+'\\sim m'+xLatex+'+b';
+  var already = exprs.some(function(e){ return e.latex===fitLatex; });
+  if(already){ return; }
+  calcCalculator.setExpression({id:'regr_'+Date.now(), latex:fitLatex});
+}
+function openCalc(){
+  document.getElementById('calcPanel').classList.add('open');
+  document.getElementById('calcToggle').classList.add('active');
+  ensureCalc();
+  requestResize();
+}
+function closeCalc(){
+  document.getElementById('calcPanel').classList.remove('open');
+  document.getElementById('calcToggle').classList.remove('active');
+  document.body.classList.remove('split');
+  splitMode = false;
+  syncSplitBtn();
+}
+document.getElementById('calcToggle').onclick = function(){
+  if(document.getElementById('calcPanel').classList.contains('open')) closeCalc();
+  else openCalc();
+};
+function syncSplitBtn(){
+  var btn = document.getElementById('splitBtn');
+  if(!btn) return;
+  btn.innerHTML = splitMode ? '&#8599;' : '&#8862;';
+  btn.title = splitMode ? 'Undock to floating window' : 'Split screen';
+}
+function toggleSplit(makeSplit){
+  splitMode = !!makeSplit;
+  var panel = document.getElementById('calcPanel');
+  panel.classList.add('open');
+  document.getElementById('calcToggle').classList.add('active');
+  ensureCalc();
+  if(splitMode){
+    // clear any drag offsets so the docked CSS rules win outright
+    panel.style.left=''; panel.style.top=''; panel.style.transform='';
+    panel.style.width=''; panel.style.height='';
+    panel.classList.add('docked');
+    document.body.classList.add('split');
+  } else {
+    panel.classList.remove('docked');
+    document.body.classList.remove('split');
+  }
+  syncSplitBtn();
+  requestResize();
+}
+syncSplitBtn();
+// keep the graph correct when the window itself changes size
+addEventListener('resize', requestResize);
+
+// drag (floating mode only)
+(function(){
+  var panel=document.getElementById('calcPanel'), head=document.getElementById('calcHead');
+  var dragging=false, ox=0, oy=0;
+  head.addEventListener('mousedown', function(e){
+    if(e.target.tagName==='BUTTON' || splitMode) return;
+    dragging=true; var r=panel.getBoundingClientRect();
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    panel.style.transform='none'; panel.style.left=r.left+'px'; panel.style.top=r.top+'px';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    panel.style.left=(e.clientX-ox)+'px'; panel.style.top=(e.clientY-oy)+'px';
+  });
+  document.addEventListener('mouseup', function(){ dragging=false; });
+})();
+
+// resize grip (floating mode only)
+(function(){
+  var panel=document.getElementById('calcPanel'), grip=document.getElementById('calcGrip');
+  var sizing=false, sx=0, sy=0, sw=0, sh=0;
+  grip.addEventListener('mousedown', function(e){
+    if(splitMode) return;
+    sizing=true; var r=panel.getBoundingClientRect();
+    sx=e.clientX; sy=e.clientY; sw=r.width; sh=r.height;
+    panel.style.transform='none'; panel.style.left=r.left+'px'; panel.style.top=r.top+'px';
+    e.preventDefault(); e.stopPropagation();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!sizing) return;
+    panel.style.width = Math.max(420, sw + (e.clientX-sx))+'px';
+    panel.style.height = Math.max(320, sh + (e.clientY-sy))+'px';
+    requestResize();
+  });
+  document.addEventListener('mouseup', function(){ if(sizing){ sizing=false; requestResize(); } });
+})();
+
+function toggleUserMenu(){
+  var m = document.getElementById('userMenu');
+  m.style.display = m.style.display==='none' ? 'block' : 'none';
+}
+function updateAuthUI(user){
+  var btn = document.getElementById('signinBtn');
+  var av = document.getElementById('userAvatar');
+  var menuName = document.getElementById('userMenuName');
+  if(user){
+    btn.style.display = 'none';
+    av.style.display = 'flex';
+    if(user.photoURL){
+      av.style.backgroundImage = "url('"+user.photoURL+"')";
+      av.textContent = '';
+    } else {
+      av.style.backgroundImage = '';
+      av.textContent = (user.displayName||user.email||'?').charAt(0).toUpperCase();
+    }
+    menuName.textContent = user.displayName || user.email || 'Signed in';
+  } else {
+    btn.style.display = 'inline-block';
+    av.style.display = 'none';
+    document.getElementById('userMenu').style.display = 'none';
+  }
+}
+</script>
+
+<!--
+  ===================== Firebase: Google sign-in + cross-device progress sync =====================
+  This is a plain client-side Firebase integration — no custom backend needed, works fine on
+  static hosting (GitHub Pages). Progress still saves to localStorage first and always works
+  offline/signed-out exactly as before; signing in additionally syncs the same data to a
+  per-user Firestore document so it follows you across devices/browsers.
+
+  SETUP (one-time, in the Firebase console — console.firebase.google.com):
+  1. Create a project (or reuse one you already have).
+  2. Build > Authentication > Sign-in method > enable "Google".
+  3. Build > Firestore Database > Create database (start in production mode is fine) —
+     then in Rules, use something like:
+       rules_version = '2';
+       service cloud.firestore {
+         match /databases/{database}/documents {
+           match /progress/{uid} {
+             allow read, write: if request.auth != null && request.auth.uid == uid;
+           }
+         }
+       }
+  4. Project settings (gear icon) > General > "Your apps" > Add app > Web (</>) >
+     register the app > copy the firebaseConfig object it gives you into
+     FIREBASE_CONFIG below, replacing the placeholder values.
+  5. Authentication > Settings > Authorized domains > add the exact domain this is
+     hosted on (e.g. your-username.github.io) if it isn't already listed.
+-->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+  // ↓↓↓ Replace with YOUR project's config (Firebase console > Project settings > Your apps) ↓↓↓
+  const FIREBASE_CONFIG = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  // ↑↑↑ ---------------------------------------------------------------------- ↑↑↑
+
+  const PLACEHOLDER = FIREBASE_CONFIG.apiKey === "YOUR_API_KEY";
+  if(PLACEHOLDER){
+    console.warn('Firebase sign-in is not configured yet — fill in FIREBASE_CONFIG in data-practice.html. Progress will keep saving locally only.');
+  } else {
+    const app = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    window.firebaseSignIn = function(){
+      signInWithPopup(auth, provider).catch(function(err){
+        alert('Sign-in failed: ' + err.message);
+      });
+    };
+    window.firebaseSignOut = function(){ signOut(auth); };
+
+    window.firebaseSaveProgress = function(blob){
+      if(!auth.currentUser) return;
+      setDoc(doc(db, 'progress', auth.currentUser.uid), blob).catch(function(err){
+        console.warn('Cloud save failed (progress still saved locally):', err.message);
+      });
+    };
+
+    onAuthStateChanged(auth, async function(user){
+      if(typeof updateAuthUI === 'function') updateAuthUI(user);
+      if(user){
+        try{
+          var snap = await getDoc(doc(db, 'progress', user.uid));
+          if(snap.exists() && typeof window.mergeCloudProgress === 'function'){
+            window.mergeCloudProgress(snap.data());
+          }
+        }catch(err){
+          console.warn('Could not load cloud progress:', err.message);
+        }
+      }
+    });
+  }
+</script>
+
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    });
+  }
+</script>
+</body></html>
