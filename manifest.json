@@ -1,6 +1,6 @@
 {
-  "name": "SAT Math Practice",
-  "short_name": "SAT Math",
+  "name": "SAT Question Bank",
+  "short_name": "SAT QBank",
   "description": "SAT Math practice questions, lessons, and a built-in Desmos calculator.",
   "start_url": "./index.html",
   "scope": "./",

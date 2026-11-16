@@ -1,4 +1,4 @@
-# SAT Math Practice
+# SAT Question Bank
 
 Live at: https://khaydarovanvar.github.io/satbank/
 
