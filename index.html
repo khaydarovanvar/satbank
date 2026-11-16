@@ -129,6 +129,12 @@
   .icbtn.calc{background:var(--greenbg);color:var(--green-dark);}
   .icbtn.calc.active{outline:2px solid var(--green-dark);}
   .avatar{width:32px;height:32px;border-radius:50%;background:#555;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;background-size:cover;background-position:center;}
+  .signinbtn{margin-left:auto;border:1.5px solid #c7c7c7;border-radius:4px;padding:7px 14px;font-size:13px;font-weight:700;background:#fff;color:#333;cursor:pointer;white-space:nowrap;}
+  .signinbtn:hover{border-color:var(--accent);color:var(--accent-dark);}
+  .usermenu{position:fixed;top:54px;right:18px;background:#fff;border:1px solid #d7d7d7;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.15);padding:10px 12px;z-index:80;min-width:160px;}
+  .usermenu-name{font-size:12.5px;color:#555;margin-bottom:8px;word-break:break-word;}
+  .usermenu-signout{width:100%;border:1px solid #c7c7c7;border-radius:4px;padding:7px 10px;font-size:13px;font-weight:600;background:#fff;color:#333;cursor:pointer;}
+  .usermenu-signout:hover{border-color:var(--red);color:var(--red);}
 
   .body{display:flex;flex:1;min-height:0;}
   .qpane{flex:1;overflow-y:auto;display:flex;justify-content:center;}
@@ -281,8 +287,65 @@
     .maintab{padding:7px 9px;font-size:12px;}
   }
 
+  /* ---- Full-screen sign-in gate ---- */
+  .authgate{position:fixed;inset:0;z-index:999;background:#fff;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+  .authcard{width:100%;max-width:360px;text-align:center;}
+  .authlogo{width:60px;height:60px;border-radius:16px;margin:0 auto 16px;background:linear-gradient(135deg,#ff7a45,#ffb020);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(255,122,69,.3);}
+  .authlogo svg{width:34px;height:34px;}
+  .authtitle{font-size:24px;font-weight:800;color:#222;margin:0 0 6px;}
+  .authtagline{font-size:14px;color:#666;margin:0 0 26px;}
+  .autherr{display:none;background:#fdecea;color:#b3261e;border:1px solid #f3c2bd;border-radius:6px;padding:8px 10px;font-size:13px;margin-bottom:14px;text-align:left;}
+  .authgooglebtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1.5px solid #d7d7d7;border-radius:6px;padding:12px;font-size:14.5px;font-weight:700;background:#fff;color:#333;cursor:pointer;margin-bottom:18px;}
+  .authgooglebtn:hover{border-color:#b7b7b7;}
+  .authgooglebtn svg{width:18px;height:18px;flex:none;}
+  .authdivider{display:flex;align-items:center;gap:10px;color:#999;font-size:11.5px;font-weight:700;letter-spacing:.04em;margin-bottom:18px;}
+  .authdivider::before,.authdivider::after{content:"";flex:1;height:1px;background:#e2e2e2;}
+  .authfield{text-align:left;margin-bottom:14px;}
+  .authfield label{display:block;font-size:12.5px;font-weight:700;color:#333;margin-bottom:5px;}
+  .authfield input{width:100%;border:1.5px solid #d7d7d7;border-radius:6px;padding:10px 12px;font-size:14.5px;font-family:inherit;box-sizing:border-box;}
+  .authfield input:focus{outline:none;border-color:#ff7a45;}
+  .authsubmit{width:100%;border:none;border-radius:6px;padding:13px;font-size:14px;font-weight:800;letter-spacing:.03em;background:linear-gradient(135deg,#ff7a45,#ffb020);color:#fff;cursor:pointer;margin:4px 0 18px;}
+  .authsubmit:hover{filter:brightness(1.06);}
+  .authlinks{display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;}
+  .authlinks a{color:#ff7a45;text-decoration:underline;cursor:pointer;}
+  .authskip{font-size:12.5px;color:#999;text-decoration:underline;cursor:pointer;}
 </style></head>
 <body>
+
+<div class="authgate" id="authGate">
+  <div class="authcard">
+    <div class="authlogo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 20h18"/>
+        <path d="M3 20V4"/>
+        <path d="M4 18C7 10 10 4 14 4c3 0 4 5 3 9c-1 4-3 7-6 7"/>
+        <circle cx="12" cy="8.3" r="1.15" fill="#fff" stroke="none"/>
+      </svg>
+    </div>
+    <h1 class="authtitle">SAT Math Practice</h1>
+    <p class="authtagline" id="authTagline">Sign in to save your progress across devices.</p>
+    <div class="autherr" id="authErr"></div>
+    <button class="authgooglebtn" onclick="window.firebaseSignIn && window.firebaseSignIn()">
+      <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.5 7.1 29.5 5 24 5 16.3 5 9.7 9.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.3C29.3 35.4 26.8 36 24 36c-5.2 0-9.6-3.1-11.3-7.6l-6.5 5C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.3 5.3C40.9 36.6 44 30.9 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+      Continue with Google
+    </button>
+    <div class="authdivider">OR USE EMAIL</div>
+    <div class="authfield">
+      <label>Email</label>
+      <input type="email" id="authEmail" autocomplete="email" placeholder="you@example.com">
+    </div>
+    <div class="authfield">
+      <label>Password</label>
+      <input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••">
+    </div>
+    <button class="authsubmit" id="authSubmitBtn" onclick="authSubmit()">SIGN IN</button>
+    <div class="authlinks">
+      <a id="authModeLink" onclick="authToggleMode()">Create an account</a>
+      <a onclick="authForgotPassword()">Forgot password</a>
+    </div>
+    <a class="authskip" onclick="authSkip()">Continue without an account</a>
+  </div>
+</div>
 
 <div class="scrim" id="scrim" onclick="closeNav()"></div>
 
@@ -293,7 +356,12 @@
     <button class="maintab" id="tabLessons" onclick="switchSection('lessons')">&#128218; Lessons</button>
     <button class="maintab active" id="tabPractice" onclick="switchSection('practice')">&#9998; Practice</button>
   </div>
-  <div class="avatar">A</div>
+  <button class="signinbtn" id="signinBtn" onclick="window.firebaseSignIn && window.firebaseSignIn()" title="Sign in with Google to sync progress across devices">Sign in</button>
+  <div class="avatar" id="userAvatar" style="display:none" onclick="toggleUserMenu()" title="Click to sign out"></div>
+  <div class="usermenu" id="userMenu" style="display:none">
+    <div class="usermenu-name" id="userMenuName"></div>
+    <button class="usermenu-signout" onclick="window.firebaseSignOut && window.firebaseSignOut(); toggleUserMenu();">Sign out</button>
+  </div>
 </div>
 
 <div class="practicebar" id="practiceBar">
@@ -1392,6 +1460,7 @@ function progressBlob(){
 function saveProgress(){
   var blob = progressBlob();
   try{ localStorage.setItem(PROGRESS_KEY, JSON.stringify(blob)); }catch(e){}
+  if(window.firebaseSaveProgress) window.firebaseSaveProgress(blob);
   if(topicTreeBuilt) updateTopicProgress();
 }
 function applyProgressBlob(saved){
@@ -1414,6 +1483,17 @@ function loadProgress(){
   }catch(e){}
 }
 loadProgress();
+// Called by the Firebase module script once, after sign-in, with the cloud copy
+// of progress. Merges it on top of whatever's already loaded (local device
+// progress made before signing in isn't lost — it's just overwritten
+// question-by-question wherever the cloud has a saved answer for that ref),
+// re-saves the merged result everywhere, and refreshes anything on screen.
+window.mergeCloudProgress = function(cloudBlob){
+  applyProgressBlob(cloudBlob || {});
+  saveProgress();
+  if(typeof updateHeaderTick === 'function') updateHeaderTick();
+  if(typeof render === 'function') render();
+};
 
 function render(){
   var di = VIEW[idx];
@@ -1830,6 +1910,159 @@ addEventListener('resize', requestResize);
   });
   document.addEventListener('mouseup', function(){ if(sizing){ sizing=false; requestResize(); } });
 })();
+
+function toggleUserMenu(){
+  var m = document.getElementById('userMenu');
+  m.style.display = m.style.display==='none' ? 'block' : 'none';
+}
+function updateAuthUI(user){
+  var btn = document.getElementById('signinBtn');
+  var av = document.getElementById('userAvatar');
+  var menuName = document.getElementById('userMenuName');
+  var gate = document.getElementById('authGate');
+  if(user){
+    btn.style.display = 'none';
+    av.style.display = 'flex';
+    if(user.photoURL){
+      av.style.backgroundImage = "url('"+user.photoURL+"')";
+      av.textContent = '';
+    } else {
+      av.style.backgroundImage = '';
+      av.textContent = (user.displayName||user.email||'?').charAt(0).toUpperCase();
+    }
+    menuName.textContent = user.displayName || user.email || 'Signed in';
+    gate.style.display = 'none';
+    try{ localStorage.removeItem('satpctAuthSkipped'); }catch(e){}
+  } else {
+    btn.style.display = 'inline-block';
+    av.style.display = 'none';
+    document.getElementById('userMenu').style.display = 'none';
+    var skipped = false;
+    try{ skipped = localStorage.getItem('satpctAuthSkipped')==='1'; }catch(e){}
+    if(!skipped) gate.style.display = 'flex';
+  }
+}
+
+var authMode = 'signin';
+function authSetMsg(text, ok){
+  var box = document.getElementById('authErr');
+  box.textContent = text || '';
+  box.style.display = text ? 'block' : 'none';
+  box.style.background = ok ? '#eaf7ec' : '#fdecea';
+  box.style.color = ok ? '#1e7a34' : '#b3261e';
+  box.style.borderColor = ok ? '#bfe6c6' : '#f3c2bd';
+}
+function authToggleMode(){
+  authMode = authMode === 'signin' ? 'signup' : 'signin';
+  authSetMsg('');
+  document.getElementById('authSubmitBtn').textContent = authMode === 'signin' ? 'SIGN IN' : 'CREATE ACCOUNT';
+  document.getElementById('authModeLink').textContent = authMode === 'signin' ? 'Create an account' : 'Already have an account? Sign in';
+}
+function authSubmit(){
+  var email = document.getElementById('authEmail').value.trim();
+  var password = document.getElementById('authPassword').value;
+  if(!email || !password){ authSetMsg('Enter an email and password.'); return; }
+  authSetMsg('');
+  var fn = authMode === 'signin' ? window.firebaseEmailSignIn : window.firebaseEmailSignUp;
+  if(!fn){ authSetMsg('Sign-in is not available right now.'); return; }
+  fn(email, password).catch(function(err){ authSetMsg(err.message); });
+}
+function authForgotPassword(){
+  var email = document.getElementById('authEmail').value.trim();
+  if(!email){ authSetMsg('Enter your email above first, then click "Forgot password".'); return; }
+  if(!window.firebaseResetPassword){ authSetMsg('Password reset is not available right now.'); return; }
+  window.firebaseResetPassword(email)
+    .then(function(){ authSetMsg('Password reset email sent — check your inbox.', true); })
+    .catch(function(err){ authSetMsg(err.message); });
+}
+function authSkip(){
+  try{ localStorage.setItem('satpctAuthSkipped', '1'); }catch(e){}
+  document.getElementById('authGate').style.display = 'none';
+}
+</script>
+
+<!--
+  ===================== Firebase: Google sign-in + cross-device progress sync =====================
+  This is a plain client-side Firebase integration — no custom backend needed, works fine on
+  static hosting (GitHub Pages). Progress still saves to localStorage first and always works
+  offline/signed-out exactly as before; signing in additionally syncs the same data to a
+  per-user Firestore document so it follows you across devices/browsers.
+
+  SETUP (one-time, in the Firebase console — console.firebase.google.com):
+  1. Create a project (or reuse one you already have).
+  2. Build > Authentication > Sign-in method > enable "Google".
+  3. Build > Firestore Database > Create database (start in production mode is fine) —
+     then in Rules, use something like:
+       rules_version = '2';
+       service cloud.firestore {
+         match /databases/{database}/documents {
+           match /progress/{uid} {
+             allow read, write: if request.auth != null && request.auth.uid == uid;
+           }
+         }
+       }
+  4. Project settings (gear icon) > General > "Your apps" > Add app > Web (</>) >
+     register the app > copy the firebaseConfig object it gives you into
+     FIREBASE_CONFIG below, replacing the placeholder values.
+  5. Authentication > Settings > Authorized domains > add the exact domain this is
+     hosted on (e.g. your-username.github.io) if it isn't already listed.
+-->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+  // ↓↓↓ Replace with YOUR project's config (Firebase console > Project settings > Your apps) ↓↓↓
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyC9rs3L_pMvpKGZkbxJjtgbBk0zLAhQoAo",
+    authDomain: "satbank-65363.firebaseapp.com",
+    projectId: "satbank-65363",
+    storageBucket: "satbank-65363.firebasestorage.app",
+    messagingSenderId: "636379855065",
+    appId: "1:636379855065:web:4ad0251c0c3612723a26c8"
+  };
+  // ↑↑↑ ---------------------------------------------------------------------- ↑↑↑
+
+  const PLACEHOLDER = FIREBASE_CONFIG.apiKey === "YOUR_API_KEY";
+  if(PLACEHOLDER){
+    console.warn('Firebase sign-in is not configured yet — fill in FIREBASE_CONFIG in data-practice.html. Progress will keep saving locally only.');
+  } else {
+    const app = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    window.firebaseSignIn = function(){
+      signInWithPopup(auth, provider).catch(function(err){
+        alert('Sign-in failed: ' + err.message);
+      });
+    };
+    window.firebaseSignOut = function(){ signOut(auth); };
+    window.firebaseEmailSignIn = function(email, password){ return signInWithEmailAndPassword(auth, email, password); };
+    window.firebaseEmailSignUp = function(email, password){ return createUserWithEmailAndPassword(auth, email, password); };
+    window.firebaseResetPassword = function(email){ return sendPasswordResetEmail(auth, email); };
+
+    window.firebaseSaveProgress = function(blob){
+      if(!auth.currentUser) return;
+      setDoc(doc(db, 'progress', auth.currentUser.uid), blob).catch(function(err){
+        console.warn('Cloud save failed (progress still saved locally):', err.message);
+      });
+    };
+
+    onAuthStateChanged(auth, async function(user){
+      if(typeof updateAuthUI === 'function') updateAuthUI(user);
+      if(user){
+        try{
+          var snap = await getDoc(doc(db, 'progress', user.uid));
+          if(snap.exists() && typeof window.mergeCloudProgress === 'function'){
+            window.mergeCloudProgress(snap.data());
+          }
+        }catch(err){
+          console.warn('Could not load cloud progress:', err.message);
+        }
+      }
+    });
+  }
 </script>
 
 <script>
