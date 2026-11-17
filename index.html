@@ -1675,8 +1675,11 @@ function switchSection(name){
 // (per request) with a "Coming soon" placeholder rather than being hidden.
 var TOPICS = [
   {domain:"Algebra", color:"#2f6fb0", skills:[
-    "Linear equations in one variable","Linear functions","Linear equations in two variables",
-    "Systems of two linear equations in two variables","Linear inequalities in one or two variables"
+    {name:"Linear equations in one variable", key:"Linear equations in one variable"},
+    {name:"Linear equations in two variables", key:"Linear equations in two variables"},
+    {name:"Linear functions", key:"Linear functions"},
+    {name:"Systems of two linear equations in two variables", key:"Systems of two linear equations in two variables"},
+    {name:"Linear inequalities in one or two variables", key:"Linear inequalities in one or two variables"}
   ]},
   {domain:"Advanced Math", color:"#7a4fbd", skills:[
     "Equivalent expressions","Nonlinear functions",
