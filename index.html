@@ -1053,7 +1053,8 @@
       <a href="#prob-empirical" onclick="return lsNav(event,'prob-empirical')">2. Empirical Probability</a>
       <a href="#prob-table" onclick="return lsNav(event,'prob-table')">3. Two-Way Tables</a>
       <a href="#prob-conditional" onclick="return lsNav(event,'prob-conditional')">4. Conditional Probability</a>
-      <a href="#prob-cheat" onclick="return lsNav(event,'prob-cheat')">5. Cheat Sheet</a>
+      <a href="#prob-unknown" onclick="return lsNav(event,'prob-unknown')">5. Solving for an Unknown</a>
+      <a href="#prob-cheat" onclick="return lsNav(event,'prob-cheat')">6. Cheat Sheet</a>
     </div>
     <div class="lessonbody" id="probBody" onscroll="onLessonScroll(this)">
       <div class="lessoncol">
@@ -1150,10 +1151,53 @@
             <button class="practicebtn" onclick="goPractice('Barron24 Prob Q5')">Try this exact question &rarr;</button>
           </div>
           <div class="lwarn">The phrase right after "if" or "given that" tells you which row or column to restrict to for your denominator. Whatever comes right before "what is the probability" is what you're counting inside that restricted row/column for your numerator.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; combining rows before dividing</div>
+            <table class="minitable">
+              <tr><th></th><th>None</th><th>1 to 4</th><th>5 or more</th><th>Total</th></tr>
+              <tr><td>Group X</td><td>15</td><td>28</td><td>57</td><td>100</td></tr>
+              <tr><td>Group Y</td><td>21</td><td>11</td><td>68</td><td>100</td></tr>
+              <tr><td>Total</td><td>36</td><td>39</td><td>125</td><td>200</td></tr>
+            </table>
+            <p class="lstep">This table shows how many dreams people recalled in a week, split by Group X (100 people) and Group Y (100 people). If a person is chosen at random from those who recalled <i>at least 1</i> dream, what's the probability they're in Group Y?</p>
+            <p class="lstep">"At least 1 dream" means everyone except the "None" column. For Group Y, that's \(100-21=79\). For Group X, that's \(100-15=85\). The "given" condition (recalled at least 1) restricts the denominator to both groups combined: \(79+85=164\).</p>
+            <p class="lstep">Desmos solution: type <code>79/(79+85)</code> as one line &mdash; no need to compute 164 separately first.</p>
+            <div class="lsol">\(\frac{79}{164}\)</div>
+            <button class="practicebtn" onclick="goPractice('Dreams Recalled Prob Q1')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; when you have to build the table yourself first</div>
+            <p class="lstep">A library has 3 shelves of Mystery novels (10 hardcover + 5 paperback each) and 4 shelves of Sci-Fi novels (6 hardcover + 4 paperback each). A book is picked at random. Given that it's a hardcover, what's the probability it's Sci-Fi?</p>
+            <p class="lstep">Nothing is handed to you as a table here &mdash; multiply shelves &times; books-per-shelf first. Mystery hardcovers: \(3\times10=30\). Sci-Fi hardcovers: \(4\times6=24\). Total hardcovers: \(30+24=54\).</p>
+            <p class="lstep">"Given hardcover" restricts you to just those 54 books; of those, 24 are Sci-Fi.</p>
+            <p class="lstep">Desmos solution: type <code>(4*6)/(3*10+4*6)</code> as one line &mdash; it builds both joint counts and divides in a single step.</p>
+            <div class="lsol">\(\frac{4}{9}\) (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('Library Shelves Prob Q1')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="prob-unknown">
+          <h2>5. Solving for an Unknown</h2>
+          <div class="lsub">When the probability is given and a table value is missing instead</div>
+          <p>Sometimes the question flips the usual setup around: you're told what the probability equals, and one entry in the table is an unknown, like \(x\), that you have to solve for. Set up the same conditional-probability fraction as always, but this time set it equal to the given probability and solve.</p>
+          <table class="minitable">
+            <tr><th>Rhesus factor</th><th>A</th><th>B</th><th>AB</th><th>O</th></tr>
+            <tr><td>+</td><td>33</td><td>9</td><td>3</td><td>37</td></tr>
+            <tr><td>&minus;</td><td>7</td><td>2</td><td>1</td><td>x</td></tr>
+          </table>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; blood type and Rh factor</div>
+            <p class="lstep">If someone who is Rh&minus; (negative) is chosen at random, the probability they have blood type B is \(\frac{1}{9}\). What is \(x\)?</p>
+            <p class="lstep">Restrict to the Rh&minus; row only (that's the "given" condition): its total is \(7+2+1+x\). The "B" count within that row is 2.</p>
+            <p class="lstep">Set up the equation: \(\dfrac{2}{7+2+1+x}=\dfrac{1}{9}\), i.e. \(\dfrac{2}{10+x}=\dfrac{1}{9}\).</p>
+            <p class="lstep">Desmos solution: type <code>2/(7+2+1+x) ~ 1/9</code> &mdash; the squiggly-equals regression solves directly for \(x\), giving 8.</p>
+            <div class="lsol">\(x = 8\)</div>
+            <button class="practicebtn" onclick="goPractice('Blood Type Rh Q1')">Try this exact question &rarr;</button>
+          </div>
         </div>
 
         <div class="lsec" id="prob-cheat">
-          <h2>5. Quick Reference</h2>
+          <h2>6. Quick Reference</h2>
           <div class="lsub">Everything from this lesson, in one table</div>
           <table class="cheat">
             <tr><th>Situation</th><th>What to do</th></tr>
@@ -1162,8 +1206,9 @@
             <tr><td>A rate or percent given directly in a table</td><td>Just convert the percent to a decimal &mdash; divide by 100</td></tr>
             <tr><td>"Probability of A and B" (joint, two-way table)</td><td>joint cell where A's row meets B's column &divide; grand total</td></tr>
             <tr><td>"If/given [condition], probability of ___" (conditional)</td><td>joint cell &divide; the row or column total for the "given" condition &mdash; never the grand total</td></tr>
+            <tr><td>The probability is given, a table value is unknown</td><td>Set up the same conditional-probability fraction, set it equal to the given probability, and solve (Desmos regression ~ works well here)</td></tr>
           </table>
-          <p style="margin-top:22px">Ready to practice? The Probability filter covers 13 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <p style="margin-top:22px">Ready to practice? The Probability filter covers 16 real SAT-style questions &mdash; including every pattern from this lesson.</p>
           <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Probability and conditional probability');">Go practice Probability &rarr;</button>
         </div>
 
