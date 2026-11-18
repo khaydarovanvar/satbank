@@ -1045,6 +1045,131 @@
       </div>
     </div>
     </div>
+
+    <div id="lessonProbability" class="lessonroot" data-subnav="probSubnav" style="display:none">
+    <div class="subnav" id="probSubnav">
+      <a href="#prob-intro" onclick="return lsNav(event,'prob-intro')">Introduction</a>
+      <a href="#prob-basic" onclick="return lsNav(event,'prob-basic')">1. Basic Probability</a>
+      <a href="#prob-empirical" onclick="return lsNav(event,'prob-empirical')">2. Empirical Probability</a>
+      <a href="#prob-table" onclick="return lsNav(event,'prob-table')">3. Two-Way Tables</a>
+      <a href="#prob-conditional" onclick="return lsNav(event,'prob-conditional')">4. Conditional Probability</a>
+      <a href="#prob-cheat" onclick="return lsNav(event,'prob-cheat')">5. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="probBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="prob-intro">
+          <h1>Probability and Conditional Probability</h1>
+          <div class="ltag">Problem-Solving &amp; Data Analysis</div>
+          <p>Every probability question on the SAT reduces to one fraction: <b>probability = (number of outcomes you want) &divide; (number of outcomes possible)</b>. The whole skill is figuring out, for a given question, exactly which count goes on top and which goes on the bottom &mdash; whether that's a simple count of items, a count pulled from real survey data, or a count restricted to one row/column of a two-way table (that last case is what "conditional" means).</p>
+          <p>This lesson walks through every version of that fraction using real SAT questions already in this practice set.</p>
+        </div>
+
+        <div class="lsec" id="prob-basic">
+          <h2>1. Basic Probability</h2>
+          <div class="lsub">Count the outcomes you want, count all possible outcomes, divide</div>
+          <div class="lrule">\(P(\text{event}) = \dfrac{\text{number of favorable outcomes}}{\text{total number of possible outcomes}}\)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; equally likely choices</div>
+            <p class="lstep">On a multiple-choice test, there are four choices per question: (A), (B), (C), (D). What is the probability that a test-taker randomly selecting an answer picks choice (B)?</p>
+            <p class="lstep">There's exactly 1 favorable outcome (choice B) out of 4 total equally-likely choices.</p>
+            <p class="lstep">Desmos solution: type <code>1/4</code> directly.</p>
+            <div class="lsol">\(\frac{1}{4}\)</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Prob Q1')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; counting items in a group</div>
+            <p class="lstep">John's wallet has five $1 bills, two $5 bills, and three $10 bills (10 bills total). What's the probability a randomly selected bill is a $5 bill?</p>
+            <p class="lstep">Favorable outcomes = 2 (the $5 bills). Total outcomes = \(5+2+3=10\).</p>
+            <p class="lstep">Desmos solution: type <code>2/10</code> &mdash; or type <code>2/(5+2+3)</code> to add up the total in the same line.</p>
+            <div class="lsol">\(\frac{1}{5}\)</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Prob Q2')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="prob-empirical">
+          <h2>2. Empirical (Data-Based) Probability</h2>
+          <div class="lsub">When the "probability" comes from real observed results, not equally-likely outcomes</div>
+          <div class="lrule">\(P(\text{event}) \approx \dfrac{\text{number of times it happened in the data}}{\text{total number of trials/observations}}\)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; click-through rate</div>
+            <p class="lstep">For 200 randomly selected online ad placements, 6 users clicked through to the business website. Based on this data, what is the probability a randomly selected ad placement results in a click-through?</p>
+            <p class="lstep">This isn't a theoretical probability &mdash; it's estimated directly from the data: 6 successes out of 200 trials.</p>
+            <p class="lstep">Desmos solution: type <code>6/200</code> directly.</p>
+            <div class="lsol">0.03</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Prob Q3')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; reading a rate straight from a table</div>
+            <p class="lstep">A table lists each business type's "conversion rate" (the percent of visitors who buy something). For an online bookstore, the table shows a conversion rate of 10%.</p>
+            <p class="lstep">The question is just asking you to convert that percentage to a probability (a decimal between 0 and 1) &mdash; no further calculation needed.</p>
+            <p class="lstep">Desmos solution: type <code>10/100</code> if you want to double-check the conversion.</p>
+            <div class="lsol">0.1 (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Graphs Q10')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="prob-table">
+          <h2>3. Two-Way Frequency Tables &amp; Joint Probability</h2>
+          <div class="lsub">Reading a probability straight off a table that cross-tabulates two categories</div>
+          <p>A two-way table breaks a group down by two categories at once (here: AQI level in January, and AQI level in February). Each inner cell is a <b>joint count</b> &mdash; the number of cities with that exact combination of both categories. The "Total" row/column at the edge are <b>marginal counts</b> &mdash; the total for just one category, ignoring the other.</p>
+          <table class="minitable">
+            <tr><th></th><th>Lower AQI in Feb</th><th>Higher AQI in Feb</th><th>Total</th></tr>
+            <tr><td>Lower AQI in Jan</td><td>40</td><td>10</td><td>50</td></tr>
+            <tr><td>Higher AQI in Jan</td><td>4</td><td>6</td><td>10</td></tr>
+            <tr><td>Total</td><td>44</td><td>16</td><td>60</td></tr>
+          </table>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; probability of "both" (a joint cell)</div>
+            <p class="lstep">What's the probability a surveyed city had an unsafe AQI (the "Higher AQI" category) in <i>both</i> January and February?</p>
+            <p class="lstep">"Both" means the joint cell where Higher-Jan meets Higher-Feb: 6 cities. Total cities surveyed: 60 (the grand total, bottom-right corner).</p>
+            <p class="lstep">Desmos solution: type <code>6/60</code> directly.</p>
+            <div class="lsol">\(\frac{1}{10}\)</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Prob Q4')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">"Both A and B" uses the one joint cell where A's row meets B's column, divided by the <i>grand total</i>. Don't confuse this with conditional probability (next section), which divides by a row or column total instead of the grand total.</div>
+        </div>
+
+        <div class="lsec" id="prob-conditional">
+          <h2>4. Conditional Probability</h2>
+          <div class="lsub">"Given that..." &mdash; shrink your total down to just one row or column first</div>
+          <div class="lrule">\(P(\text{B given A}) = \dfrac{\text{joint count of A and B}}{\text{total count of A only}}\) &mdash; the denominator is a row or column total, not the grand total.</div>
+          <table class="minitable">
+            <tr><th></th><th>Lower-Level</th><th>Upper-Level</th><th>Total</th></tr>
+            <tr><td>Professors</td><td>40</td><td>45</td><td>85</td></tr>
+            <tr><td>Graduate Students</td><td>80</td><td>20</td><td>100</td></tr>
+            <tr><td>Total</td><td>120</td><td>65</td><td>185</td></tr>
+          </table>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "if ___, what is the probability ___"</div>
+            <p class="lstep">If a math class is taught by a graduate student, what's the probability the class is upper-level?</p>
+            <p class="lstep">The word "if" tells you this is conditional: you're told the class is taught by a grad student, so restrict your whole world to the "Graduate Students" row only &mdash; ignore the Professors row entirely. That row's total is 100.</p>
+            <p class="lstep">Within that row, 20 classes are upper-level. So the probability is \(\frac{20}{100}\), not \(\frac{20}{185}\) (that would ignore the "given" condition).</p>
+            <p class="lstep">Desmos solution: type <code>20/100</code> directly &mdash; the key step is picking 100 (the row total), not 185 (the grand total), as the denominator.</p>
+            <div class="lsol">0.2</div>
+            <button class="practicebtn" onclick="goPractice('Barron24 Prob Q5')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">The phrase right after "if" or "given that" tells you which row or column to restrict to for your denominator. Whatever comes right before "what is the probability" is what you're counting inside that restricted row/column for your numerator.</div>
+        </div>
+
+        <div class="lsec" id="prob-cheat">
+          <h2>5. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Simple equally-likely outcomes</td><td>favorable outcomes &divide; total outcomes</td></tr>
+            <tr><td>Probability estimated from real data/survey results</td><td>number of successes in the data &divide; total number of trials/observations</td></tr>
+            <tr><td>A rate or percent given directly in a table</td><td>Just convert the percent to a decimal &mdash; divide by 100</td></tr>
+            <tr><td>"Probability of A and B" (joint, two-way table)</td><td>joint cell where A's row meets B's column &divide; grand total</td></tr>
+            <tr><td>"If/given [condition], probability of ___" (conditional)</td><td>joint cell &divide; the row or column total for the "given" condition &mdash; never the grand total</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The Probability filter covers 13 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Probability and conditional probability');">Go practice Probability &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 </div>
@@ -1691,7 +1816,7 @@ var TOPICS = [
     {name:"Percentages", key:"Percentages", lesson:"lessonPercentages"},
     {name:"One-variable data: Distributions and measures of center and spread", key:"One-variable", lesson:"lessonOneVariable"},
     {name:"Two-variable data: Models and scatterplots", key:"Two-variable"},
-    {name:"Probability and conditional probability", key:"Probability and conditional probability"},
+    {name:"Probability and conditional probability", key:"Probability and conditional probability", lesson:"lessonProbability"},
     {name:"Inference from sample statistics and margin of error", key:"Inference from sample statistics and margin of error"},
     {name:"Evaluating statistical claims: Observational studies and experiments", key:"Evaluating statistical claims: Observational studies and experiments"}
   ]},
