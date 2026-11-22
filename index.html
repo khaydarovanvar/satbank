@@ -1215,6 +1215,382 @@
       </div>
     </div>
     </div>
+
+    <div id="lessonEquivExpr" class="lessonroot" data-subnav="eqeSubnav" style="display:none">
+    <div class="subnav" id="eqeSubnav">
+      <a href="#eqe-intro" onclick="return lsNav(event,'eqe-intro')">Introduction</a>
+      <a href="#eqe-combine" onclick="return lsNav(event,'eqe-combine')">1. Combining Like Terms</a>
+      <a href="#eqe-factor" onclick="return lsNav(event,'eqe-factor')">2. Factoring Quadratics</a>
+      <a href="#eqe-match" onclick="return lsNav(event,'eqe-match')">3. Matching Coefficients</a>
+      <a href="#eqe-gcf" onclick="return lsNav(event,'eqe-gcf')">4. Finding a Factor</a>
+      <a href="#eqe-rational" onclick="return lsNav(event,'eqe-rational')">5. Rational Expressions</a>
+      <a href="#eqe-cheat" onclick="return lsNav(event,'eqe-cheat')">6. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="eqeBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="eqe-intro">
+          <h1>Equivalent Expressions</h1>
+          <div class="ltag">Advanced Math</div>
+          <p>These questions give you an expression and ask which answer choice means the <i>same thing</i> &mdash; written differently. The algebra moves (combining like terms, factoring, matching coefficients) matter, but there's also a universal Desmos trick that works no matter which move the question is testing: <b>pick a test number for the variable, evaluate the original expression and every answer choice at that number, and see which one matches.</b></p>
+          <p>This lesson goes from easy (just simplify) to hard (combine rational expressions), with that Desmos trick demonstrated throughout.</p>
+        </div>
+
+        <div class="lsec" id="eqe-combine">
+          <h2>1. Combining Like Terms</h2>
+          <div class="lsub">Easy &mdash; add/subtract terms with the same variable and exponent</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Which expression is equivalent to \(20w-(4w+3w)\)?</p>
+            <p class="lstep">Distribute the minus sign first: \(20w-4w-3w=13w\).</p>
+            <p class="lstep">Desmos solution: type <code>20w-(4w+3w)</code> directly (with a slider or just a value for \(w\), like \(w=1\)) and compare the result to each choice evaluated at the same \(w\) &mdash; or just simplify by hand since this one has no fractions to worry about.</p>
+            <div class="lsol">13w</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.4')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; the "pick a number" trick in action</div>
+            <p class="lstep">Which expression is equivalent to \(9x^{2}+7x^{2}+9x\)? Combine the squared terms: \(9x^2+7x^2=16x^2\), giving \(16x^2+9x\).</p>
+            <p class="lstep">Desmos solution: type a list <code>x=\{1,2,3\}</code>, then type <code>9x^2+7x^2+9x</code> on one line and <code>16x^2+9x</code> on another &mdash; Desmos evaluates both at all three list values at once, and if every pair of results matches, you've confirmed they're equivalent for more than just one lucky number.</p>
+            <div class="lsol">\(16x^2+9x\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.1')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Checking with just <i>one</i> number can occasionally match by coincidence (especially with small whole numbers). Checking with a <i>list</i> of 2-3 different numbers at once, like \(\{1,2,3\}\), is nearly as fast in Desmos and much safer.</div>
+        </div>
+
+        <div class="lsec" id="eqe-factor">
+          <h2>2. Factoring Quadratics</h2>
+          <div class="lsub">Easy/Medium &mdash; find two numbers that multiply to the constant and add to the middle coefficient</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Which expression is equivalent to \(x^{2}+3x-40\)?</p>
+            <p class="lstep">Find two numbers that multiply to \(-40\) and add to \(3\): that's \(8\) and \(-5\). So it factors as \((x-5)(x+8)\).</p>
+            <p class="lstep">Desmos solution: type <code>x^2+3x-40</code> and <code>(x-5)(x+8)</code> as two separate lines with <code>x=\{0,1,2\}</code> defined above them &mdash; if the result lists match, the factoring is confirmed without needing to expand anything by hand.</p>
+            <div class="lsol">\((x-5)(x+8)\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.2')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="eqe-match">
+          <h2>3. Matching Coefficients (Solve for an Unknown Constant)</h2>
+          <div class="lsub">Medium &mdash; the two sides are declared equivalent; find the constant that makes it true</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a constant inside a denominator</div>
+            <p class="lstep">The expression \(\frac{24}{6x+42}\) is equivalent to \(\frac{4}{x+b}\), where \(b\) is a constant. What is \(b\)?</p>
+            <p class="lstep">Factor a 6 out of the first denominator: \(\frac{24}{6(x+7)}=\frac{4}{x+7}\). Matching that to \(\frac{4}{x+b}\) gives \(b=7\).</p>
+            <p class="lstep">Desmos solution: since the two expressions must be equal for <i>every</i> \(x\), pick one convenient test value like \(x=0\) and solve: type <code>24/(6(0)+42) ~ 4/(0+b)</code> &mdash; the regression solves directly for \(b\).</p>
+            <div class="lsol">\(b=7\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.6')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; matching a leading coefficient</div>
+            <p class="lstep">\(90y^{5}-54y^{4}\) is equivalent to \(ry^{4}(15y-9)\), where \(r\) is a constant. What is \(r\)?</p>
+            <p class="lstep">Desmos solution: type <code>90y^5-54y^4 ~ r\cdot y^4(15y-9)</code> with a test value for \(y\) defined above it (like \(y=1\)) &mdash; the regression solves for \(r\) directly, giving 6.</p>
+            <div class="lsol">\(r=6\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 2.18')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT4 M 1.12')">Try a subtraction-of-expressions version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="eqe-gcf">
+          <h2>4. Finding a Missing Factor</h2>
+          <div class="lsub">Hard &mdash; pull out the greatest common factor, or test which binomial divides evenly</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; smallest possible constant factor</div>
+            <p class="lstep">One factor of \(2x^{3}+42x^{2}+208x\) is \(x+b\), where \(b\) is a positive constant. What's the smallest possible \(b\)?</p>
+            <p class="lstep">Pull out the GCF first: \(2x(x^2+21x+104)\). Factor the quadratic inside: two numbers multiplying to 104 and adding to 21 are 8 and 13, so it's \(2x(x+8)(x+13)\). The possible values of \(b\) are 8 and 13 &mdash; the smallest is 8.</p>
+            <p class="lstep">Desmos solution: graph <code>y=2x^3+42x^2+208x</code> and look at where it crosses the x-axis &mdash; the roots are \(x=0,-8,-13\), confirming the factors \(x\), \(x+8\), \(x+13\) directly from the graph.</p>
+            <div class="lsol">\(b=8\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 3.16')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT3 M 3.13')">Try a "which of these is a factor" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="eqe-rational">
+          <h2>5. Combining Rational Expressions</h2>
+          <div class="lsub">Hard &mdash; find a common denominator, then combine the numerators</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Which expression is equivalent to \(\frac{4}{4x-5}-\frac{1}{x+1}\)?</p>
+            <p class="lstep">Common denominator is \((4x-5)(x+1)\). Rewrite: \(\frac{4(x+1)-(4x-5)}{(4x-5)(x+1)}=\frac{4x+4-4x+5}{(4x-5)(x+1)}=\frac{9}{(4x-5)(x+1)}\).</p>
+            <p class="lstep">Desmos solution: type <code>x=\{1,2,3\}</code>, then <code>4/(4x-5)-1/(x+1)</code> and each answer choice as its own line &mdash; the one that produces the same list of results for all three test values is correct, no common-denominator algebra required.</p>
+            <div class="lsol">\(\frac{9}{(x+1)(4x-5)}\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 2.9')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="eqe-cheat">
+          <h2>6. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Simplify / combine like terms</td><td>Add or subtract terms with the same variable and exponent</td></tr>
+            <tr><td>"Which expression is equivalent" (any form)</td><td>Desmos: define a list like \(x=\{1,2,3\}\), evaluate the original and every choice, match the result lists</td></tr>
+            <tr><td>Factor a quadratic \(x^2+bx+c\)</td><td>Find two numbers that multiply to \(c\) and add to \(b\)</td></tr>
+            <tr><td>Two sides declared equivalent, solve for a constant</td><td>Plug in one test value for the variable and use Desmos regression (~) to solve for the constant</td></tr>
+            <tr><td>Factor out a GCF, or find a missing binomial factor</td><td>Pull out the GCF first, then factor what's left &mdash; or graph it and read the roots directly</td></tr>
+            <tr><td>Combine rational expressions (fractions with \(x\) in the denominator)</td><td>Find a common denominator, combine numerators &mdash; or just test with a list of numbers in Desmos</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The Equivalent Expressions filter covers 59 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Equivalent expressions');">Go practice Equivalent Expressions &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonNonlinearEq" class="lessonroot" data-subnav="nleSubnav" style="display:none">
+    <div class="subnav" id="nleSubnav">
+      <a href="#nle-intro" onclick="return lsNav(event,'nle-intro')">Introduction</a>
+      <a href="#nle-abs" onclick="return lsNav(event,'nle-abs')">1. Absolute Value</a>
+      <a href="#nle-literal" onclick="return lsNav(event,'nle-literal')">2. Solving for a Variable</a>
+      <a href="#nle-intersect" onclick="return lsNav(event,'nle-intersect')">3. Line Meets Curve</a>
+      <a href="#nle-quad" onclick="return lsNav(event,'nle-quad')">4. Quadratic Equations</a>
+      <a href="#nle-discrim" onclick="return lsNav(event,'nle-discrim')">5. Number of Solutions</a>
+      <a href="#nle-system" onclick="return lsNav(event,'nle-system')">6. Nonlinear Systems</a>
+      <a href="#nle-cheat" onclick="return lsNav(event,'nle-cheat')">7. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="nleBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="nle-intro">
+          <h1>Nonlinear Equations &amp; Systems</h1>
+          <div class="ltag">Advanced Math</div>
+          <p>This skill covers equations that aren't straight lines: absolute value, quadratics, and systems where at least one equation is curved. The fastest tool for almost all of them is the same one: <b>Desmos regression (the ~ symbol)</b> &mdash; type the equation (or system) in almost exactly as written, and let Desmos solve it, or graph it and read the intersection point directly off the screen.</p>
+          <p>This lesson goes from easy (absolute value) to hard (nonlinear systems with a constant to solve for), using real SAT questions already in this practice set.</p>
+        </div>
+
+        <div class="lsec" id="nle-abs">
+          <h2>1. Absolute Value Equations</h2>
+          <div class="lsub">Easy &mdash; an absolute value equation usually has two solutions</div>
+          <div class="lrule">\(|A|=k\) (for positive \(k\)) means \(A=k\) OR \(A=-k\).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(|x-5|=10\). What is one possible solution?</p>
+            <p class="lstep">Either \(x-5=10\) (giving \(x=15\)) or \(x-5=-10\) (giving \(x=-5\)).</p>
+            <p class="lstep">Desmos solution: type <code>|x-5|=10</code> directly into the graph &mdash; Desmos draws two vertical lines at \(x=15\) and \(x=-5\), showing both solutions at once.</p>
+            <div class="lsol">15 or &minus;5 (either is accepted)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.9')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="nle-literal">
+          <h2>2. Solving a Literal Equation for a Different Variable</h2>
+          <div class="lsub">Easy/Medium &mdash; rearrange an equation with 3+ letters to isolate one of them</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(14j+5k=m\). Which equation correctly expresses \(k\) in terms of \(j\) and \(m\)?</p>
+            <p class="lstep">Subtract \(14j\) from both sides: \(5k=m-14j\). Divide by 5: \(k=\frac{m-14j}{5}\).</p>
+            <p class="lstep">Desmos solution: pick easy test numbers, like \(j=1,\ m=20\), so \(k=\frac{20-14}{5}=1.2\). Type <code>14(1)+5(1.2) ~ 20</code> to confirm it checks out, or test each answer choice directly with those same numbers and see which gives \(k=1.2\).</p>
+            <div class="lsol">\(k=\frac{m-14j}{5}\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.21')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT3 M 2.13')">Try another literal-equation version &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 3.7')">Try one with a fraction to clear &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nle-intersect">
+          <h2>3. Where a Line Meets a Curve</h2>
+          <div class="lsub">Easy/Medium &mdash; "the graphs intersect at (x,y)" means solve the system</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(y=76\) and \(y=x^2-5\). The graphs intersect at \((x,y)\). What's a possible value of \(x\)?</p>
+            <p class="lstep">Set the two expressions for \(y\) equal: \(x^2-5=76\), so \(x^2=81\), so \(x=\pm9\).</p>
+            <p class="lstep">Desmos solution: type both equations exactly as given, <code>y=76</code> and <code>y=x^2-5</code>, as two separate lines &mdash; Desmos plots both and marks the intersection points directly; click one to read off its coordinates.</p>
+            <div class="lsol">9 or &minus;9 (either is accepted)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.7')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT4 M 2.16')">Try a "solve for y" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nle-quad">
+          <h2>4. Quadratic Equations</h2>
+          <div class="lsub">Medium &mdash; factor, use the quadratic formula, or just graph it</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a rational equation that becomes quadratic</div>
+            <p class="lstep">\(\frac{55}{x+6}=x\). What's the positive solution?</p>
+            <p class="lstep">Multiply both sides by \((x+6)\): \(55=x^2+6x\), so \(x^2+6x-55=0\), which factors as \((x+11)(x-5)=0\), giving \(x=-11\) or \(x=5\). The positive one is 5.</p>
+            <p class="lstep">Desmos solution: type <code>55/(x+6)=x</code> directly &mdash; Desmos finds both intersection points of the two sides treated as separate graphs, and you just read off the positive one.</p>
+            <div class="lsol">5</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.8')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 1.8')">Try a standard-form quadratic version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nle-discrim">
+          <h2>5. How Many Solutions?</h2>
+          <div class="lsub">Hard &mdash; a quadratic has 2, 1, or 0 real solutions depending on the discriminant</div>
+          <div class="lrule">For \(ax^2+bx+c=0\): discriminant \(=b^2-4ac\). Positive &rarr; 2 solutions. Zero &rarr; exactly 1. Negative &rarr; 0 real solutions.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "exactly one point" means the discriminant is zero</div>
+            <p class="lstep">A line \(2y=c\) intersects the parabola \(y=-2x^2+9x\) at exactly one point. What is \(c\)?</p>
+            <p class="lstep">"Exactly one intersection" with a parabola means the line is tangent at the vertex. Rewrite the line as \(y=\frac{c}{2}\) and substitute: \(-2x^2+9x=\frac{c}{2}\), or \(-2x^2+9x-\frac{c}{2}=0\). Setting the discriminant to 0 and solving gives \(c=20.25\).</p>
+            <p class="lstep">Desmos solution: graph <code>y=-2x^2+9x</code>, then add a horizontal slider line <code>y=h</code> and drag \(h\) until it just touches the top of the parabola &mdash; that touching value of \(h\), doubled, is \(c\). Or just find the vertex: \(x=\frac{-9}{2(-2)}=2.25\), then \(y=-2(2.25)^2+9(2.25)=10.125\), so \(c=2(10.125)=20.25\).</p>
+            <div class="lsol">\(c=20.25\) (or \(\frac{81}{4}\))</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.22')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 3.15')">Try a "which value of b gives 2 solutions" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nle-system">
+          <h2>6. Systems with a Quadratic</h2>
+          <div class="lsub">Hard &mdash; substitute one equation into the other, then solve like any quadratic</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(8x+y=-11\) and \(2x^2=y+341\). The graphs intersect at \((x,y)\). What's a possible value of \(x\)?</p>
+            <p class="lstep">From the first equation, \(y=-11-8x\). Substitute into the second: \(2x^2=(-11-8x)+341=330-8x\), so \(2x^2+8x-330=0\), or \(x^2+4x-165=0\), which factors as \((x+15)(x-11)=0\).</p>
+            <p class="lstep">Desmos solution: type both equations exactly as given, <code>8x+y=-11</code> and <code>2x^2=y+341</code> &mdash; Desmos plots the line and the parabola and marks both intersection points directly, no substitution needed by hand.</p>
+            <div class="lsol">&minus;15 or 11 (either is accepted)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.11')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 1.22')">Try a "tangent system" version (one intersection only) &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nle-cheat">
+          <h2>7. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>\(|A|=k\)</td><td>Two equations: \(A=k\) and \(A=-k\) &mdash; or graph it in Desmos and read both crossings</td></tr>
+            <tr><td>Solve a literal equation for a different letter</td><td>Isolate it with normal algebra, or plug in easy test numbers for the other letters and check each choice</td></tr>
+            <tr><td>"The graphs intersect at (x,y)"</td><td>Set the two expressions for \(y\) equal and solve &mdash; or just graph both in Desmos and read the intersection</td></tr>
+            <tr><td>Quadratic equation to solve</td><td>Factor, use the quadratic formula, or graph both sides in Desmos and read the crossing(s)</td></tr>
+            <tr><td>"Exactly one solution / intersection"</td><td>Discriminant \(b^2-4ac=0\) (for a quadratic), or the line is tangent to the curve</td></tr>
+            <tr><td>System with a line and a parabola</td><td>Substitute one equation into the other and solve the resulting quadratic &mdash; or graph both directly</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 91 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Nonlinear equations in one variable and systems of equations in two variables');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonNonlinearFunc" class="lessonroot" data-subnav="nlfSubnav" style="display:none">
+    <div class="subnav" id="nlfSubnav">
+      <a href="#nlf-intro" onclick="return lsNav(event,'nlf-intro')">Introduction</a>
+      <a href="#nlf-evaluate" onclick="return lsNav(event,'nlf-evaluate')">1. Evaluating a Function</a>
+      <a href="#nlf-table" onclick="return lsNav(event,'nlf-table')">2. Function Tables</a>
+      <a href="#nlf-graph" onclick="return lsNav(event,'nlf-graph')">3. Reading Graphs</a>
+      <a href="#nlf-growth" onclick="return lsNav(event,'nlf-growth')">4. Growth &amp; Decay</a>
+      <a href="#nlf-vertex" onclick="return lsNav(event,'nlf-vertex')">5. Vertex &amp; Minimum/Maximum</a>
+      <a href="#nlf-cheat" onclick="return lsNav(event,'nlf-cheat')">6. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="nlfBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="nlf-intro">
+          <h1>Nonlinear Functions</h1>
+          <div class="ltag">Advanced Math</div>
+          <p>These questions are about quadratic, exponential, and other curved functions: evaluating them, reading their graphs, and finding features like the vertex, y-intercept, or growth rate. Desmos can evaluate a function directly, graph it, fit a model to a table of data with regression, or evaluate a whole list of inputs at once &mdash; all of which show up in this lesson.</p>
+        </div>
+
+        <div class="lsec" id="nlf-evaluate">
+          <h2>1. Evaluating a Function at a Value</h2>
+          <div class="lsub">Easy &mdash; plug the given input into the function's formula</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(f(x)=x^3+9\). What is \(f(2)\)?</p>
+            <p class="lstep">\(f(2)=2^3+9=8+9=17\).</p>
+            <p class="lstep">Desmos solution: type <code>f(x)=x^3+9</code> on one line, then <code>f(2)</code> on the next &mdash; Desmos evaluates it instantly.</p>
+            <div class="lsol">17</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.10')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="nlf-table">
+          <h2>2. Function Tables &amp; Lists of Values</h2>
+          <div class="lsub">Easy &mdash; evaluate the same function at several inputs at once</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(h(x)=x^2-3\). Which table correctly gives three values of \(x\) and their \(h(x)\)?</p>
+            <p class="lstep">\(h(1)=1-3=-2\), \(h(2)=4-3=1\), \(h(3)=9-3=6\).</p>
+            <p class="lstep">Desmos solution: type <code>h(x)=x^2-3</code>, then on the next line type <code>h(\{1,2,3\})</code> &mdash; defining the input as a <i>list</i> \(\{1,2,3\}\) makes Desmos evaluate the function at all three inputs simultaneously and hand back the list \([-2,1,6]\), which you can then match against each answer choice's table in one step.</p>
+            <div class="lsol">x=1: &minus;2, x=2: 1, x=3: 6</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.19')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="nlf-graph">
+          <h2>3. Reading Features Off a Graph</h2>
+          <div class="lsub">Easy/Medium &mdash; y-intercept, x-intercepts, and other points you can read directly</div>
+          <div class="lrule">The \(y\)-intercept of any function is always just \(f(0)\) &mdash; plug in 0, don't overthink it.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; y-intercept of an exponential</div>
+            <p class="lstep">\(g(x)=11\left(\frac{1}{12}\right)^x\). What is the \(y\)-intercept of its graph?</p>
+            <p class="lstep">Plug in \(x=0\): \(g(0)=11\left(\frac{1}{12}\right)^0=11\times1=11\). So the y-intercept is \((0,11)\).</p>
+            <p class="lstep">Desmos solution: type <code>g(x)=11(1/12)^x</code>, then <code>g(0)</code> &mdash; any exponential's y-intercept is just its leading coefficient, confirmed instantly.</p>
+            <div class="lsol">(0, 11)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.10')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 2.3')">Try reading a y-intercept straight off a pictured graph &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nlf-growth">
+          <h2>4. Growth, Decay, and Fitting a Model to Data</h2>
+          <div class="lsub">Medium &mdash; exponential growth/decay word problems, and regression when you're given a table instead of a formula</div>
+          <div class="lrule">Exponential model: \(y=a(b)^t\), where \(a\) is the starting amount and \(b\) is the growth factor (\(b>1\) grows, \(0&lt;b&lt;1\) decays).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; building the model from a word problem</div>
+            <p class="lstep">Bacteria double every day; there are 44,000 at the start. Which represents the count \(y\) after \(t\) days?</p>
+            <p class="lstep">Starting amount \(a=44{,}000\); doubling means growth factor \(b=2\). So \(y=44{,}000(2)^t\).</p>
+            <p class="lstep">Desmos solution: type <code>y=44000(2)^t</code> and check it against \(t=0\) (should give 44,000) and \(t=1\) (should give 88,000, i.e. doubled).</p>
+            <div class="lsol">\(y=44{,}000(2)^t\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.16')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; fitting an exponential model to a table with regression</div>
+            <p class="lstep">A savings account's balance over time: \(t=0 \to \$604.00\), \(t=1 \to \$606.42\), \(t=2 \to \$608.84\). Which equation models this?</p>
+            <p class="lstep">Rather than solving for the growth rate by hand, this is exactly what Desmos regression is built for.</p>
+            <p class="lstep">Desmos solution: type the table as point pairs with a tilde, like <code>(0,604),(1,606.42),(2,608.84)</code> on a table/list, then fit <code>n_1 \sim a(1+r)^{t_1}</code> &mdash; Desmos's regression finds \(a\approx604\) and \(r\approx0.004\) directly, matching \(n=604(1.004)^t\).</p>
+            <div class="lsol">\(n=604(1+0.004)^t\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.13')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 2.18')">Try a "height thrown from" projectile version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nlf-vertex">
+          <h2>5. Vertex, Minimum/Maximum, and Symmetry</h2>
+          <div class="lsub">Hard &mdash; the vertex of a parabola is its highest or lowest point, and it's also the axis of symmetry</div>
+          <div class="lrule">For \(f(x)=ax^2+bx+c\), the vertex is at \(x=-\frac{b}{2a}\). A parabola is symmetric around that x-value &mdash; so both x-intercepts are equally far from it.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; finding the minimum directly</div>
+            <p class="lstep">\(f(x)=4x^2-50x+126\). For what \(x\) does \(f(x)\) reach its minimum?</p>
+            <p class="lstep">\(x=-\frac{b}{2a}=-\frac{-50}{2(4)}=\frac{50}{8}=6.25\).</p>
+            <p class="lstep">Desmos solution: type <code>f(x)=4x^2-50x+126</code>, graph it, and click on the lowest point of the parabola &mdash; Desmos labels its coordinates directly, or type <code>d/dx f(x) = 0</code> and solve for the vertex using calculus-style regression.</p>
+            <div class="lsol">\(x=6.25\) (or \(\frac{25}{4}\))</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.20')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; using symmetry to find the other x-intercept</div>
+            <p class="lstep">A parabola's vertex is \((-3,6)\), and one x-intercept is \(\left(-\frac{17}{4},0\right)\). What's the other x-intercept?</p>
+            <p class="lstep">The vertex's x-coordinate, \(-3\), is exactly halfway between the two x-intercepts. The given intercept is \(-\frac{17}{4}-(-3)=-\frac{5}{4}\) away from \(-3\), so the other one is the same distance on the other side: \(-3+\frac{5}{4}=-\frac{7}{4}\).</p>
+            <p class="lstep">Desmos solution: type <code>(-17/4 + x)/2 ~ -3</code> &mdash; this says the midpoint of the two intercepts equals the vertex's x-coordinate, and the regression solves directly for the missing intercept \(x\).</p>
+            <div class="lsol">\(\left(-\frac{7}{4},0\right)\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.13')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 1.20')">Try a "shifted function" version, g(x)=f(x+5) &rarr;</button>
+        </div>
+
+        <div class="lsec" id="nlf-cheat">
+          <h2>6. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Evaluate \(f\) at one input</td><td>Plug the value directly into the formula &mdash; or type it into Desmos as <code>f(value)</code></td></tr>
+            <tr><td>Evaluate \(f\) at several inputs (a table)</td><td>Define the inputs as a Desmos list, like \(\{1,2,3\}\), and evaluate the function on the whole list at once</td></tr>
+            <tr><td>Find a y-intercept</td><td>Plug in \(x=0\) &mdash; works for any function, not just lines</td></tr>
+            <tr><td>Build an exponential model from words ("doubles every...", "increases by X% every...")</td><td>\(y=a(b)^t\): \(a\) = starting amount, \(b\) = growth factor (2 for doubling, \(1+r\) for a percent increase)</td></tr>
+            <tr><td>Given a table instead of a formula</td><td>Use Desmos regression: fit \(y\sim a(1+r)^{t}\) (or another model) to the table's points directly</td></tr>
+            <tr><td>Find a parabola's vertex / min / max</td><td>\(x=-\frac{b}{2a}\), then plug back in for the y-value &mdash; or read it straight off the graph</td></tr>
+            <tr><td>Find a missing x-intercept, given the vertex and one intercept</td><td>Use symmetry: the vertex's x-coordinate is the midpoint of the two intercepts</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 145 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Nonlinear functions');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 </div>
@@ -1852,9 +2228,9 @@ var TOPICS = [
     {name:"Linear inequalities in one or two variables", key:"Linear inequalities in one or two variables"}
   ]},
   {domain:"Advanced Math", color:"#7a4fbd", skills:[
-    {name:"Equivalent expressions", key:"Equivalent expressions"},
-    {name:"Nonlinear functions", key:"Nonlinear functions"},
-    {name:"Nonlinear equations in one variable and systems of equations in two variables", key:"Nonlinear equations in one variable and systems of equations in two variables"}
+    {name:"Equivalent expressions", key:"Equivalent expressions", lesson:"lessonEquivExpr"},
+    {name:"Nonlinear functions", key:"Nonlinear functions", lesson:"lessonNonlinearFunc"},
+    {name:"Nonlinear equations in one variable and systems of equations in two variables", key:"Nonlinear equations in one variable and systems of equations in two variables", lesson:"lessonNonlinearEq"}
   ]},
   {domain:"Problem-Solving and Data Analysis", color:"#1e7a35", skills:[
     {name:"Ratios, rates, proportional relationships, and units", key:"Ratios, rates, proportional relationships, and units", lesson:"lessonRatios"},
