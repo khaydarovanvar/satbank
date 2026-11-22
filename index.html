@@ -1591,6 +1591,643 @@
       </div>
     </div>
     </div>
+
+    <div id="lessonLinEq1" class="lessonroot" data-subnav="le1Subnav" style="display:none">
+    <div class="subnav" id="le1Subnav">
+      <a href="#le1-intro" onclick="return lsNav(event,'le1-intro')">Introduction</a>
+      <a href="#le1-basic" onclick="return lsNav(event,'le1-basic')">1. Basic Equations</a>
+      <a href="#le1-words" onclick="return lsNav(event,'le1-words')">2. Word Problems</a>
+      <a href="#le1-equiv" onclick="return lsNav(event,'le1-equiv')">3. Equivalent Equations</a>
+      <a href="#le1-multistep" onclick="return lsNav(event,'le1-multistep')">4. Multi-Step Equations</a>
+      <a href="#le1-howmany" onclick="return lsNav(event,'le1-howmany')">5. How Many Solutions?</a>
+      <a href="#le1-cheat" onclick="return lsNav(event,'le1-cheat')">6. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="le1Body" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="le1-intro">
+          <h1>Linear Equations in One Variable</h1>
+          <div class="ltag">Algebra</div>
+          <p>This is the simplest skill in the Algebra domain: one variable, no exponents, solve for it. The algebra (combine like terms, undo operations in reverse order) is usually the fast way by hand, but Desmos regression (the ~ symbol) can solve any of these directly &mdash; type the equation almost exactly as written and let it find the value.</p>
+          <p>This lesson goes from easy (one-step equations) to hard ("for what constant does this equation have no solution"), using real SAT questions already in this practice set.</p>
+        </div>
+
+        <div class="lsec" id="le1-basic">
+          <h2>1. Basic Equations</h2>
+          <div class="lsub">Easy &mdash; undo the operations in reverse order</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(x+40=95\). What value of \(x\) solves this?</p>
+            <p class="lstep">Subtract 40 from both sides: \(x=55\).</p>
+            <p class="lstep">Desmos solution: type <code>x+40=95</code> directly &mdash; Desmos solves it instantly and shows \(x=55\).</p>
+            <div class="lsol">55</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.2')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; using the equation, not re-solving from scratch</div>
+            <p class="lstep">If \(6+x=9\), what is the value of \(18+3x\)?</p>
+            <p class="lstep">Notice \(18+3x=3(6+x)=3(9)=27\) &mdash; no need to solve for \(x\) first and then substitute back in.</p>
+            <p class="lstep">Desmos solution: type <code>x=9-6</code> to get \(x=3\), then <code>18+3(3)</code> &mdash; or just type <code>3(6+x)</code> with \(6+x=9\) defined above it.</p>
+            <div class="lsol">27</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.9')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le1-words">
+          <h2>2. Translating Word Problems into Equations</h2>
+          <div class="lsub">Easy &mdash; a down payment plus a fixed number of equal payments</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">John paid $165 total for a microscope: a $37 down payment plus \(p\) monthly payments of $16 each. Which equation represents this?</p>
+            <p class="lstep">Down payment + (payment amount &times; number of payments) = total: \(37+16p=165\).</p>
+            <p class="lstep">Desmos solution: type each answer choice with <code>~</code> in place of the equals sign isn't needed here &mdash; just check which choice, when you solve it for \(p\), gives a sensible positive whole number of payments (\(p=8\)).</p>
+            <div class="lsol">\(16p+37=165\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.16')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le1-equiv">
+          <h2>3. Equivalent Equations</h2>
+          <div class="lsub">Easy/Medium &mdash; "has the same solution" means do the same operation to both sides</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(4x+6=18\). Which equation has the same solution?</p>
+            <p class="lstep">Subtract 6 from both sides: \(4x=12\) &mdash; this is the same equation, just rearranged, so it has the identical solution (\(x=3\)) without needing to go further.</p>
+            <p class="lstep">Desmos solution: solve the original (<code>4x+6=18</code> gives \(x=3\)), then test each choice the same way and keep the one that also gives \(x=3\).</p>
+            <div class="lsol">\(4x=12\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 1.1')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le1-multistep">
+          <h2>4. Multi-Step Equations</h2>
+          <div class="lsub">Medium &mdash; distribute first, then combine like terms on both sides</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(2(3t-10)+t=40+4t\). What is the value of \(3t\)?</p>
+            <p class="lstep">Distribute: \(6t-20+t=40+4t\), so \(7t-20=40+4t\), so \(3t=60\). (The question asks for \(3t\) directly &mdash; you don't even need to divide by 3 at the end.)</p>
+            <p class="lstep">Desmos solution: type <code>2(3t-10)+t=40+4t</code> directly, let Desmos solve for \(t\), then multiply by 3 &mdash; or just solve for \(3t\) in one regression by substituting \(u=3t\) if you want to skip a step.</p>
+            <div class="lsol">60</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.3')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 3.4')">Try a version asking for an expression's value, not just the variable &rarr;</button>
+        </div>
+
+        <div class="lsec" id="le1-howmany">
+          <h2>5. How Many Solutions?</h2>
+          <div class="lsub">Medium/Hard &mdash; simplify both sides; if they become identical, it's infinite; if they become a false statement, it's zero</div>
+          <div class="lrule">After fully simplifying: same equation on both sides &rarr; infinitely many solutions. A statement like \(5=7\) (variable cancels, numbers don't match) &rarr; zero solutions. Variable doesn't cancel &rarr; exactly one solution.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(66x=66x\). How many solutions does this have?</p>
+            <p class="lstep">Both sides are already identical for every value of \(x\) &mdash; infinitely many solutions.</p>
+            <p class="lstep">Desmos solution: type <code>66x=66x</code> and graph both sides as \(y=66x\) twice &mdash; the two lines are literally the same line, overlapping at every point.</p>
+            <div class="lsol">Infinitely many</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 3.3')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a less obvious "infinitely many"</div>
+            <p class="lstep">How many solutions does \(10(15x-9)=-15(6-10x)\) have?</p>
+            <p class="lstep">Distribute: \(150x-90=-90+150x\). Both sides are identical &mdash; infinitely many.</p>
+            <p class="lstep">Desmos solution: type <code>10(15x-9)=-15(6-10x)</code> and graph both sides separately (<code>y=10(15x-9)</code>, <code>y=-15(6-10x)</code>) &mdash; if they trace the exact same line, it's infinitely many solutions.</p>
+            <div class="lsol">Infinitely many</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.12')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT5 M 3.11')">Try a version with exactly one solution &rarr;</button>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; solving for a constant that forces "no solution"</div>
+            <p class="lstep">\(2(kx-n)=-\frac{28}{15}x-\frac{36}{19}\), where \(n>1\). The equation has no solution. What is \(k\)?</p>
+            <p class="lstep">"No solution" means the \(x\)-coefficients must match (so \(x\) cancels) while the constants don't. Distribute the left side: \(2kx-2n=-\frac{28}{15}x-\frac{36}{19}\). For no solution, match the \(x\)-coefficients: \(2k=-\frac{28}{15}\).</p>
+            <p class="lstep">Desmos solution: type <code>2k = -28/15</code> directly &mdash; solving this one-step equation for \(k\) gives \(k=-\frac{14}{15}\approx-0.9333\).</p>
+            <div class="lsol">\(k=-\frac{14}{15}\approx-0.9333\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 3.11')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le1-cheat">
+          <h2>6. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Basic one/two-step equation</td><td>Undo operations in reverse order, or type it straight into Desmos</td></tr>
+            <tr><td>"Which expression equals ___" without solving for the variable first</td><td>Look for a way to build the target expression directly from the given equation</td></tr>
+            <tr><td>Translating a word scenario (fixed fee + rate &times; count)</td><td>fixed amount + rate &times; variable = total</td></tr>
+            <tr><td>"Which equation has the same solution"</td><td>Do the same operation to both sides of the original &mdash; it stays equivalent</td></tr>
+            <tr><td>Multi-step equation with parentheses</td><td>Distribute first, then combine like terms on each side separately</td></tr>
+            <tr><td>Both sides simplify to be identical</td><td>Infinitely many solutions</td></tr>
+            <tr><td>Variable cancels, leaving a false numeric statement</td><td>Zero solutions</td></tr>
+            <tr><td>"For what constant does this equation have no solution"</td><td>Match the coefficients of the variable on both sides (so it would cancel), then that constant is forced</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 57 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Linear equations in one variable');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonLinEq2" class="lessonroot" data-subnav="le2Subnav" style="display:none">
+    <div class="subnav" id="le2Subnav">
+      <a href="#le2-intro" onclick="return lsNav(event,'le2-intro')">Introduction</a>
+      <a href="#le2-words" onclick="return lsNav(event,'le2-words')">1. From a Word Scenario</a>
+      <a href="#le2-build" onclick="return lsNav(event,'le2-build')">2. Building a Line's Equation</a>
+      <a href="#le2-interpret" onclick="return lsNav(event,'le2-interpret')">3. Interpreting a Coefficient</a>
+      <a href="#le2-graph" onclick="return lsNav(event,'le2-graph')">4. Equation From a Graph</a>
+      <a href="#le2-parallel" onclick="return lsNav(event,'le2-parallel')">5. Parallel Lines</a>
+      <a href="#le2-intercepts" onclick="return lsNav(event,'le2-intercepts')">6. Intercepts</a>
+      <a href="#le2-cheat" onclick="return lsNav(event,'le2-cheat')">7. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="le2Body" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="le2-intro">
+          <h1>Linear Equations in Two Variables</h1>
+          <div class="ltag">Algebra</div>
+          <p>This skill is about the equation of a line itself: writing it from a word scenario, a slope and a point, a table, or a graph, and reading meaning out of its pieces (slope, intercepts, coefficients). Desmos can graph any line instantly and fit a line through a table of points with regression &mdash; both show up throughout this lesson.</p>
+        </div>
+
+        <div class="lsec" id="le2-words">
+          <h2>1. Writing an Equation From a Word Scenario</h2>
+          <div class="lsub">Easy &mdash; identify each rate and combine them into one equation</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Jay walks at 3 mph and runs at 5 mph. He walks \(w\) hours and runs \(r\) hours for a combined 14 miles. Which equation represents this?</p>
+            <p class="lstep">Distance = rate &times; time for each activity, added together: \(3w+5r=14\).</p>
+            <p class="lstep">Desmos solution: pick simple test numbers, like \(w=3,\ r=1\) (giving \(9+5=14\) miles, which checks out), then verify only <code>3w+5r=14</code> is satisfied by that pair among the choices.</p>
+            <div class="lsol">\(3w+5r=14\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.3')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le2-build">
+          <h2>2. Building a Line's Equation (Slope + Point, or a Table)</h2>
+          <div class="lsub">Easy/Medium &mdash; slope-intercept form is \(y=mx+b\)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; from slope and a point</div>
+            <p class="lstep">A line has slope \(\frac{1}{9}\) and passes through \((0,14)\). Which equation represents it?</p>
+            <p class="lstep">\((0,14)\) is the y-intercept itself (since \(x=0\)), so \(b=14\) and \(m=\frac{1}{9}\): \(y=\frac{1}{9}x+14\).</p>
+            <p class="lstep">Desmos solution: type <code>y=(1/9)x+14</code> and confirm it passes through \((0,14)\) by checking the graph.</p>
+            <div class="lsol">\(y=\frac{1}{9}x+14\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.2')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; from a table of values</div>
+            <p class="lstep">A table shows \(x=0,y=18\); \(x=1,y=13\); \(x=2,y=8\). Which equation represents this linear relationship?</p>
+            <p class="lstep">The y-intercept (where \(x=0\)) is 18. Slope = change in \(y\) per change in \(x\): from \(x=0\) to \(x=1\), \(y\) drops by 5, so slope \(=-5\). Equation: \(y=-5x+18\).</p>
+            <p class="lstep">Desmos solution: enter the three points into a table, then add the regression line <code>y_1 \sim mx_1+b</code> &mdash; Desmos fits \(m=-5,\ b=18\) directly from the data.</p>
+            <div class="lsol">\(y=-5x+18\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.17')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT3 M 2.10')">Try a "which table matches this graph" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="le2-interpret">
+          <h2>3. Interpreting a Coefficient or Variable in Context</h2>
+          <div class="lsub">Medium &mdash; match each piece of the equation to what it counts in the real-world scenario</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A neighborhood has a 2-hectare park and 35-hectare residential area, with 3,934 total trees: \(2x+35y=3{,}934\). What does \(x\) represent?</p>
+            <p class="lstep">The 2 multiplies \(x\) and matches the park's 2 hectares &mdash; so \(x\) must be trees <i>per hectare</i> in the park (average density), not a total count (a total wouldn't need multiplying by the hectare count).</p>
+            <div class="lsol">The average number of trees per hectare in the park</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.5')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 1.4')">Try a version where you plug in a given value &rarr;</button>
+        </div>
+
+        <div class="lsec" id="le2-graph">
+          <h2>4. Finding a Line's Equation From Its Graph</h2>
+          <div class="lsub">Medium &mdash; read the slope and y-intercept directly off the picture</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A graph shows a line. Which equation matches it?</p>
+            <p class="lstep">Read the y-intercept straight off the graph, then pick any other clear point and compute slope = rise/run between them.</p>
+            <p class="lstep">Desmos solution: if you can estimate two points the line passes through from the picture, type them into a table and add a regression line <code>y_1 \sim mx_1+b</code> to get the exact equation.</p>
+            <div class="lsol">\(y=-x-8\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.17')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le2-parallel">
+          <h2>5. Parallel Lines</h2>
+          <div class="lsub">Hard &mdash; parallel lines always have the same slope</div>
+          <div class="lrule">Two lines are parallel if and only if they have the same slope.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Line \(\ell\) passes through \((0,0)\) and is parallel to \(y=8x+2\). If \(\ell\) also passes through \((3,d)\), what is \(d\)?</p>
+            <p class="lstep">Parallel means same slope, 8. Since \(\ell\) passes through the origin, its equation is \(y=8x\). At \(x=3\): \(d=8(3)=24\).</p>
+            <p class="lstep">Desmos solution: type <code>y=8x</code> (slope 8 through the origin), then <code>8(3)</code> to evaluate it at \(x=3\).</p>
+            <div class="lsol">24</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.21')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="le2-intercepts">
+          <h2>6. x- and y-Intercepts</h2>
+          <div class="lsub">Hard &mdash; set the other variable to 0 to find each intercept</div>
+          <div class="lrule">x-intercept: set \(y=0\), solve for \(x\). y-intercept: set \(x=0\), solve for \(y\).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(7x+2y=-31\) has x-intercept \((a,0)\) and y-intercept \((0,b)\). What is \(\frac{b}{a}\)?</p>
+            <p class="lstep">Set \(y=0\): \(7a=-31\), so \(a=-\frac{31}{7}\). Set \(x=0\): \(2b=-31\), so \(b=-\frac{31}{2}\). Then \(\frac{b}{a}=\frac{-31/2}{-31/7}=\frac{7}{2}\).</p>
+            <p class="lstep">Desmos solution: type <code>7x+2y=-31</code>, graph it, and click where it crosses each axis &mdash; Desmos labels both intercepts directly, then just divide them.</p>
+            <div class="lsol">\(\frac{7}{2}\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.14')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 3.14')">Try a "shifted function" version, y=f(x)+14 &rarr;</button>
+        </div>
+
+        <div class="lsec" id="le2-cheat">
+          <h2>7. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Build an equation from a word scenario</td><td>Identify each rate/quantity and combine them &mdash; test with easy numbers to check your equation</td></tr>
+            <tr><td>Slope + one point given</td><td>\(y=mx+b\); if the point is \((0,b)\), that IS the y-intercept</td></tr>
+            <tr><td>A table of points, need the equation</td><td>y-intercept = value where \(x=0\); slope = change in \(y\) per change in \(x\) &mdash; or fit with Desmos regression</td></tr>
+            <tr><td>Interpret a coefficient/variable in context</td><td>Match each number/letter in the equation to what it multiplies or counts in the story</td></tr>
+            <tr><td>Equation from a pictured graph</td><td>Read the y-intercept and one other point, compute slope = rise/run &mdash; or regression-fit two read-off points</td></tr>
+            <tr><td>Parallel lines</td><td>Same slope, different (or same) y-intercept</td></tr>
+            <tr><td>x-intercept / y-intercept</td><td>Set the OTHER variable to 0 and solve</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 73 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Linear equations in two variables');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonLinFunc" class="lessonroot" data-subnav="lfSubnav" style="display:none">
+    <div class="subnav" id="lfSubnav">
+      <a href="#lf-intro" onclick="return lsNav(event,'lf-intro')">Introduction</a>
+      <a href="#lf-write" onclick="return lsNav(event,'lf-write')">1. Writing the Relationship</a>
+      <a href="#lf-evaluate" onclick="return lsNav(event,'lf-evaluate')">2. Evaluating f(x)</a>
+      <a href="#lf-interpret" onclick="return lsNav(event,'lf-interpret')">3. Interpreting Slope &amp; Intercept</a>
+      <a href="#lf-build" onclick="return lsNav(event,'lf-build')">4. Building f From Two Points</a>
+      <a href="#lf-table" onclick="return lsNav(event,'lf-table')">5. From a Table (Regression)</a>
+      <a href="#lf-piecewise" onclick="return lsNav(event,'lf-piecewise')">6. Tiered Pricing</a>
+      <a href="#lf-cheat" onclick="return lsNav(event,'lf-cheat')">7. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="lfBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="lf-intro">
+          <h1>Linear Functions</h1>
+          <div class="ltag">Algebra</div>
+          <p>Same math as "linear equations in two variables," but written in function notation: \(f(x)\) instead of \(y\). The skill is the same &mdash; slope, intercepts, building an equation &mdash; wrapped in slightly different notation and usually a real-world context to interpret.</p>
+        </div>
+
+        <div class="lsec" id="lf-write">
+          <h2>1. Writing a Relationship as an Equation</h2>
+          <div class="lsub">Easy &mdash; translate a comparison sentence directly</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(y\) is 84 less than \(x\). Which equation represents this?</p>
+            <p class="lstep">"84 less than x" means \(x-84\), so \(y=x-84\).</p>
+            <div class="lsol">\(y=x-84\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.5')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="lf-evaluate">
+          <h2>2. Evaluating a Linear Function</h2>
+          <div class="lsub">Easy &mdash; plug the given input into the formula</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A car lease costs \(f(x)=36x+1{,}000\) for a monthly payment of \(x\) dollars over 36 months. What's the total cost when the payment is $400?</p>
+            <p class="lstep">\(f(400)=36(400)+1{,}000=14{,}400+1{,}000=15{,}400\).</p>
+            <p class="lstep">Desmos solution: type <code>f(x)=36x+1000</code>, then <code>f(400)</code>.</p>
+            <div class="lsol">$15,400</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.11')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 2.12')">Try a pure "evaluate g(8)" version &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 2.6')">Try solving for y given x in y=mx+b form &rarr;</button>
+        </div>
+
+        <div class="lsec" id="lf-interpret">
+          <h2>3. Interpreting Slope and y-Intercept in Context</h2>
+          <div class="lsub">Medium &mdash; slope is a rate ("per" something); y-intercept is the starting value (at \(x=0\))</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; slope</div>
+            <p class="lstep">A graph shows an electrician's total charge for \(x\) hours of work: a onetime fee plus an hourly rate. What does the slope represent?</p>
+            <p class="lstep">Slope = change in charge per additional hour of work &mdash; that's exactly the hourly rate.</p>
+            <div class="lsol">The electrician's hourly rate</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.5')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; y-intercept</div>
+            <p class="lstep">\(f(x)=-5x+30\) approximates juice remaining after making \(x\) popsicles. What does the y-intercept mean here?</p>
+            <p class="lstep">The y-intercept is \(f(0)=30\): the amount of juice BEFORE making any popsicles (\(x=0\)) &mdash; the starting amount.</p>
+            <div class="lsol">Caleb had approximately 30 fluid ounces of juice when he began</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 3.5')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="lf-build">
+          <h2>4. Building f From Two Known Values</h2>
+          <div class="lsub">Medium &mdash; \(f(0)\) is always the y-intercept; use any other value to find the slope</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(f(0)=8\) and \(f(1)=12\). Which equation defines \(f\)?</p>
+            <p class="lstep">\(f(0)=8\) means the y-intercept \(b=8\). From \(x=0\) to \(x=1\), \(f\) increases by 4, so slope \(m=4\): \(f(x)=4x+8\).</p>
+            <p class="lstep">Desmos solution: type the two points into a table, \((0,8)\) and \((1,12)\), then fit <code>y_1 \sim mx_1+b</code> &mdash; Desmos gives \(m=4,\ b=8\) directly.</p>
+            <div class="lsol">\(f(x)=4x+8\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.20')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 2.19')">Try finding the x-intercept of f instead &rarr;</button>
+        </div>
+
+        <div class="lsec" id="lf-table">
+          <h2>5. Building f From a Table, With Regression</h2>
+          <div class="lsub">Hard &mdash; when you're given several (x, f(x)) pairs instead of a clean slope and intercept</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A table shows \(f(1)=-64,\ f(2)=0,\ f(3)=64\), and \(f(x)=ax+b\). What is \(a-b\)?</p>
+            <p class="lstep">From \(x=1\) to \(x=2\), \(f\) increases by 64, so \(a=64\). Then \(f(1)=64(1)+b=-64\), so \(b=-128\). \(a-b=64-(-128)=192\).</p>
+            <p class="lstep">Desmos solution: enter the three points into a table, then fit <code>y_1 \sim ax_1+b</code> &mdash; Desmos's regression finds \(a=64,\ b=-128\) directly, and you just subtract.</p>
+            <div class="lsol">192</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.19')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="lf-piecewise">
+          <h2>6. Tiered Pricing &amp; Unit-Rate Functions</h2>
+          <div class="lsub">Hard &mdash; a flat rate for the first group, then a different rate after</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; first N at one price, rest at another</div>
+            <p class="lstep">A museum charges $21/person for the first 25 people, then $14 for each additional person. Which function gives the total charge for \(n\ge25\) people?</p>
+            <p class="lstep">First 25 people cost a flat \(25\times21=525\). Each person beyond 25 costs an extra $14: that's \(14(n-25)\) more. Total: \(525+14(n-25)=525+14n-350=14n+175\).</p>
+            <p class="lstep">Desmos solution: type <code>f(n)=525+14(n-25)</code> and simplify, or just test \(n=25\) (should give exactly 525) and \(n=26\) (should give \(525+14=539\)) against each answer choice.</p>
+            <div class="lsol">\(f(n)=14n+175\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.21')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 3.14')">Try a unit-conversion function (Kelvin to Fahrenheit) &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 3.19')">Try a "cover twice" rate-and-scaling version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="lf-cheat">
+          <h2>7. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Translate a comparison sentence</td><td>"A is k more/less than B" &rarr; \(A=B\pm k\)</td></tr>
+            <tr><td>Evaluate \(f\) at a value</td><td>Plug it directly into the formula</td></tr>
+            <tr><td>Interpret slope in context</td><td>Slope = rate of change ("per" one unit of the input)</td></tr>
+            <tr><td>Interpret y-intercept in context</td><td>\(f(0)\) &mdash; the starting value, before any of the input has happened</td></tr>
+            <tr><td>Build \(f\) from two known values</td><td>\(f(0)\) is the y-intercept; use any other value to compute the slope</td></tr>
+            <tr><td>Build \(f\) from a table</td><td>Use Desmos regression: fit \(y\sim ax+b\) to the table's points directly</td></tr>
+            <tr><td>Flat rate for the first N, different rate after</td><td>total = (rate&#8321; &times; N) + rate&#8322; &times; (amount beyond N)</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 84 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Linear functions');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonLinIneq" class="lessonroot" data-subnav="liSubnav" style="display:none">
+    <div class="subnav" id="liSubnav">
+      <a href="#li-intro" onclick="return lsNav(event,'li-intro')">Introduction</a>
+      <a href="#li-words" onclick="return lsNav(event,'li-words')">1. Word Problems</a>
+      <a href="#li-point" onclick="return lsNav(event,'li-point')">2. Checking a Point</a>
+      <a href="#li-budget" onclick="return lsNav(event,'li-budget')">3. Budget/Max Problems</a>
+      <a href="#li-graph" onclick="return lsNav(event,'li-graph')">4. Reading a Shaded Graph</a>
+      <a href="#li-system" onclick="return lsNav(event,'li-system')">5. Systems of Inequalities</a>
+      <a href="#li-table" onclick="return lsNav(event,'li-table')">6. Table Checks (Lists)</a>
+      <a href="#li-cheat" onclick="return lsNav(event,'li-cheat')">7. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="liBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="li-intro">
+          <h1>Linear Inequalities in One or Two Variables</h1>
+          <div class="ltag">Algebra</div>
+          <p>Inequalities work almost exactly like equations &mdash; same algebra moves &mdash; except the answer is a whole range of values instead of one number, and you have to track which direction the inequality sign points. Desmos handles inequalities directly: typing one in shades the solution region on the graph.</p>
+        </div>
+
+        <div class="lsec" id="li-words">
+          <h2>1. Translating a Word Scenario</h2>
+          <div class="lsub">Easy &mdash; "at least," "no more than," "between" each map to a specific inequality sign</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "minimum number of hours"</div>
+            <p class="lstep">Ty wants to walk at least 24 km, at 4 km/hour. What's the minimum number of hours needed?</p>
+            <p class="lstep">distance = rate &times; time, so time \(\ge\frac{24}{4}=6\) hours.</p>
+            <p class="lstep">Desmos solution: type <code>4t \ge 24</code> and solve for \(t\) &mdash; or just <code>24/4</code> directly since this one simplifies cleanly.</p>
+            <div class="lsol">6 hours</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 2.8')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "varied between"</div>
+            <p class="lstep">A plane's speed varied between 150 and 170 mph. Which inequality represents this, for speed \(s\)?</p>
+            <p class="lstep">"Between" two values, inclusive, is a compound inequality: \(150\le s\le170\).</p>
+            <div class="lsol">\(150\le s\le170\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 2.10')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="li-point">
+          <h2>2. Checking Whether a Point Is a Solution</h2>
+          <div class="lsub">Easy &mdash; substitute the point's coordinates into each inequality and see if it holds</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">Is \((8,2)\) a solution to \(x>0,\ y>0\)? Just check: \(8>0\) true, \(2>0\) true &mdash; both hold.</p>
+            <p class="lstep">Desmos solution: type <code>(8,2)</code> as a point and shade both inequalities, <code>x>0</code> and <code>y>0</code> &mdash; if the point lands inside the shaded overlap, it's a solution.</p>
+            <div class="lsol">\(x>0,\ y>0\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 2.14')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="li-budget">
+          <h2>3. Budget / Maximum-Count Problems</h2>
+          <div class="lsub">Medium &mdash; set up a "total &le; limit" inequality and solve for the count</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A truck can tow at most 4,600 lbs total. The trailer alone weighs 500 lbs, and each box weighs 120 lbs. What's the max number of boxes?</p>
+            <p class="lstep">\(500+120b\le4{,}600\), so \(120b\le4{,}100\), so \(b\le34.17\). Since \(b\) must be a whole number, the max is 34.</p>
+            <p class="lstep">Desmos solution: type <code>500+120b \le 4600</code> and solve &mdash; Desmos gives \(b\le34.1\overline{6}\); round DOWN to the nearest whole number since you can't have part of a box.</p>
+            <div class="lsol">34</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.20')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Always round in the direction that keeps the inequality true. For a maximum with "no more than," round DOWN even if the decimal is close to the next whole number.</div>
+          <button class="practicebtn" onclick="goPractice('SAT1 M 3.10')">Try a "max price per item including tax" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="li-graph">
+          <h2>4. Reading a Shaded-Region Graph</h2>
+          <div class="lsub">Medium &mdash; the boundary line's equation, plus which side is shaded, tells you the inequality direction</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A shaded region's boundary line is \(y=-1-3x\) (or equivalent). Which inequality does the shading represent?</p>
+            <p class="lstep">Figure out the boundary line's equation first, then check one point clearly inside the shaded region against each candidate inequality to see which one it satisfies.</p>
+            <div class="lsol">\(y>-1-3x\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 1.8')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="li-system">
+          <h2>5. Systems of Inequalities</h2>
+          <div class="lsub">Hard &mdash; a point must satisfy every inequality in the system at once</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(y\le x+7\) and \(y\ge-2x-1\). Which point is a solution to both?</p>
+            <p class="lstep">Test each choice in BOTH inequalities. For \((14,0)\): \(0\le14+7=21\) true; \(0\ge-2(14)-1=-29\) true. Both hold.</p>
+            <p class="lstep">Desmos solution: shade both inequalities on one graph, then check which answer choice's point falls in the overlapping shaded region.</p>
+            <div class="lsol">\((14,0)\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 3.7')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a system with one unknown, given one point</div>
+            <p class="lstep">\(y>14\) and \(4x+y<18\). The point \((x,53)\) is a solution. Which value could \(x\) be?</p>
+            <p class="lstep">Plug \(y=53\) into the second inequality: \(4x+53<18\), so \(4x<-35\), so \(x<-8.75\). Among the choices, only \(-9\) is less than \(-8.75\).</p>
+            <p class="lstep">Desmos solution: type <code>4x+53 < 18</code> and solve for \(x\) &mdash; Desmos gives the boundary \(x<-8.75\) directly.</p>
+            <div class="lsol">\(-9\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 1.13')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="li-table">
+          <h2>6. "Which Table Satisfies This for Every Row?" (Lists)</h2>
+          <div class="lsub">Hard &mdash; check several (x, y) pairs against one inequality at once with a Desmos list</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(y>13x-18\). Which table has all its \((x,y)\) pairs satisfying this?</p>
+            <p class="lstep">Instead of checking each row by hand one at a time, check all of a candidate table's x-values at once.</p>
+            <p class="lstep">Desmos solution: for a candidate table with \(x=\{3,5,8\}\), type <code>13\{3,5,8\}-18</code> to get the boundary values for all three rows simultaneously, then compare each to that table's \(y\) column &mdash; every \(y\) must be bigger than its matching boundary value.</p>
+            <div class="lsol">x=3,y=26; x=5,y=52; x=8,y=91</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 2.20')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT3 M 3.12')">Try another "check every row" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="li-cheat">
+          <h2>7. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>"At least" / "no more than" / "between"</td><td>\(\ge\) / \(\le\) / a compound inequality \(a\le x\le b\)</td></tr>
+            <tr><td>Is a point a solution?</td><td>Substitute its coordinates into EVERY inequality in the system</td></tr>
+            <tr><td>Maximum count under a budget/weight limit</td><td>Set up total &le; limit, solve, then round DOWN to a whole number</td></tr>
+            <tr><td>Shaded-region graph, find the inequality</td><td>Find the boundary line's equation, then test a point clearly inside the shading</td></tr>
+            <tr><td>System of inequalities</td><td>The point must satisfy ALL of them at once &mdash; test each candidate against every inequality</td></tr>
+            <tr><td>"Which table works for every row"</td><td>Desmos: evaluate the inequality's boundary at a LIST of all the table's x-values at once</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 36 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Linear inequalities in one or two variables');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    <div id="lessonSystems" class="lessonroot" data-subnav="sysSubnav" style="display:none">
+    <div class="subnav" id="sysSubnav">
+      <a href="#sys-intro" onclick="return lsNav(event,'sys-intro')">Introduction</a>
+      <a href="#sys-sub" onclick="return lsNav(event,'sys-sub')">1. Solving by Substitution</a>
+      <a href="#sys-howmany" onclick="return lsNav(event,'sys-howmany')">2. How Many Intersections?</a>
+      <a href="#sys-elim" onclick="return lsNav(event,'sys-elim')">3. Elimination</a>
+      <a href="#sys-words" onclick="return lsNav(event,'sys-words')">4. Word Problems</a>
+      <a href="#sys-nosol" onclick="return lsNav(event,'sys-nosol')">5. No-Solution Systems</a>
+      <a href="#sys-cheat" onclick="return lsNav(event,'sys-cheat')">6. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="sysBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="sys-intro">
+          <h1>Systems of Two Linear Equations</h1>
+          <div class="ltag">Algebra</div>
+          <p>Two equations, two unknowns, one shared solution: the point where both lines cross. Desmos solves these almost for free &mdash; graph both equations exactly as given and read off the intersection point, or type the system in with a <code>~</code> regression to get exact values.</p>
+        </div>
+
+        <div class="lsec" id="sys-sub">
+          <h2>1. Solving by Substitution</h2>
+          <div class="lsub">Easy &mdash; when one equation already isolates a variable, substitute it into the other</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(x+y=18\) and \(5y=x\). What's the solution \((x,y)\)?</p>
+            <p class="lstep">Substitute \(x=5y\) into the first equation: \(5y+y=18\), so \(6y=18\), so \(y=3\), and \(x=5(3)=15\).</p>
+            <p class="lstep">Desmos solution: type both equations exactly as given, <code>x+y=18</code> and <code>5y=x</code> &mdash; Desmos graphs both lines and marks the intersection point directly.</p>
+            <div class="lsol">\((15,3)\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.13')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 3.1')">Try a version where one equation is already solved for x &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT5 M 2.9')">Try a version with y set equal to a constant &rarr;</button>
+        </div>
+
+        <div class="lsec" id="sys-howmany">
+          <h2>2. How Many Intersection Points?</h2>
+          <div class="lsub">Medium &mdash; two non-parallel lines always cross exactly once</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">At how many points do \(y=x+20\) and \(y=8x\) intersect?</p>
+            <p class="lstep">These are two different, non-parallel lines (different slopes: 1 vs 8) &mdash; any two distinct, non-parallel lines in a plane cross at exactly one point.</p>
+            <p class="lstep">Desmos solution: type both equations &mdash; you'll see them cross exactly once, no need to even solve for the actual point.</p>
+            <div class="lsol">1</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.14')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="sys-elim">
+          <h2>3. Elimination</h2>
+          <div class="lsub">Medium &mdash; multiply one equation so a variable cancels when you add/subtract</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(6x+7y=28\) and \(2x+2y=10\). What's \(y\)?</p>
+            <p class="lstep">Multiply the second equation by 3: \(6x+6y=30\). Subtract this from the first: \((6x+7y)-(6x+6y)=28-30\), giving \(y=-2\).</p>
+            <p class="lstep">Desmos solution: type both equations exactly as given &mdash; Desmos finds the intersection point without any elimination algebra at all.</p>
+            <div class="lsol">\(-2\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.18')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="sys-words">
+          <h2>4. Word Problems &rarr; Systems</h2>
+          <div class="lsub">Medium &mdash; translate two separate relationships into two separate equations</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">A wire of length 106 inches is cut into two parts, \(x\) and \(y\). \(x\) is 6 more than 4 times \(y\). What is \(x\)?</p>
+            <p class="lstep">Two equations: \(x+y=106\) and \(x=4y+6\). Substitute: \((4y+6)+y=106\), so \(5y=100\), so \(y=20\), and \(x=4(20)+6=86\).</p>
+            <p class="lstep">Desmos solution: type <code>x+y=106</code> and <code>x=4y+6</code> &mdash; read \(x\) off the intersection point directly.</p>
+            <div class="lsol">86</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.21')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 3.4')">Try a "ratio of votes" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="sys-nosol">
+          <h2>5. "No Solution" Systems</h2>
+          <div class="lsub">Hard &mdash; two linear equations have no solution exactly when they're parallel but not identical</div>
+          <div class="lrule">Rewrite both equations in slope-intercept form. No solution &rarr; same slope, different y-intercept (parallel, never touching).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example</div>
+            <p class="lstep">\(4x-6y=10y+2\) and \(ty=\frac{1}{2}+2x\), where \(t\) is a constant. If the system has no solution, what is \(t\)?</p>
+            <p class="lstep">Rewrite the first: \(4x-16y=2\), so \(y=\frac{4x-2}{16}=\frac{1}{4}x-\frac{1}{8}\) &mdash; slope \(\frac{1}{4}\). Rewrite the second: \(y=\frac{2}{t}x+\frac{1}{2t}\) &mdash; slope \(\frac{2}{t}\). For no solution, the slopes must match: \(\frac{2}{t}=\frac{1}{4}\), so \(t=8\).</p>
+            <p class="lstep">Desmos solution: type <code>2/t = 1/4</code> directly &mdash; solving this one-step equation for \(t\) gives 8 immediately, skipping the full slope-intercept rewrite.</p>
+            <div class="lsol">\(t=8\)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 3.17')">Try this exact question &rarr;</button>
+          </div>
+          <button class="practicebtn" onclick="goPractice('SAT2 M 3.20')">Try a version with larger coefficients &rarr;</button>
+          <button class="practicebtn" onclick="goPractice('SAT3 M 3.14')">Try another "solve for the constant" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="sys-cheat">
+          <h2>6. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>One equation already isolates a variable</td><td>Substitute it directly into the other equation</td></tr>
+            <tr><td>"How many points do these lines intersect at"</td><td>Different slopes &rarr; exactly 1. Same slope + same y-intercept &rarr; infinitely many. Same slope + different y-intercept &rarr; 0</td></tr>
+            <tr><td>Neither equation is pre-isolated</td><td>Elimination: scale one equation so a variable's coefficients match, then add/subtract &mdash; or just graph both in Desmos</td></tr>
+            <tr><td>Word problem with two unknowns</td><td>Write one equation per sentence/relationship given, then solve the system</td></tr>
+            <tr><td>"For what constant does this system have no solution"</td><td>Rewrite both in slope-intercept form, set the slopes equal, solve for the constant</td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? This filter covers 65 real SAT-style questions &mdash; including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Systems of two linear equations in two variables');">Go practice this skill &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
   </div>
 </div>
 </div>
@@ -2221,11 +2858,11 @@ function switchSection(name){
 // (per request) with a "Coming soon" placeholder rather than being hidden.
 var TOPICS = [
   {domain:"Algebra", color:"#2f6fb0", skills:[
-    {name:"Linear equations in one variable", key:"Linear equations in one variable"},
-    {name:"Linear equations in two variables", key:"Linear equations in two variables"},
-    {name:"Linear functions", key:"Linear functions"},
-    {name:"Systems of two linear equations in two variables", key:"Systems of two linear equations in two variables"},
-    {name:"Linear inequalities in one or two variables", key:"Linear inequalities in one or two variables"}
+    {name:"Linear equations in one variable", key:"Linear equations in one variable", lesson:"lessonLinEq1"},
+    {name:"Linear equations in two variables", key:"Linear equations in two variables", lesson:"lessonLinEq2"},
+    {name:"Linear functions", key:"Linear functions", lesson:"lessonLinFunc"},
+    {name:"Systems of two linear equations in two variables", key:"Systems of two linear equations in two variables", lesson:"lessonSystems"},
+    {name:"Linear inequalities in one or two variables", key:"Linear inequalities in one or two variables", lesson:"lessonLinIneq"}
   ]},
   {domain:"Advanced Math", color:"#7a4fbd", skills:[
     {name:"Equivalent expressions", key:"Equivalent expressions", lesson:"lessonEquivExpr"},
