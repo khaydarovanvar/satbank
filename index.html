@@ -188,6 +188,10 @@
   .desmospanel{margin-top:14px;background:#fff3ea;border:1px solid #ffdcc2;border-radius:var(--radius);padding:14px 16px;font-size:14.5px;line-height:1.55;}
   .desmospanel b{color:#b3550f;}
   .topictag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-left:6px;vertical-align:middle;background:#fff3ea;color:#b3550f;}
+  .hardselect{font-size:14px;font-family:inherit;border:1.5px solid var(--choice-border);border-radius:var(--radius);padding:8px 12px;background:#fff;cursor:pointer;}
+  .hardfilterbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #e7e7e7;background:#fafafa;flex:none;}
+  .hardfilterbar label{font-size:13px;font-weight:700;color:#555;}
+  .hardintro .hardselect{display:block;margin:0 auto 18px;}
 
   .bottombar{height:68px;flex:none;border-top:1px solid #d7d7d7;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;}
   .navbtn{border:1.5px solid #767676;border-radius:4px;padding:9px 22px;font-weight:500;font-size:14px;background:#fff;color:#333;cursor:pointer;}
@@ -425,8 +429,13 @@
   <div class="hardintro" id="hardIntro">
     <div class="hardbadge">&#128293; 100 Hard SAT Math Questions &mdash; Form C</div>
     <h1>The hardest Digital SAT Math questions, one at a time</h1>
-    <p>97 official-style questions curated from a dedicated "hardest questions" workbook, each with its own Desmos solution shortcut &mdash; what to type and what to read off the graph. Every question and solution here was independently re-derived, not just copied from a key.</p>
+    <p><span id="hardIntroCount">97</span> Hard-difficulty questions &mdash; a curated "hardest questions" workbook (each with its own hand-written Desmos solution shortcut) plus every Hard-difficulty question already in this app's full bank. Filter by domain below, or practice them all.</p>
+    <select id="hardDomainSelect" class="hardselect"></select>
     <button class="practicebtn" onclick="startHard()">Start &rarr;</button>
+  </div>
+  <div class="hardfilterbar" id="hardFilterBar" style="display:none">
+    <label for="hardDomainSelectLive">Domain:</label>
+    <select id="hardDomainSelectLive" class="hardselect" onchange="changeHardDomain()"></select>
   </div>
   <div class="body" style="display:none" id="hardBody">
   <div class="qpane" id="hardPane"></div>
@@ -2808,7 +2817,34 @@ function closeNav(){ document.getElementById('navModal').classList.remove('open'
 function jumpTo(vi){ idx=vi; render(); closeNav(); }
 
 // ---- Hard 100 section ----
-var hardIdx = 0, hardStarted = false;
+// Merges the 97 hand-curated "Hard 100" workbook questions (HARDQ, each with
+// its own hand-written Desmos solution) with every diff:"Hard" question
+// already in the main bank (DATA) — so this section always reflects every
+// hard question the app has, including any added to DATA later.
+var hardIdx = 0, hardStarted = false, hardView = [], hardDomainFilter = 'all', HARD_ALL = [];
+var HARD_DOMAINS = ['Algebra','Advanced Math','Problem-Solving and Data Analysis','Geometry and Trigonometry'];
+var SKILL_DOMAIN = {
+  'Linear equations in one variable':'Algebra','Linear equations in two variables':'Algebra','Linear functions':'Algebra',
+  'Linear inequalities in one or two variables':'Algebra','Systems of two linear equations in two variables':'Algebra',
+  'Equivalent expressions':'Advanced Math','Nonlinear functions':'Advanced Math',
+  'Nonlinear equations in one variable and systems of equations in two variables':'Advanced Math',
+  'Ratios, rates, proportional relationships, and units':'Problem-Solving and Data Analysis','Percentages':'Problem-Solving and Data Analysis',
+  'One-variable':'Problem-Solving and Data Analysis','Two-variable':'Problem-Solving and Data Analysis',
+  'Probability and conditional probability':'Problem-Solving and Data Analysis',
+  'Inference from sample statistics and margin of error':'Problem-Solving and Data Analysis',
+  'Evaluating statistical claims: Observational studies and experiments':'Problem-Solving and Data Analysis',
+  'Lines, angles, and triangles':'Geometry and Trigonometry','Right triangles and trigonometry':'Geometry and Trigonometry',
+  'Circles':'Geometry and Trigonometry','Area and volume':'Geometry and Trigonometry'
+};
+function buildHardAll(){
+  HARD_ALL = HARDQ.map(function(q){
+    return {key:'hq'+q.num, text:q.text, choices:q.choices, ansIdx:q.ansIdx, ans:q.ans, domain:q.domain, topic:q.topic, desmos:q.desmos, figure:null, figureSVG:null};
+  });
+  DATA.forEach(function(q){
+    if(q.diff !== 'Hard') return;
+    HARD_ALL.push({key:'bk'+q.ref, text:q.text, choices:q.choices, ansIdx:q.ansIdx, ans:q.ans, domain:SKILL_DOMAIN[q.skill]||'Advanced Math', topic:q.skill, desmos:null, figure:q.figure||null, figureSVG:q.figureSVG||null});
+  });
+}
 var HARD_PROGRESS_KEY = 'satpctHard100_v1';
 var hardAnswered = {};
 (function loadHardProgress(){
@@ -2817,21 +2853,58 @@ var hardAnswered = {};
 function saveHardProgress(){
   try{ localStorage.setItem(HARD_PROGRESS_KEY, JSON.stringify(hardAnswered)); }catch(e){}
 }
+function buildHardDomainOptions(){
+  buildHardAll();
+  var counts = {};
+  HARD_ALL.forEach(function(q){ counts[q.domain]=(counts[q.domain]||0)+1; });
+  var opts = '<option value="all">All Domains ('+HARD_ALL.length+')<\/option>';
+  HARD_DOMAINS.forEach(function(d){
+    if(counts[d]) opts += '<option value="'+d+'">'+d+' ('+counts[d]+')<\/option>';
+  });
+  document.getElementById('hardDomainSelect').innerHTML = opts;
+  document.getElementById('hardDomainSelectLive').innerHTML = opts;
+  document.getElementById('hardIntroCount').textContent = HARD_ALL.length;
+}
+function rebuildHardView(){
+  hardView = [];
+  HARD_ALL.forEach(function(q,i){ if(hardDomainFilter==='all' || q.domain===hardDomainFilter) hardView.push(i); });
+}
 function startHard(){
   hardStarted = true;
+  hardDomainFilter = document.getElementById('hardDomainSelect').value;
+  document.getElementById('hardDomainSelectLive').value = hardDomainFilter;
+  rebuildHardView();
+  hardIdx = 0;
   document.getElementById('hardIntro').style.display = 'none';
-  document.getElementById('hardBody').style.display = 'block';
+  document.getElementById('hardFilterBar').style.display = 'flex';
+  document.getElementById('hardBody').style.display = 'flex';
   document.getElementById('hardBottombar').style.display = 'flex';
   renderHard();
 }
+function changeHardDomain(){
+  hardDomainFilter = document.getElementById('hardDomainSelectLive').value;
+  rebuildHardView();
+  hardIdx = 0;
+  renderHard();
+}
 function renderHard(){
-  var q = HARDQ[hardIdx];
+  var q = HARD_ALL[hardView[hardIdx]];
   var host = document.getElementById('hardPane');
-  var st = hardAnswered[q.num] || {};
+  var st = hardAnswered[q.key] || {};
   var elim = st.elim || {};
   var html = '<div class="qcol">';
   html += '<div class="qtophead"><div class="qnum">'+(hardIdx+1)+(st.revealed && ((q.choices && st.sel===q.ansIdx) || (!q.choices && st.revealed)) ?'<span class="solvedtick" title="Solved">&#10003;<\/span>':'')+'<\/div><\/div>';
   html += '<div class="qtext">'+q.text.replace(/\\n|\n/g,'<br>')+'<span class="tag Hard">Hard<\/span><span class="topictag">'+q.topic+'<\/span><\/div>';
+  if(q.figure && q.figure.type==='table'){
+    html += '<div class="figwrap"><table class="datatable"><tr>'+q.figure.headers.map(h=>'<th>'+h+'<\/th>').join('')+'<\/tr>';
+    q.figure.rows.forEach(r=>{ html+='<tr>'+r.map(c=>'<td>'+c+'<\/td>').join('')+'<\/tr>'; });
+    html += '<\/table><\/div>';
+  } else if(q.figure){
+    html += '<div class="figwrap">'+renderFigure(q.figure)+'<\/div>';
+  }
+  if(q.figureSVG){
+    html += '<div class="figwrap">'+q.figureSVG+'<\/div>';
+  }
   if(q.choices){
     html += '<div class="choices">';
     q.choices.forEach(function(c,i){
@@ -2850,33 +2923,36 @@ function renderHard(){
     html += '<\/div>';
     html += '<button class="answerbtn" onclick="revealHard()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
   } else {
-    html += '<div class="gridin"><input id="hardGridInput" type="text" placeholder="Answer" value="'+(st.val||'')+'" oninput="hardAnswered['+q.num+']=hardAnswered['+q.num+']||{}; hardAnswered['+q.num+'].val=this.value; saveHardProgress();"><\/div>';
+    html += '<div class="gridin"><input id="hardGridInput" type="text" placeholder="Answer" value="'+(st.val||'')+'" oninput="hardAnswered[\''+q.key+'\']=hardAnswered[\''+q.key+'\']||{}; hardAnswered[\''+q.key+'\'].val=this.value; saveHardProgress();"><\/div>';
     html += '<button class="answerbtn" onclick="revealHard()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
     if(st.revealed) html += '<div class="answerline">Correct answer: '+q.ans+'<\/div>';
   }
-  html += '<button class="desmosbtn" onclick="toggleHardDesmos()">'+(st.showDesmos?'Hide':'Show')+' Desmos solution &#128202;<\/button>';
-  if(st.showDesmos){
-    html += '<div class="desmospanel"><b>Desmos Solution Shortcut:<\/b> '+q.desmos+'<\/div>';
+  if(q.desmos){
+    html += '<button class="desmosbtn" onclick="toggleHardDesmos()">'+(st.showDesmos?'Hide':'Show')+' Desmos solution &#128202;<\/button>';
+    if(st.showDesmos){
+      html += '<div class="desmospanel"><b>Desmos Solution Shortcut:<\/b> '+q.desmos+'<\/div>';
+    }
   }
   html += '<\/div>';
   host.innerHTML = html;
   if(typeof renderMathInElement === 'function'){
     renderMathInElement(host, {delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});
   }
-  document.getElementById('hardProgress').innerHTML = (hardIdx+1)+' of '+HARDQ.length+' <span class="chev">&#9662;<\/span>';
+  document.getElementById('hardProgress').innerHTML = (hardIdx+1)+' of '+hardView.length+' <span class="chev">&#9662;<\/span>';
   document.getElementById('hardPrevBtn').disabled = hardIdx===0;
-  document.getElementById('hardNextBtn').textContent = hardIdx===HARDQ.length-1 ? 'Finish' : 'Next';
+  document.getElementById('hardNextBtn').textContent = hardIdx===hardView.length-1 ? 'Finish' : 'Next';
 }
-function selectHardChoice(i){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].sel=i; saveHardProgress(); renderHard(); }
-function toggleHardElim(i,e){ e.stopPropagation(); var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].elim=hardAnswered[q.num].elim||{}; hardAnswered[q.num].elim[i]=!hardAnswered[q.num].elim[i]; saveHardProgress(); renderHard(); }
-function revealHard(){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].revealed=!hardAnswered[q.num].revealed; saveHardProgress(); renderHard(); }
-function toggleHardDesmos(){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].showDesmos=!hardAnswered[q.num].showDesmos; saveHardProgress(); renderHard(); }
-function goHard(d){ var n=hardIdx+d; if(n<0||n>=HARDQ.length) return; hardIdx=n; renderHard(); }
+function selectHardChoice(i){ var q=HARD_ALL[hardView[hardIdx]]; hardAnswered[q.key]=hardAnswered[q.key]||{}; hardAnswered[q.key].sel=i; saveHardProgress(); renderHard(); }
+function toggleHardElim(i,e){ e.stopPropagation(); var q=HARD_ALL[hardView[hardIdx]]; hardAnswered[q.key]=hardAnswered[q.key]||{}; hardAnswered[q.key].elim=hardAnswered[q.key].elim||{}; hardAnswered[q.key].elim[i]=!hardAnswered[q.key].elim[i]; saveHardProgress(); renderHard(); }
+function revealHard(){ var q=HARD_ALL[hardView[hardIdx]]; hardAnswered[q.key]=hardAnswered[q.key]||{}; hardAnswered[q.key].revealed=!hardAnswered[q.key].revealed; saveHardProgress(); renderHard(); }
+function toggleHardDesmos(){ var q=HARD_ALL[hardView[hardIdx]]; hardAnswered[q.key]=hardAnswered[q.key]||{}; hardAnswered[q.key].showDesmos=!hardAnswered[q.key].showDesmos; saveHardProgress(); renderHard(); }
+function goHard(d){ var n=hardIdx+d; if(n<0||n>=hardView.length) return; hardIdx=n; renderHard(); }
 function openHardNav(e){
   e.stopPropagation();
   var grid = document.getElementById('navGrid');
-  grid.innerHTML = HARDQ.map(function(q,i){
-    var st = hardAnswered[q.num] || {};
+  grid.innerHTML = hardView.map(function(di,i){
+    var q = HARD_ALL[di];
+    var st = hardAnswered[q.key] || {};
     var done = st.sel!==undefined || st.val;
     var cls='navcell'+(done?' answered':'')+(i===hardIdx?' current':'');
     return '<div class="'+cls+'" onclick="jumpToHard('+i+')">'+(i+1)+'<\/div>';
@@ -2885,6 +2961,7 @@ function openHardNav(e){
   document.getElementById('scrim').classList.add('open');
 }
 function jumpToHard(vi){ hardIdx=vi; renderHard(); closeNav(); }
+buildHardDomainOptions();
 
 render();
 
