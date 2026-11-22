@@ -178,6 +178,17 @@
   .answerbtn:hover{background:var(--accent-light);}
   .answerline{margin-top:14px;font-size:15px;color:var(--green-dark);font-weight:700;}
 
+  /* ---- Hard 100 section ---- */
+  .hardintro{max-width:560px;margin:40px auto;padding:0 20px;text-align:center;}
+  .hardintro h1{font-size:24px;margin:0 0 10px;}
+  .hardintro p{font-size:15px;color:#555;line-height:1.5;margin:0 0 20px;}
+  .hardbadge{display:inline-block;font-size:12px;font-weight:700;color:#b3261e;background:var(--redbg);border-radius:20px;padding:5px 14px;margin-bottom:14px;}
+  .desmosbtn{margin-top:10px;margin-left:10px;background:#fff;border:1.5px solid #ff7a45;color:#b3550f;font-weight:700;padding:9px 18px;border-radius:var(--radius);cursor:pointer;font-size:14px;}
+  .desmosbtn:hover{background:#fff3ea;}
+  .desmospanel{margin-top:14px;background:#fff3ea;border:1px solid #ffdcc2;border-radius:var(--radius);padding:14px 16px;font-size:14.5px;line-height:1.55;}
+  .desmospanel b{color:#b3550f;}
+  .topictag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-left:6px;vertical-align:middle;background:#fff3ea;color:#b3550f;}
+
   .bottombar{height:68px;flex:none;border-top:1px solid #d7d7d7;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;}
   .navbtn{border:1.5px solid #767676;border-radius:4px;padding:9px 22px;font-weight:500;font-size:14px;background:#fff;color:#333;cursor:pointer;}
   .navbtn:disabled{opacity:.35;cursor:default;}
@@ -375,6 +386,7 @@
   <div class="maintabs">
     <button class="maintab" id="tabLessons" onclick="switchSection('lessons')">&#128218; Lessons</button>
     <button class="maintab active" id="tabPractice" onclick="switchSection('practice')">&#9998; Practice</button>
+    <button class="maintab" id="tabHard" onclick="switchSection('hard')">&#128293; Hard 100</button>
   </div>
   <button class="signinbtn" id="signinBtn" onclick="window.firebaseSignIn && window.firebaseSignIn()" title="Sign in with Google to sync progress across devices">Sign in</button>
   <div class="avatar" id="userAvatar" style="display:none" onclick="toggleUserMenu()" title="Click to sign out"></div>
@@ -407,6 +419,23 @@
   <button class="navbtn primary" id="nextBtn" onclick="go(1)">Next</button>
 </div>
 </div>
+</div>
+
+<div class="section" id="sectionHard">
+  <div class="hardintro" id="hardIntro">
+    <div class="hardbadge">&#128293; 100 Hard SAT Math Questions &mdash; Form C</div>
+    <h1>The hardest Digital SAT Math questions, one at a time</h1>
+    <p>97 official-style questions curated from a dedicated "hardest questions" workbook, each with its own Desmos solution shortcut &mdash; what to type and what to read off the graph. Every question and solution here was independently re-derived, not just copied from a key.</p>
+    <button class="practicebtn" onclick="startHard()">Start &rarr;</button>
+  </div>
+  <div class="body" style="display:none" id="hardBody">
+  <div class="qpane" id="hardPane"></div>
+  </div>
+  <div class="bottombar" id="hardBottombar" style="display:none">
+  <button class="navbtn" id="hardPrevBtn" onclick="goHard(-1)">Previous</button>
+  <button class="progress" id="hardProgress" onclick="openHardNav(event)"></button>
+  <button class="navbtn primary" id="hardNextBtn" onclick="goHard(1)">Next</button>
+  </div>
 </div>
 
 <div class="section" id="sectionLessons">
@@ -2556,6 +2585,7 @@
 </template>
 
 <script src="data_all.js"></script>
+<script src="hardq_data.js"></script>
 <script>
 var filterMode = "All";
 var VIEW = DATA.map((q,i)=>i);
@@ -2777,6 +2807,85 @@ function openNav(e){
 function closeNav(){ document.getElementById('navModal').classList.remove('open'); document.getElementById('scrim').classList.remove('open'); }
 function jumpTo(vi){ idx=vi; render(); closeNav(); }
 
+// ---- Hard 100 section ----
+var hardIdx = 0, hardStarted = false;
+var HARD_PROGRESS_KEY = 'satpctHard100_v1';
+var hardAnswered = {};
+(function loadHardProgress(){
+  try{ var raw = localStorage.getItem(HARD_PROGRESS_KEY); if(raw) hardAnswered = JSON.parse(raw); }catch(e){}
+})();
+function saveHardProgress(){
+  try{ localStorage.setItem(HARD_PROGRESS_KEY, JSON.stringify(hardAnswered)); }catch(e){}
+}
+function startHard(){
+  hardStarted = true;
+  document.getElementById('hardIntro').style.display = 'none';
+  document.getElementById('hardBody').style.display = 'block';
+  document.getElementById('hardBottombar').style.display = 'flex';
+  renderHard();
+}
+function renderHard(){
+  var q = HARDQ[hardIdx];
+  var host = document.getElementById('hardPane');
+  var st = hardAnswered[q.num] || {};
+  var elim = st.elim || {};
+  var html = '<div class="qcol">';
+  html += '<div class="qtophead"><div class="qnum">'+(hardIdx+1)+(st.revealed && ((q.choices && st.sel===q.ansIdx) || (!q.choices && st.revealed)) ?'<span class="solvedtick" title="Solved">&#10003;<\/span>':'')+'<\/div><\/div>';
+  html += '<div class="qtext">'+q.text.replace(/\\n|\n/g,'<br>')+'<span class="tag Hard">Hard<\/span><span class="topictag">'+q.topic+'<\/span><\/div>';
+  if(q.choices){
+    html += '<div class="choices">';
+    q.choices.forEach(function(c,i){
+      var letter = String.fromCharCode(65+i);
+      var cls='choice';
+      if(st.revealed){
+        if(i===q.ansIdx) cls+=' correct';
+        else if(st.sel===i) cls+=' wrong';
+      } else if(st.sel===i) cls+=' selected';
+      if(elim[i]) cls+=' eliminated';
+      html += '<div class="choicerow">'+
+        '<div class="'+cls+'" onclick="selectHardChoice('+i+')"><span class="cl">'+letter+'<\/span><span class="ctext">'+c+'<\/span><\/div>'+
+        '<div class="elim '+(elim[i]?'on':'')+'" onclick="toggleHardElim('+i+',event)" title="Cross out">'+(elim[i]?letter:'&#10005;')+'<\/div>'+
+      '<\/div>';
+    });
+    html += '<\/div>';
+    html += '<button class="answerbtn" onclick="revealHard()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+  } else {
+    html += '<div class="gridin"><input id="hardGridInput" type="text" placeholder="Answer" value="'+(st.val||'')+'" oninput="hardAnswered['+q.num+']=hardAnswered['+q.num+']||{}; hardAnswered['+q.num+'].val=this.value; saveHardProgress();"><\/div>';
+    html += '<button class="answerbtn" onclick="revealHard()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+    if(st.revealed) html += '<div class="answerline">Correct answer: '+q.ans+'<\/div>';
+  }
+  html += '<button class="desmosbtn" onclick="toggleHardDesmos()">'+(st.showDesmos?'Hide':'Show')+' Desmos solution &#128202;<\/button>';
+  if(st.showDesmos){
+    html += '<div class="desmospanel"><b>Desmos Solution Shortcut:<\/b> '+q.desmos+'<\/div>';
+  }
+  html += '<\/div>';
+  host.innerHTML = html;
+  if(typeof renderMathInElement === 'function'){
+    renderMathInElement(host, {delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});
+  }
+  document.getElementById('hardProgress').innerHTML = (hardIdx+1)+' of '+HARDQ.length+' <span class="chev">&#9662;<\/span>';
+  document.getElementById('hardPrevBtn').disabled = hardIdx===0;
+  document.getElementById('hardNextBtn').textContent = hardIdx===HARDQ.length-1 ? 'Finish' : 'Next';
+}
+function selectHardChoice(i){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].sel=i; saveHardProgress(); renderHard(); }
+function toggleHardElim(i,e){ e.stopPropagation(); var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].elim=hardAnswered[q.num].elim||{}; hardAnswered[q.num].elim[i]=!hardAnswered[q.num].elim[i]; saveHardProgress(); renderHard(); }
+function revealHard(){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].revealed=!hardAnswered[q.num].revealed; saveHardProgress(); renderHard(); }
+function toggleHardDesmos(){ var q=HARDQ[hardIdx]; hardAnswered[q.num]=hardAnswered[q.num]||{}; hardAnswered[q.num].showDesmos=!hardAnswered[q.num].showDesmos; saveHardProgress(); renderHard(); }
+function goHard(d){ var n=hardIdx+d; if(n<0||n>=HARDQ.length) return; hardIdx=n; renderHard(); }
+function openHardNav(e){
+  e.stopPropagation();
+  var grid = document.getElementById('navGrid');
+  grid.innerHTML = HARDQ.map(function(q,i){
+    var st = hardAnswered[q.num] || {};
+    var done = st.sel!==undefined || st.val;
+    var cls='navcell'+(done?' answered':'')+(i===hardIdx?' current':'');
+    return '<div class="'+cls+'" onclick="jumpToHard('+i+')">'+(i+1)+'<\/div>';
+  }).join('');
+  document.getElementById('navModal').classList.add('open');
+  document.getElementById('scrim').classList.add('open');
+}
+function jumpToHard(vi){ hardIdx=vi; renderHard(); closeNav(); }
+
 render();
 
 // ===================== Lesson language switcher =====================
@@ -2844,9 +2953,11 @@ function switchSection(name){
   currentSection = name;
   document.getElementById('sectionPractice').classList.toggle('active', name==='practice');
   document.getElementById('sectionLessons').classList.toggle('active', name==='lessons');
+  document.getElementById('sectionHard').classList.toggle('active', name==='hard');
   document.getElementById('tabPractice').classList.toggle('active', name==='practice');
   document.getElementById('tabLessons').classList.toggle('active', name==='lessons');
-  document.getElementById('practiceBar').style.display = name==='practice' ? 'flex' : 'none';
+  document.getElementById('tabHard').classList.toggle('active', name==='hard');
+  document.getElementById('practiceBar').style.display = (name==='practice'||name==='hard') ? 'flex' : 'none';
   if(name==='lessons'){
     closeCalc(); // the calculator is a Practice-only tool; never leave it floating over a lesson
     if(!topicTreeBuilt) buildTopicTree();
