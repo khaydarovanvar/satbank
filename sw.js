@@ -1,5 +1,5 @@
 const CACHE = 'sat-math-practice-v1';
-const APP_SHELL = ['./', './index.html', './figures.js', './data_all.js', './manifest.json', './icon-192.png', './icon-512.png'];
+const APP_SHELL = ['./', './index.html', './figures.js', './data_all.js', './hardq_data.js', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(APP_SHELL)));
