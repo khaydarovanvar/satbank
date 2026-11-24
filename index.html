@@ -391,7 +391,7 @@
     <button class="maintab" id="tabLessons" onclick="switchSection('lessons')">&#128218; Lessons</button>
     <button class="maintab active" id="tabPractice" onclick="switchSection('practice')">&#9998; Practice</button>
     <button class="maintab" id="tabHard" onclick="switchSection('hard')">&#128293; Hard 100</button>
-    <a class="maintab" href="english/" title="SAT Reading &amp; Writing question bank">&#128221; English</a>
+    <button class="maintab" id="tabEnglish" onclick="switchSection('english')">&#128221; English</button>
   </div>
   <button class="signinbtn" id="signinBtn" onclick="window.firebaseSignIn && window.firebaseSignIn()" title="Sign in with Google to sync progress across devices">Sign in</button>
   <div class="avatar" id="userAvatar" style="display:none" onclick="toggleUserMenu()" title="Click to sign out"></div>
@@ -445,6 +445,22 @@
   <button class="navbtn" id="hardPrevBtn" onclick="goHard(-1)">Previous</button>
   <button class="progress" id="hardProgress" onclick="openHardNav(event)"></button>
   <button class="navbtn primary" id="hardNextBtn" onclick="goHard(1)">Next</button>
+  </div>
+</div>
+
+<div class="section" id="sectionEnglish">
+  <button class="treeToggle" id="engTreeToggleBtn" onclick="toggleEngTree()">&#9776; Topics</button>
+  <div class="treescrim" id="engTreeScrim" onclick="closeEngTree()"></div>
+  <div class="topictree" id="engTopicTree"></div>
+  <div class="practicemain">
+  <div class="body">
+  <div class="qpane" id="engPane"></div>
+  </div>
+  <div class="bottombar">
+  <button class="navbtn" id="engPrevBtn" onclick="goEng(-1)">Previous</button>
+  <button class="progress" id="engProgress" onclick="openEngNav(event)"></button>
+  <button class="navbtn primary" id="engNextBtn" onclick="goEng(1)">Next</button>
+  </div>
   </div>
 </div>
 
@@ -2596,6 +2612,7 @@
 
 <script src="data_all.js"></script>
 <script src="hardq_data.js"></script>
+<script src="eng_data.js"></script>
 <script>
 var filterMode = "All";
 var VIEW = DATA.map((q,i)=>i);
@@ -2964,6 +2981,225 @@ function openHardNav(e){
 function jumpToHard(vi){ hardIdx=vi; renderHard(); closeNav(); }
 buildHardDomainOptions();
 
+// ===================== English (Reading & Writing) section =====================
+// Mirrors the Practice section's architecture exactly (own VIEW/idx/answered/
+// flagged state, own topic tree, own progress key) but reads from ENGDATA
+// instead of DATA, so it behaves identically without touching Math's state.
+var ENG_DOMAIN_COLOR = {'Craft and Structure':'#2f6fb0','Information and Ideas':'#1e7a35','Standard English Conventions':'#7a4fbd','Expression of Ideas':'#b5651d'};
+var ENGTOPICS = [
+  {domain:'Craft and Structure', color:ENG_DOMAIN_COLOR['Craft and Structure'], skills:[
+    {name:'Words in Context', key:'Words in Context'},
+    {name:'Text Structure and Purpose', key:'Text Structure and Purpose'},
+    {name:'Cross-Text Connections', key:'Cross-Text Connections'}
+  ]},
+  {domain:'Information and Ideas', color:ENG_DOMAIN_COLOR['Information and Ideas'], skills:[
+    {name:'Central Ideas and Details', key:'Central Ideas and Details'},
+    {name:'Command of Evidence', key:'Command of Evidence'},
+    {name:'Inferences', key:'Inferences'}
+  ]},
+  {domain:'Standard English Conventions', color:ENG_DOMAIN_COLOR['Standard English Conventions'], skills:[
+    {name:'Boundaries', key:'Boundaries'},
+    {name:'Form, Structure, and Sense', key:'Form, Structure, and Sense'}
+  ]},
+  {domain:'Expression of Ideas', color:ENG_DOMAIN_COLOR['Expression of Ideas'], skills:[
+    {name:'Transitions', key:'Transitions'},
+    {name:'Rhetorical Synthesis', key:'Rhetorical Synthesis'}
+  ]}
+];
+var engFilterMode = 'All';
+var ENGVIEW = ENGDATA.map((q,i)=>i);
+var engIdx = 0;
+var engAnswered = {};
+var engFlagged = {};
+var engTopicTreeBuilt = false;
+
+function applyFilterEng(mode){
+  engFilterMode = mode;
+  ENGVIEW = ENGDATA.map((q,i)=>i).filter(i => mode==='All' || ENGDATA[i].skill===mode);
+  engIdx = 0;
+  if(!engTopicTreeBuilt) buildEngTopicTree();
+  updateEngTopicActive();
+  closeEngTree();
+  renderEng();
+}
+function buildEngTopicTree(){
+  engTopicTreeBuilt = true;
+  var html = '<div class="ttitle">Practice by Topic</div>';
+  html += '<div class="domaingroup"><div class="skillitem" data-key="All" style="padding-left:20px;font-weight:700;" onclick="applyFilterEng(\'All\')">'+
+    '<span class="sname">All questions<\/span><span class="skillprogress">'+ENGDATA.length+'<\/span><\/div><\/div>';
+  ENGTOPICS.forEach(function(group){
+    html += '<div class="domaingroup"><div class="domainhead"><span class="domaindot" style="background:'+group.color+'"></span>'+group.domain+'<\/div>';
+    group.skills.forEach(function(obj){
+      var count = ENGDATA.filter(function(q){ return q.skill===obj.key; }).length;
+      html += '<div class="skillitem" data-key="'+obj.key.replace(/"/g,'&quot;')+'" onclick="applyFilterEng(\''+obj.key.replace(/'/g,"\\'")+'\')">'+
+        '<span class="sname">'+obj.name+'<\/span><span class="skillprogress">'+count+'<\/span><\/div>';
+    });
+    html += '<\/div>';
+  });
+  document.getElementById('engTopicTree').innerHTML = html;
+  updateEngTopicActive();
+}
+function updateEngTopicActive(){
+  document.querySelectorAll('#engTopicTree .skillitem').forEach(function(el){
+    el.classList.toggle('active', el.getAttribute('data-key')===engFilterMode);
+  });
+}
+function toggleEngTree(){
+  document.getElementById('engTopicTree').classList.toggle('open');
+  document.getElementById('engTreeScrim').classList.toggle('open');
+}
+function closeEngTree(){
+  document.getElementById('engTopicTree').classList.remove('open');
+  document.getElementById('engTreeScrim').classList.remove('open');
+}
+
+function isAnsweredEng(viewPos){
+  var di = ENGVIEW[viewPos];
+  var st = engAnswered[di];
+  if(!st) return false;
+  return st.sel!==undefined || (st.val && st.val.trim()!=='');
+}
+function isSolvedDiEng(di){
+  var q = ENGDATA[di];
+  var st = engAnswered[di];
+  if(!st) return false;
+  if(q.ansIdx!==undefined) return st.sel===q.ansIdx;
+  if(q.ans!==undefined && st.val) return st.val.trim().toLowerCase()===String(q.ans).trim().toLowerCase();
+  return false;
+}
+function isSolvedEng(viewPos){ return isSolvedDiEng(ENGVIEW[viewPos]); }
+function updateHeaderTickEng(){
+  var host = document.querySelector('#engPane .qnum');
+  if(!host) return;
+  var existing = host.querySelector('.solvedtick');
+  if(isSolvedEng(engIdx)){
+    if(!existing) host.insertAdjacentHTML('beforeend', '<span class="solvedtick" title="Solved">&#10003;<\/span>');
+  } else if(existing){ existing.remove(); }
+}
+function skillProgressEng(key){
+  var total=0, solved=0;
+  ENGDATA.forEach(function(q, di){ if(q.skill===key){ total++; if(isSolvedDiEng(di)) solved++; } });
+  return {total:total, solved:solved};
+}
+function updateEngTopicProgress(){
+  document.querySelectorAll('#engTopicTree .skillitem[data-key]').forEach(function(el){
+    var key = el.getAttribute('data-key');
+    if(!key) return;
+    var p = skillProgressEng(key);
+    if(p.total===0 && key!=='All') return;
+    var badge = el.querySelector('.skillprogress');
+    if(badge) badge.innerHTML = (p.solved>0?'&#10003; ':'')+p.solved+'/'+p.total;
+  });
+}
+
+var ENG_PROGRESS_KEY = 'satengProgress_v1';
+function engProgressBlob(){
+  var a={}, f={};
+  Object.keys(engAnswered).forEach(function(di){ a[ENGDATA[di].ref]=engAnswered[di]; });
+  Object.keys(engFlagged).forEach(function(di){ if(engFlagged[di]) f[ENGDATA[di].ref]=true; });
+  return {answered:a, flagged:f};
+}
+function saveProgressEng(){
+  var blob = engProgressBlob();
+  try{ localStorage.setItem(ENG_PROGRESS_KEY, JSON.stringify(blob)); }catch(e){}
+  if(engTopicTreeBuilt) updateEngTopicProgress();
+}
+function applyEngProgressBlob(saved){
+  var refToIdx = {};
+  ENGDATA.forEach(function(q,di){ refToIdx[q.ref]=di; });
+  Object.keys(saved.answered||{}).forEach(function(ref){
+    var di = refToIdx[ref];
+    if(di!==undefined) engAnswered[di]=saved.answered[ref];
+  });
+  Object.keys(saved.flagged||{}).forEach(function(ref){
+    var di = refToIdx[ref];
+    if(di!==undefined) engFlagged[di]=true;
+  });
+}
+function loadProgressEng(){
+  try{
+    var raw = localStorage.getItem(ENG_PROGRESS_KEY);
+    if(!raw) return;
+    applyEngProgressBlob(JSON.parse(raw));
+  }catch(e){}
+}
+loadProgressEng();
+
+function renderEng(){
+  var di = ENGVIEW[engIdx];
+  var q = ENGDATA[di];
+  var host = document.getElementById('engPane');
+  var st = engAnswered[di] || {};
+  var elim = st.elim || {};
+  var html = '<div class="qcol">';
+  html += '<div class="qtophead"><div class="qnum">'+(engIdx+1)+(isSolvedEng(engIdx)?'<span class="solvedtick" title="Solved">&#10003;<\/span>':'')+'<\/div>'+
+    '<div class="marks">'+
+      '<button class="markbtn '+(engFlagged[di]?'on':'')+'" onclick="toggleFlagEng()" title="Mark for review">&#9873;<\/button>'+
+    '<\/div><\/div>';
+  if(q.text){
+    html += '<div class="qtext">'+escapeEngHtml(q.text)+(q.diff?'<span class="tag '+q.diff+'">'+q.diff+'<\/span>':'')+'<span class="skilltag">'+q.skill+'<\/span><\/div>';
+    if(q.choices){
+      html += '<div class="choices">';
+      q.choices.forEach((c,i)=>{
+        var letter = String.fromCharCode(65+i);
+        var cls='choice';
+        if(st.revealed){
+          if(i===q.ansIdx) cls+=' correct';
+          else if(st.sel===i) cls+=' wrong';
+        } else if(st.sel===i) cls+=' selected';
+        if(elim[i]) cls+=' eliminated';
+        html += '<div class="choicerow">'+
+          '<div class="'+cls+'" onclick="selectChoiceEng('+i+')"><span class="cl">'+letter+'<\/span><span class="ctext">'+escapeEngHtml(c)+'<\/span><\/div>'+
+          '<div class="elim '+(elim[i]?'on':'')+'" onclick="toggleElimEng('+i+',event)" title="Cross out">'+(elim[i]?letter:'&#10005;')+'<\/div>'+
+        '<\/div>';
+      });
+      html += '<\/div>';
+    }
+    html += '<button class="answerbtn" onclick="revealEng()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+    if(st.revealed && q.rationale) html += '<div class="answerline" style="margin-top:10px">'+escapeEngHtml(q.rationale)+'<\/div>';
+  } else if(q.b){
+    // legacy cropped-image question (not yet converted to text)
+    var b=q.b;
+    html += '<div class="qtext"><span class="tag '+(q.diff||'')+'">'+(q.diff||'')+'<\/span><span class="skilltag">'+q.skill+'<\/span><\/div>';
+    html += '<div class="figwrap"><div style="max-width:'+Math.min(b[1],760)+'px;overflow:hidden;border:1px solid #e3e3e8;border-radius:6px">'+
+      '<div style="overflow:hidden;aspect-ratio:'+b[1]+'/'+b[3]+'"><img loading="lazy" style="width:100%;display:block;margin-top:'+(-100*b[2]/b[1]).toFixed(4)+'%" src="english/img/'+b[0]+'"><\/div><\/div><\/div>';
+    html += '<button class="answerbtn" onclick="revealEng()">'+(st.revealed?'Hide answer':'Show answer')+'<\/button>';
+    if(st.revealed){
+      html += '<div class="answerline">Correct answer: '+q.ans+'<\/div>';
+      if(q.sol){
+        var s=q.sol;
+        html += '<div class="figwrap" style="margin-top:10px"><div style="max-width:'+Math.min(s[1],760)+'px;overflow:hidden;border:1px solid #e3e3e8;border-radius:6px">'+
+          '<div style="overflow:hidden;aspect-ratio:'+s[1]+'/'+s[3]+'"><img loading="lazy" style="width:100%;display:block;margin-top:'+(-100*s[2]/s[1]).toFixed(4)+'%" src="english/img/'+s[0]+'"><\/div><\/div><\/div>';
+      }
+    }
+  }
+  html += '<\/div>';
+  host.innerHTML = html;
+  document.getElementById('engProgress').innerHTML = (engIdx+1)+' of '+ENGVIEW.length+' <span class="chev">&#9662;<\/span>';
+  document.getElementById('engPrevBtn').disabled = engIdx===0;
+  document.getElementById('engNextBtn').textContent = engIdx===ENGVIEW.length-1 ? 'Finish' : 'Next';
+}
+function escapeEngHtml(s){ return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/\n/g,'<br>'); }
+function selectChoiceEng(i){ var di=ENGVIEW[engIdx]; engAnswered[di]=engAnswered[di]||{}; engAnswered[di].sel=i; saveProgressEng(); renderEng(); }
+function toggleElimEng(i,e){ e.stopPropagation(); var di=ENGVIEW[engIdx]; engAnswered[di]=engAnswered[di]||{}; engAnswered[di].elim=engAnswered[di].elim||{}; engAnswered[di].elim[i]=!engAnswered[di].elim[i]; saveProgressEng(); renderEng(); }
+function revealEng(){ var di=ENGVIEW[engIdx]; engAnswered[di]=engAnswered[di]||{}; engAnswered[di].revealed=!engAnswered[di].revealed; saveProgressEng(); renderEng(); }
+function toggleFlagEng(){ var di=ENGVIEW[engIdx]; engFlagged[di]=!engFlagged[di]; saveProgressEng(); renderEng(); }
+function goEng(d){ var n=engIdx+d; if(n<0||n>=ENGVIEW.length) return; engIdx=n; renderEng(); }
+
+function openEngNav(e){
+  e.stopPropagation();
+  var grid = document.getElementById('navGrid');
+  grid.innerHTML = ENGVIEW.map((di,vi)=>{
+    var cls='navcell'+(isAnsweredEng(vi)?' answered':'')+(isSolvedEng(vi)?' solved':'')+(vi===engIdx?' current':'');
+    return '<div class="'+cls+'" onclick="jumpToEng('+vi+')">'+(vi+1)+(isSolvedEng(vi)?'<span class="solvedtick">&#10003;<\/span>':'')+(engFlagged[di]?'<span class="flagdot">&#9873;<\/span>':'')+'<\/div>';
+  }).join('');
+  document.getElementById('navModal').classList.add('open');
+  document.getElementById('scrim').classList.add('open');
+}
+function jumpToEng(vi){ engIdx=vi; renderEng(); closeNav(); }
+renderEng();
+if(location.hash==='#english') switchSection('english');
+
 render();
 
 // ===================== Lesson language switcher =====================
@@ -3032,14 +3268,18 @@ function switchSection(name){
   document.getElementById('sectionPractice').classList.toggle('active', name==='practice');
   document.getElementById('sectionLessons').classList.toggle('active', name==='lessons');
   document.getElementById('sectionHard').classList.toggle('active', name==='hard');
+  document.getElementById('sectionEnglish').classList.toggle('active', name==='english');
   document.getElementById('tabPractice').classList.toggle('active', name==='practice');
   document.getElementById('tabLessons').classList.toggle('active', name==='lessons');
   document.getElementById('tabHard').classList.toggle('active', name==='hard');
-  document.getElementById('practiceBar').style.display = (name==='practice'||name==='hard') ? 'flex' : 'none';
+  document.getElementById('tabEnglish').classList.toggle('active', name==='english');
+  document.getElementById('practiceBar').style.display = (name==='practice'||name==='hard'||name==='english') ? 'flex' : 'none';
+  document.querySelectorAll('.icbtn.ref, .icbtn.calc').forEach(function(el){ el.style.display = name==='english' ? 'none' : ''; });
   if(name==='lessons'){
     closeCalc(); // the calculator is a Practice-only tool; never leave it floating over a lesson
     if(!topicTreeBuilt) buildTopicTree();
   }
+  if(name==='english' && !engTopicTreeBuilt) buildEngTopicTree();
 }
 
 // ---- Topic directory: the full official skill taxonomy, grouped by domain.
