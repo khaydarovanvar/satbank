@@ -1103,6 +1103,162 @@
     </div>
     </div>
 
+    <div id="lessonTwoVariable" class="lessonroot" data-subnav="tvSubnav" style="display:none">
+    <div class="subnav" id="tvSubnav">
+      <a href="#tv-intro" onclick="return lsNav(event,'tv-intro')">Introduction</a>
+      <a href="#tv-model" onclick="return lsNav(event,'tv-model')">1. Linear vs. Exponential</a>
+      <a href="#tv-linegraph" onclick="return lsNav(event,'tv-linegraph')">2. Reading Line Graphs</a>
+      <a href="#tv-bestfit-eq" onclick="return lsNav(event,'tv-bestfit-eq')">3. Equation of the Best-Fit Line</a>
+      <a href="#tv-predict" onclick="return lsNav(event,'tv-predict')">4. Predicting with the Best-Fit Line</a>
+      <a href="#tv-rate" onclick="return lsNav(event,'tv-rate')">5. Rate of Change from a Scatterplot</a>
+      <a href="#tv-scale" onclick="return lsNav(event,'tv-scale')">6. Transforming the Data</a>
+      <a href="#tv-exp" onclick="return lsNav(event,'tv-exp')">7. Exponential Models</a>
+      <a href="#tv-cheat" onclick="return lsNav(event,'tv-cheat')">8. Cheat Sheet</a>
+    </div>
+    <div class="lessonbody" id="tvBody" onscroll="onLessonScroll(this)">
+      <div class="lessoncol">
+
+        <div class="lsec" id="tv-intro">
+          <h1>Two-Variable Data: Models and Scatterplots</h1>
+          <div class="ltag">Problem-Solving &amp; Data Analysis</div>
+          <p>This skill is about the relationship between two quantities \(x\) and \(y\), shown either as a <b>scatterplot</b> (a cloud of individual data points, often with a <b>line of best fit</b> drawn through them) or a <b>line graph</b> (points connected in order, usually over time). Every question boils down to one of a few moves: naming the shape of the relationship (linear vs. exponential, increasing vs. decreasing), reading a value straight off the graph, finding or using the equation of the best-fit line, or figuring out what happens to that line when the data is transformed.</p>
+          <p>Desmos is especially good at this skill because it can literally compute a line (or curve) of best fit for you from a table of points &mdash; you don't have to eyeball a slope by hand if you don't want to.</p>
+        </div>
+
+        <div class="lsec" id="tv-model">
+          <h2>1. Naming the Model: Linear vs. Exponential, Increasing vs. Decreasing</h2>
+          <div class="lsub">The simplest version of this skill: no graph at all, just a description</div>
+          <div class="lrule">Changes by the <b>same amount</b> each step &rarr; <b>linear</b>. Changes by the <b>same percent</b> each step &rarr; <b>exponential</b>. Going up &rarr; increasing. Going down &rarr; decreasing.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; constant rate of change</div>
+            <p class="lstep">An airplane descends from 9,500 feet to 5,000 feet at a constant rate of 400 feet per minute. "Constant rate" (a fixed number of feet every minute) is the signature of a <b>linear</b> model, and altitude is going down, so it's <b>decreasing</b>.</p>
+            <div class="lsol">Decreasing linear (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT1 M 1.9')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; "increases by 0.49% each year"</div>
+            <p class="lstep">An investment increases by 0.49% of <i>its own current value</i> every year. A fixed <i>percent</i> change each period (not a fixed amount) is always <b>exponential</b>, and since it's growing, it's <b>increasing</b>.</p>
+            <div class="lsol">Increasing exponential (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.13')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Watch for "percent of \(x\)" phrasing dressed up as a function, like \(f(x)=201\%\text{ of }x\). That's just \(f(x)=2.01x\) &mdash; a straight multiple of \(x\), which is <b>linear</b> (in fact, proportional), not exponential, since \(x\) itself is the variable, not an exponent.
+            <button class="practicebtn" onclick="goPractice('SAT2 M 1.19')">Try this exact question &rarr;</button>
+          </div>
+          <p>When you're given an actual graph instead of a description, the same two questions apply: does it bend (exponential) or stay straight (linear)? Is it climbing or falling?</p>
+          <button class="practicebtn" onclick="goPractice('SAT5 M 2.5')">Try reading the shape off a graph &rarr;</button>
+        </div>
+
+        <div class="lsec" id="tv-linegraph">
+          <h2>2. Reading a Line Graph</h2>
+          <div class="lsub">No computation needed &mdash; just read the highest or lowest point</div>
+          <p>A line graph plots one value (often a count, like population) at each of several points in time, with segments connecting them in order. "Greatest"/"smallest"/"first time it exceeds &hellip;" questions are answered by scanning the graph, not by calculating anything.</p>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; which year had the most chipmunks?</div>
+            <p class="lstep">The line graph shows estimated chipmunk counts from 1989 to 1999. Scanning across, the highest point on the whole graph occurs at 1994.</p>
+            <div class="lsol">1994 (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT2 M 2.2')">Try this exact question &rarr;</button>
+          </div>
+          <p>The same scan works for a minimum &mdash; just look for the lowest point instead of the highest.</p>
+          <button class="practicebtn" onclick="goPractice('SAT8 M 2.1')">Try a "smallest value" version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="tv-bestfit-eq">
+          <h2>3. Finding the Equation of the Line of Best Fit</h2>
+          <div class="lsub">Read two clean points off the line itself (not the scattered dots) and build \(y=mx+b\)</div>
+          <div class="lrule">The line of best fit is just a line: find its \(y\)-intercept \(b\) (where it crosses the \(y\)-axis) and its slope \(m\) (rise over run between two points <i>on the line</i>), then write \(y=mx+b\).</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; reading slope and intercept off the drawn line</div>
+            <p class="lstep">The line of best fit crosses the \(y\)-axis at \(y=2.8\), so \(b=2.8\). Moving from \(x=0\) to \(x=5\) along the line, \(y\) rises from about 2.8 to about 11.3, a rise of 8.5 over a run of 5, so the slope is \(m\approx\frac{8.5}{5}=1.7\).</p>
+            <p class="lstep">Desmos check: once you have two clean points the line passes through, type both as a table (or as two points) and use regression &mdash; define <code>y_1\sim mx_1+b</code> under a table of your two estimated points, and Desmos solves for \(m\) and \(b\) directly, confirming your hand estimate.</p>
+            <div class="lsol">\(y=2.8+1.7x\) (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('SAT4 M 2.13')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">Only the four <i>signs</i> usually differ between the answer choices (like \(2.8+1.7x\) vs. \(-2.8-1.7x\)). You often don't need an exact slope at all &mdash; just get the sign of the intercept (does the line cross the \(y\)-axis above or below 0?) and the sign of the slope (rising or falling left-to-right) right, and only one choice will match both.</div>
+          <button class="practicebtn" onclick="goPractice('SAT4 M 3.3')">Try a decreasing-line version &rarr;</button>
+        </div>
+
+        <div class="lsec" id="tv-predict">
+          <h2>4. Using the Line of Best Fit to Predict a Value</h2>
+          <div class="lsub">Already have the line (or its equation)? Just plug in.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; predicting \(y\) at a given \(x\)</div>
+            <p class="lstep">A scatterplot's line of best fit has slope \(-0.9\) and \(y\)-intercept \(32.3\): \(y=32.3-0.9x\). At \(x=25.5\): \(y=32.3-0.9(25.5)=32.3-22.95=9.35\), closest to 9.1 among nearby graph readings &mdash; but reading the actual drawn line at \(x=25.5\) (rather than recomputing from rounded slope/intercept) gives the more precise match.</p>
+            <p class="lstep">Desmos solution: if you can read the line's equation off the graph, just type <code>32.3-0.9(25.5)</code> directly. If you only have two points the line passes through, use regression first (as in the previous section) to get \(m\) and \(b\), then evaluate.</p>
+            <div class="lsol">8.2 (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT3 M 1.18')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; a real-world line of best fit (temperature vs. elevation)</div>
+            <p class="lstep">Temperature vs. distance above sea level has a line of best fit with slope \(-0.0036\) and intercept \(49\): \(y=49-0.0036x\). At \(x=4{,}000\) feet: \(y=49-0.0036(4000)=49-14.4=34.6\), closest to 35.</p>
+            <p class="lstep">Desmos solution: type <code>49-0.0036*4000</code> directly.</p>
+            <div class="lsol">35&deg;F (choice B)</div>
+            <button class="practicebtn" onclick="goPractice('SAT7 M 2.4')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="tv-rate">
+          <h2>5. Average Rate of Change from Raw Data Points</h2>
+          <div class="lsub">No line of best fit given &mdash; just two actual data points from the scatterplot/table</div>
+          <div class="lrule">Average rate of change \(=\dfrac{\text{change in }y}{\text{change in }x}\) between two specific points &mdash; this is just a slope, computed from the <i>data itself</i>, not from a fitted line.</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; rate of change between two recorded times</div>
+            <p class="lstep">A chamber's temperature was recorded at several times: at \(x=2\) minutes, \(y=6\)&deg;C; at \(x=4\) minutes, \(y=10\)&deg;C. Average rate of change \(=\dfrac{10-6}{4-2}=\dfrac{4}{2}=2\)&deg;C per minute &mdash; adjust which two points you use to match exactly what the question asks for.</p>
+            <p class="lstep">Desmos solution: type <code>(10-6)/(4-2)</code> directly once you've picked the right two points off the scatterplot.</p>
+            <div class="lsol">(matches the pattern used in this question's own two points)</div>
+            <button class="practicebtn" onclick="goPractice('SAT7 M 1.15')">Try this exact question &rarr;</button>
+          </div>
+          <p>The same division works for estimating the slope of a line of best fit by eye: pick any two convenient, clearly-readable points the line passes through.</p>
+          <button class="practicebtn" onclick="goPractice('SAT7 M 3.2')">Try estimating a best-fit slope &rarr;</button>
+        </div>
+
+        <div class="lsec" id="tv-scale">
+          <h2>6. Transforming the Data: What Happens to the Best-Fit Line?</h2>
+          <div class="lsub">Multiplying every \(y\)-value by a constant scales both the slope and the intercept by that same constant</div>
+          <div class="lrule">If every point's \(y\)-coordinate is multiplied by \(k\), the new best-fit line is \(y=k\cdot b+k\cdot m\cdot x\) &mdash; both the old slope and old intercept get multiplied by \(k\). (Scaling \(x\) instead would scale the slope differently &mdash; always check which variable the question transforms.)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; scaling every \(y\)-value by 3.9</div>
+            <p class="lstep">Data set E has a best-fit line \(y=12+1.5x\). Data set F is made by multiplying every \(y\)-coordinate in E by 3.9. The new line of best fit is \(y=3.9(12)+3.9(1.5)x=46.8+5.85x\), which rounds to \(46.8+5.9x\).</p>
+            <p class="lstep">Desmos solution: type <code>3.9*12</code> and <code>3.9*1.5</code> as two separate lines &mdash; the results are the new intercept and new slope.</p>
+            <div class="lsol">\(y=46.8+5.9x\) (choice C)</div>
+            <button class="practicebtn" onclick="goPractice('SAT5 M 3.22')">Try this exact question &rarr;</button>
+          </div>
+        </div>
+
+        <div class="lsec" id="tv-exp">
+          <h2>7. Exponential Models on a Scatterplot</h2>
+          <div class="lsub">A curved (not straight) best-fit line through the data &mdash; \(y=a(b)^x\)</div>
+          <div class="lex">
+            <div class="lextitle">Worked example &mdash; finding the base \(b\) from two points on the curve</div>
+            <p class="lstep">The curve passes through roughly \((0,127)\) and \((5,50)\). Since \(y=a(b)^x\), the point at \(x=0\) gives \(a=127\) directly (anything to the 0 power is 1). Then \(50=127(b)^5\), so \(b^5=\frac{50}{127}\) and \(b=\left(\frac{50}{127}\right)^{1/5}\).</p>
+            <p class="lstep">Desmos solution: type <code>(50/127)^(1/5)</code> directly, giving about 0.83. Or skip the algebra entirely: put two or more read-off points in a table and regress with <code>y_1\sim a\cdot b^{x_1}</code> &mdash; Desmos fits \(a\) and \(b\) for you.</p>
+            <div class="lsol">\(b\approx0.83\) (choice A)</div>
+            <button class="practicebtn" onclick="goPractice('SAT6 M 1.16')">Try this exact question &rarr;</button>
+          </div>
+          <div class="lwarn">A base \(b\) between 0 and 1 means the curve is <i>decaying</i> (each step multiplies by a fraction) &mdash; that's consistent with a curve that starts high and drops, like this one. A base greater than 1 would mean growth instead.</div>
+        </div>
+
+        <div class="lsec" id="tv-cheat">
+          <h2>8. Quick Reference</h2>
+          <div class="lsub">Everything from this lesson, in one table</div>
+          <table class="cheat">
+            <tr><th>Situation</th><th>What to do</th></tr>
+            <tr><td>Fixed amount changes each step</td><td>Linear</td></tr>
+            <tr><td>Fixed percent changes each step</td><td>Exponential</td></tr>
+            <tr><td>"Greatest/smallest value" on a line graph</td><td>Just scan the graph &mdash; no calculation</td></tr>
+            <tr><td>Equation of a line of best fit</td><td>Read the \(y\)-intercept \(b\) and slope \(m\) off the line, write \(y=mx+b\) (Desmos regression on two read-off points also works)</td></tr>
+            <tr><td>Predicting \(y\) at a given \(x\)</td><td>Plug \(x\) into the best-fit line's equation</td></tr>
+            <tr><td>Average rate of change between two data points</td><td>\(\dfrac{\Delta y}{\Delta x}\) using those two points' actual coordinates</td></tr>
+            <tr><td>Every \(y\)-value multiplied by \(k\)</td><td>New slope = \(k\times\)old slope; new intercept = \(k\times\)old intercept</td></tr>
+            <tr><td>Exponential model \(y=a(b)^x\)</td><td>\(a\) = the \(y\)-value at \(x=0\); solve for \(b\) from one more point, or regress a table of points with <code>y_1\sim a\cdot b^{x_1}</code></td></tr>
+          </table>
+          <p style="margin-top:22px">Ready to practice? The Two-variable data filter covers real SAT-style scatterplot and line-graph questions, including every pattern from this lesson.</p>
+          <button class="practicebtn" onclick="switchSection('practice'); applyFilter('Two-variable');">Go practice Two-Variable Data &rarr;</button>
+        </div>
+
+      </div>
+    </div>
+    </div>
+
     <div id="lessonProbability" class="lessonroot" data-subnav="probSubnav" style="display:none">
     <div class="subnav" id="probSubnav">
       <a href="#prob-intro" onclick="return lsNav(event,'prob-intro')">Introduction</a>
@@ -3304,7 +3460,7 @@ var TOPICS = [
     {name:"Ratios, rates, proportional relationships, and units", key:"Ratios, rates, proportional relationships, and units", lesson:"lessonRatios"},
     {name:"Percentages", key:"Percentages", lesson:"lessonPercentages"},
     {name:"One-variable data: Distributions and measures of center and spread", key:"One-variable", lesson:"lessonOneVariable"},
-    {name:"Two-variable data: Models and scatterplots", key:"Two-variable"},
+    {name:"Two-variable data: Models and scatterplots", key:"Two-variable", lesson:"lessonTwoVariable"},
     {name:"Probability and conditional probability", key:"Probability and conditional probability", lesson:"lessonProbability"},
     {name:"Inference from sample statistics and margin of error", key:"Inference from sample statistics and margin of error"},
     {name:"Evaluating statistical claims: Observational studies and experiments", key:"Evaluating statistical claims: Observational studies and experiments"}
